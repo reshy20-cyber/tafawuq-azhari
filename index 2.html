@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تفوق الأزهري - كلية أصول الدين الشاملة</title>
+    <style>
+        :root {
+            --primary-emerald: #0b4619;
+            --secondary-emerald: #145a28;
+            --accent-gold: #d4af37;
+            --accent-gold-light: #fdf8e2;
+            --bg-cream: #f4f0e6;
+            --card-bg: #ffffff;
+            --text-main: #1e293b;
+            --text-muted: #64748b;
+            --border-color: #e2e8f0;
+            --success-green: #10b981;
+            --danger-red: #ef4444;
+        }
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Amiri', 'Traditional Arabic', 'Segoe UI', Tahoma, sans-serif;
+        }
+        body {
+            background-color: var(--bg-cream);
+            color: var(--text-main);
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            padding: 10px;
+        }
+        .phone-frame {
+            width: 100%;
+            max-width: 410px;
+            height: 840px;
+            background: #f8fafc;
+            border-radius: 40px;
+            box-shadow: 0 25px 50px -12px rgba(11, 70, 25, 0.25);
+            border: 8px solid #1e293b;
+            display: flex;
+            flex-direction: column;
+            overflow: hidden;
+            position: relative;
+        }
+        .screen {
+            flex: 1;
+            display: none;
+            flex-direction: column;
+            overflow-y: auto;
+            background: #f8fafc;
+            padding: 16px;
+            animation: fadeIn 0.2s ease-in-out;
+        }
+        .screen.active {
+            display: flex;
+        }
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(4px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .app-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 16px;
+            padding-bottom: 12px;
+            border-bottom: 2px solid var(--accent-gold-light);
+        }
+        .app-title {
+            font-size: 1.05rem;
+            font-weight: bold;
+            color: var(--primary-emerald);
+        }
+        .back-btn, .icon-btn {
+            background: #fff;
+            border: 1px solid var(--border-color);
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            color: var(--primary-emerald);
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+        .card {
+            background: var(--card-bg);
+            border-radius: 16px;
+            padding: 14px;
+            margin-bottom: 12px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+            border: 1px solid var(--border-color);
+        }
+        .btn-primary {
+            background: linear-gradient(135deg, var(--primary-emerald), var(--secondary-emerald));
+            color: #fff;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 12px;
+            font-size: 0.95rem;
+            font-weight: bold;
+            cursor: pointer;
+            width: 100%;
+            text-align: center;
+            box-shadow: 0 4px 12px rgba(11, 70, 25, 0.2);
+        }
+        .input-group {
+            margin-bottom: 10px;
+        }
+        .input-group label {
+            display: block;
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            margin-bottom: 4px;
+            font-weight: bold;
+        }
+        .input-group select {
+            width: 100%;
+            padding: 9px 10px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            background: #fff;
+            font-size: 0.85rem;
+            color: var(--text-main);
+            outline: none;
+        }
+        .bottom-nav {
+            display: flex;
+            background: #fff;
+            border-top: 1px solid var(--border-color);
+            padding: 8px 0;
+            justify-content: space-around;
+            box-shadow: 0 -4px 12px rgba(0,0,0,0.03);
+        }
+        .nav-item {
+            text-align: center;
+            font-size: 0.7rem;
+            color: var(--text-muted);
+            cursor: pointer;
+            flex: 1;
+        }
+        .nav-item.active {
+            color: var(--primary-emerald);
+            font-weight: bold;
+        }
+        .nav-item span {
+            display: block;
+            font-size: 1.25rem;
+            margin-bottom: 2px;
+        }
+        .dashboard-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 12px;
+            margin-bottom: 12px;
+        }
+        .dashboard-tile {
+            background: #fff;
+            border: 1px solid var(--border-color);
+            border-radius: 16px;
+            padding: 18px 12px;
+            text-align: center;
+            cursor: pointer;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.02);
+            transition: 0.2s;
+        }
+        .dashboard-tile:hover {
+            border-color: var(--accent-gold);
+            transform: translateY(-2px);
+        }
+        .dashboard-tile .icon {
+            font-size: 2rem;
+            margin-bottom: 8px;
+        }
+        .dashboard-tile .title {
+            font-size: 0.9rem;
+            font-weight: bold;
+            color: var(--primary-emerald);
+        }
+        .progress-bar-bg {
+            background: var(--border-color);
+            border-radius: 8px;
+            height: 10px;
+            width: 100%;
+            overflow: hidden;
+            margin: 8px 0;
+        }
+        .progress-bar-fill {
+            background: var(--success-green);
+            height: 100%;
+            width: 0%;
+            transition: width 0.4s ease;
+        }
+        .chat-container {
+            display: flex;
+            flex-direction: column;
+            height: calc(100% - 60px);
+        }
+        .chat-messages {
+            flex: 1;
+            overflow-y: auto;
+            padding: 8px;
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+        .chat-bubble {
+            max-width: 85%;
+            padding: 10px 14px;
+            border-radius: 14px;
+            font-size: 0.85rem;
+            line-height: 1.4;
+        }
+        .chat-bubble.bot {
+            background: #ffffff;
+            border: 1px solid var(--border-color);
+            align-self: flex-start;
+            color: var(--text-main);
+        }
+        .chat-bubble.user {
+            background: var(--primary-emerald);
+            color: #fff;
+            align-self: flex-end;
+        }
+        .chat-input-area {
+            display: flex;
+            gap: 8px;
+            padding-top: 8px;
+            border-top: 1px solid var(--border-color);
+        }
+        .chat-input-area input {
+            flex: 1;
+            padding: 10px;
+            border-radius: 10px;
+            border: 1px solid var(--border-color);
+            outline: none;
+            font-size: 0.85rem;
+        }
+        .option-btn {
+            background: #fff;
+            border: 1px solid var(--border-color);
+            padding: 10px 14px;
+            border-radius: 10px;
+            text-align: right;
+            cursor: pointer;
+            margin-bottom: 8px;
+            font-size: 0.85rem;
+            transition: 0.2s;
+        }
+        .option-btn:hover {
+            border-color: var(--primary-emerald);
+            background: #f0fdf4;
+        }
+    </style>
+</head>
+<body>
+
+<div class="phone-frame">
+    <!-- الشاشة الرئيسية -->
+    <div id="screen-dashboard" class="screen active">
+        <div class="app-header">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <div style="width: 40px; height: 40px; background: var(--accent-gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-weight: bold; color: var(--primary-emerald);">أ</div>
+                <div>
+                    <div style="font-size: 0.75rem; color: var(--text-muted);">كلية أصول الدين - جامعة الأزهر</div>
+                    <div style="font-size: 0.95rem; font-weight: bold; color: var(--primary-emerald);">تفوق الأزهري الشامل</div>
+                </div>
+            </div>
+            <div style="display: flex; gap: 8px;">
+                <div class="icon-btn" onclick="goToScreen('screen-hierarchy')" title="إعداد المسار">⚙️</div>
+            </div>
+        </div>
+
+        <div class="card" style="background: linear-gradient(135deg, var(--primary-emerald), var(--secondary-emerald)); color: white; padding: 14px;">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px;">
+                <div>
+                    <div style="font-size: 0.7rem; opacity: 0.8;">الكلية الحالية</div>
+                    <div style="font-size: 0.85rem; font-weight: bold; color: var(--accent-gold);" id="dash-college-name">أصول الدين</div>
+                </div>
+                <div style="text-align: left;">
+                    <div style="font-size: 0.7rem; opacity: 0.8;">الفرقة الدراسية</div>
+                    <div style="font-size: 0.85rem; font-weight: bold;" id="dash-year-name">الفرقة الأولى</div>
+                </div>
+            </div>
+            <div style="border-top: 1px solid rgba(255,255,255,0.2); padding-top: 6px; display: flex; justify-content: space-between; align-items: center;">
+                <div style="font-size: 0.75rem; opacity: 0.9;">📍 الفرع: <span id="dash-governorate-name" style="font-weight: bold; color: var(--accent-gold);">القاهرة</span></div>
+                <button onclick="goToScreen('screen-hierarchy')" style="background: rgba(255,255,255,0.2); border: none; color: white; padding: 4px 8px; border-radius: 6px; font-size: 0.75rem; cursor: pointer;">تغيير</button>
+            </div>
+        </div>
+
+        <div class="dashboard-grid">
+            <div class="dashboard-tile" onclick="goToScreen('screen-courses')">
+                <div class="icon">📖</div>
+                <div class="title">المقررات الرسمية</div>
+            </div>
+            <div class="dashboard-tile" onclick="startActiveQuiz()">
+                <div class="icon">📋</div>
+                <div class="title">بنك الاختبارات</div>
+            </div>
+            <div class="dashboard-tile" onclick="updateProgressScreen()">
+                <div class="icon">📈</div>
+                <div class="title">معدل الإنجاز</div>
+            </div>
+            <div class="dashboard-tile" onclick="goToScreen('screen-lecturer')">
+                <div class="icon">🤖</div>
+                <div class="title">المحاضر الذكي</div>
+            </div>
+        </div>
+
+        <div class="card" style="background: #fffdf5; border-color: var(--accent-gold); padding: 12px;">
+            <h4 style="font-size: 0.85rem; color: var(--primary-emerald); margin-bottom: 4px;">🌟 المناهج الرسمية المعتمدة</h4>
+            <p style="font-size: 0.75rem; color: var(--text-main);">"تم تضمين المقررات الرسمية لكلية أصول الدين لجميع الفرق الأربع بالكامل."</p>
+        </div>
+    </div>
+
+    <!-- المقررات والدروس -->
+    <div id="screen-courses" class="screen">
+        <div class="app-header">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <div class="back-btn" onclick="goToScreen('screen-dashboard')">←</div>
+                <span class="app-title">المقررات الرسمية - أصول الدين</span>
+            </div>
+        </div>
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px;">
+            <div class="input-group" style="margin:0;">
+                <label style="font-size:0.7rem;">الكلية:</label>
+                <select id="filter-college" onchange="renderCoursesList()" style="font-size: 0.75rem; padding: 8px;">
+                    <option value="أصول الدين">أصول الدين</option>
+                    <option value="الشريعة والقانون">الشريعة والقانون</option>
+                    <option value="اللغة العربية">اللغة العربية</option>
+                    <option value="كلية الطب">كلية الطب البشري</option>
+                </select>
+            </div>
+            <div class="input-group" style="margin:0;">
+                <label style="font-size:0.7rem;">الفرقة الدراسية:</label>
+                <select id="filter-year" onchange="renderCoursesList()" style="font-size: 0.75rem; padding: 8px;">
+                    <option value="الفرقة الأولى">الفرقة الأولى</option>
+                    <option value="الفرقة الثانية">الفرقة الثانية</option>
+                    <option value="الفرقة الثالثة">الفرقة الثالثة</option>
+                    <option value="الفرقة الرابعة">الفرقة الرابعة</option>
+                </select>
+            </div>
+        </div>
+        <div id="courses-list-container"></div>
+    </div>
+
+    <!-- تفاصيل المقرر والدروس -->
+    <div id="screen-course-detail" class="screen">
+        <div class="app-header">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <div class="back-btn" onclick="goToScreen('screen-courses')">←</div>
+                <span class="app-title" id="detail-title">تفاصيل المقرر</span>
+            </div>
+        </div>
+        <div class="card">
+            <h3 id="card-course-title" style="color: var(--primary-emerald); margin-bottom: 6px;">عنوان المقرر</h3>
+            <p id="card-course-desc" style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 12px;">الوصف الأكاديمي.</p>
+            <div style="border-top: 1px solid var(--border-color); padding-top: 10px;">
+                <h4 style="font-size: 0.85rem; color: var(--primary-emerald); margin-bottom: 8px;">📚 محاور ودروس المنهج:</h4>
+                <div id="lessons-container"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- شاشة الاختبار التفاعلي -->
+    <div id="screen-quiz-active" class="screen">
+        <div class="app-header">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <div class="back-btn" onclick="goToScreen('screen-dashboard')">←</div>
+                <span class="app-title" id="quiz-header-title">اختبار قياس التحصيل</span>
+            </div>
+        </div>
+        <div class="card">
+            <div style="display: flex; justify-content: space-between; font-size: 0.75rem; color: var(--text-muted); margin-bottom: 8px;">
+                <span id="quiz-progress-text">السؤال 1 من 3</span>
+                <span id="quiz-score-text">الدرجة: 0</span>
+            </div>
+            <div id="quiz-question-box" style="font-size: 0.95rem; font-weight: bold; margin-bottom: 14px; color: var(--primary-emerald);"></div>
+            <div id="quiz-options-box"></div>
+        </div>
+    </div>
+
+    <!-- نتيجة الاختبار -->
+    <div id="screen-quiz-result" class="screen">
+        <div class="app-header">
+            <span class="app-title">نتيجة الاختبار</span>
+        </div>
+        <div class="card" style="text-align: center; padding: 24px;">
+            <div style="font-size: 3rem; margin-bottom: 10px;">🏆</div>
+            <h3 style="color: var(--primary-emerald); margin-bottom: 8px;">أحسنت صنعاً!</h3>
+            <p id="final-score-msg" style="font-size: 0.9rem; color: var(--text-main); margin-bottom: 16px;"></p>
+            <button class="btn-primary" onclick="goToScreen('screen-dashboard')">العودة للرئيسية</button>
+        </div>
+    </div>
+
+    <!-- التقدم الدراسي الحقيقي -->
+    <div id="screen-progress" class="screen">
+        <div class="app-header">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <div class="back-btn" onclick="goToScreen('screen-dashboard')">←</div>
+                <span class="app-title">معدل الإنجاز الدراسي</span>
+            </div>
+        </div>
+        <div class="card" style="text-align: center; padding: 20px;">
+            <div style="font-size: 2.5rem; font-weight: bold; color: var(--primary-emerald); margin-bottom: 8px;" id="progress-percentage-val">0%</div>
+            <p style="font-size: 0.85rem; color: var(--text-muted);">نسبة إنجاز الدروس واجتياز الاختبارات</p>
+            <div class="progress-bar-bg" style="margin-top: 15px;"><div class="progress-bar-fill" id="progress-bar-element"></div></div>
+            <div style="margin-top: 20px; text-align: right; font-size: 0.8rem;">
+                <p>📖 دروس تم إتمامها: <span id="stat-lessons-done" style="font-weight: bold; color: var(--primary-emerald);">0</span></p>
+                <p>📋 اختبارات مجتازة: <span id="stat-quizzes-done" style="font-weight: bold; color: var(--primary-emerald);">0</span></p>
+            </div>
+        </div>
+    </div>
+
+    <!-- المحاضر الذكي التفاعلي -->
+    <div id="screen-lecturer" class="screen">
+        <div class="app-header">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <div class="back-btn" onclick="goToScreen('screen-dashboard')">←</div>
+                <span class="app-title">المحاضر الأزهري الذكي</span>
+            </div>
+        </div>
+        <div class="chat-container">
+            <div class="chat-messages" id="chat-messages-box">
+                <div class="chat-bubble bot">أهلاً بك يا أزهري. أنا محاضرك الذكي لأصول الدين، جاهز للإجابة عن أي استفسار تفصيلي في التفسير، الحديث، العقيدة، والسيرة. تفضل بالسؤال!</div>
+            </div>
+            <div class="chat-input-area">
+                <input type="text" id="chat-user-input" placeholder="اكتب سؤالك الأكاديمي هنا..." onkeypress="if(event.key==='Enter') sendChatMessage()">
+                <button class="btn-primary" style="width: auto; padding: 10px 16px;" onclick="sendChatMessage()">إرسال</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- إعداد المسار -->
+    <div id="screen-hierarchy" class="screen">
+        <div class="app-header">
+            <div style="display: flex; align-items: center; gap: 10px;">
+                <div class="back-btn" onclick="goToScreen('screen-dashboard')">←</div>
+                <span class="app-title">تحديد المسار والكلية</span>
+            </div>
+        </div>
+        <div class="card">
+            <div class="input-group">
+                <label>📍 فرع الجامعة / المحافظة:</label>
+                <select id="edit-governorate">
+                    <option value="القاهرة">القاهرة (الفرع الرئيسي)</option>
+                    <option value="الإسكندرية">الإسكندرية</option>
+                    <option value="الدقهلية">الدقهلية (منصورة)</option>
+                    <option value="الغربية">الغربية (طنطا)</option>
+                    <option value="الشرقية">الشرقية (زقازيق)</option>
+                    <option value="أسيوط">أسيوط</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label>🏛️ الكلية:</label>
+                <select id="edit-college">
+                    <option value="أصول الدين">أصول الدين</option>
+                    <option value="الشريعة والقانون">الشريعة والقانون</option>
+                    <option value="اللغة العربية">اللغة العربية</option>
+                    <option value="كلية الطب">كلية الطب البشري</option>
+                </select>
+            </div>
+            <div class="input-group">
+                <label>🎓 الفرقة الدراسية:</label>
+                <select id="edit-year">
+                    <option value="الفرقة الأولى">الفرقة الأولى</option>
+                    <option value="الفرقة الثانية">الفرقة الثانية</option>
+                    <option value="الفرقة الثالثة">الفرقة الثالثة</option>
+                    <option value="الفرقة الرابعة">الفرقة الرابعة</option>
+                </select>
+            </div>
+            <button class="btn-primary" style="margin-top: 10px;" onclick="updateHierarchy()">حفظ وتحديث المسار</button>
+        </div>
+    </div>
+
+    <!-- شريط التنقل السفلي -->
+    <div class="bottom-nav">
+        <div class="nav-item active" onclick="goToScreen('screen-dashboard')"><span>🏠</span>الرئيسية</div>
+        <div class="nav-item" onclick="goToScreen('screen-courses')"><span>📚</span>المقررات</div>
+        <div class="nav-item" onclick="startActiveQuiz()"><span>📋</span>الاختبارات</div>
+        <div class="nav-item" onclick="updateProgressScreen()"><span>📈</span>التقدم</div>
+        <div class="nav-item" onclick="goToScreen('screen-lecturer')"><span>🤖</span>المحاضر</div>
+    </div>
+</div>
+
+<script>
+    let userProgress = {
+        completedLessons: JSON.parse(localStorage.getItem('completedLessons') || '[]'),
+        passedQuizzes: parseInt(localStorage.getItem('passedQuizzes') || '0')
+    };
+
+    // Official Azhar Curriculum Database for Usul Ad-Din (أصول الدين) across all 4 years
+    const ALL_AZHAR_COURSES = {
+        "أصول الدين": {
+            "الفرقة الأولى": [
+                {
+                    name: "التفسير وتحليله (1)", units: 4, icon: "📖", 
+                    desc: "دراسة وتحليل سور من القرآن الكريم وبيان أسباب الننزول والمعاني الإجمالية.",
+                    lessons: [
+                        { title: "سورة الفاتحة وأوائل البقرة", content: "معاني الاستعاذة، البسملة، والهداية القرآنية الكبرى في فاتحة الكتاب وأوائل البقرة." },
+                        { title: "منهج المفسرين وأسباب النزول", content: "دراسة أهمية معرفة أسباب النزول في الفهم الصحيح لآيات الذكر الحكيم." }
+                    ]
+                },
+                {
+                    name: "الحديث الشريف وعلومه (1)", units: 4, icon: "📜", 
+                    desc: "دراسة الأربعين النووية ومقدمة في مصطلح الحديث الشريف.",
+                    lessons: [
+                        { title: "شرح الأربعين النووية (الحديث الأول والثاني)", content: "إنما الأعمال بالنيات، وحديث جبريل عليه السلام في الإسلام والإيمان والإحسان." },
+                        { title: "مقدمة في مصطلح الحديث", content: "معرفة الحديث الصحيح، الحسن، والضعيف وشروط الراوي العدل الضابط." }
+                    ]
+                },
+                {
+                    name: "التوحيد والعقيدة الإسلامية (1)", units: 4, icon: "🛡️", 
+                    desc: "الإلهيات والصفات الواجبة والجائزة والمستحيلة في حق الله تعالى.",
+                    lessons: [
+                        { title: "صفات الوجوب والجواز في الإلهيات", content: "دراسة صفات الوجود، البقاء، الخصائص الإلهية الواجبة عقلاً ونقلاً." },
+                        { title: "التوحيد وأدلته العقلية والنقلية", content: "إثبات الوحدانية لله تعالى والرد على الشبهات العقدية." }
+                    ]
+                },
+                {
+                    name: "السيرة النبوية والتاريخ الإسلامي", units: 3, icon: "🕌", 
+                    desc: "أحداث العهد المكي والمدني والدروس المستفادة.",
+                    lessons: [
+                        { title: "مرحلة الدعوة السرية والجهرية بمكة", content: "تحمل الصحابة للأذى وأساليب النبي صلى الله عليه وسلم في تبليغ الدعوة." },
+                        { title: "أحداث الهجرة النبوية المباركة", content: "التخطيط المسبق، التوكل على الله، وتأسيس المجتمع المدني." }
+                    ]
+                }
+            ],
+            "الفرقة الثانية": [
+                {
+                    name: "التفسير الموضوعي للقرآن الكريم", units: 4, icon: "📖", 
+                    desc: "دراسة القضايا القرآنية الكبرى من خلال الآيات المتفرقة.",
+                    lessons: [
+                        { title: "مفهوم التفسير الموضوعي ونشأته", content: "الفرق بين التفسير التحليلي والموضوعي وأهميته في العصر الحديث." },
+                        { title: "قضية الإيمان والعمل الصالح في القرآن", content: "ترابط العقيدة بالأخلاق والسلوك في الآيات القرآنية." }
+                    ]
+                },
+                {
+                    name: "علوم الحديث ومصطلحه المتقدم", units: 4, icon: "📜", 
+                    desc: "دراسة الجرح والتعديل وأنواع الحديث والمقبول والمردود.",
+                    lessons: [
+                        { title: "علم الجرح والتعديل", content: "قواعد معرفة رواة الحديث وضبط عدالتهم وحفظهم." },
+                        { title: "الحديث المسند والمرسل والمنقطع", content: "أقسام الحديث المردود وأسباب ضعف الأسانيد." }
+                    ]
+                },
+                {
+                    name: "الفرق والمذاهب الإسلامية", units: 3, icon: "🛡️", 
+                    desc: "دراسة تاريخ ظهور الفرق وموقف أهل السنة والجماعة.",
+                    lessons: [
+                        { title: "ظهور الخوارج والشيعة والمعتزلة", content: "الأسباب التاريخية والفكرية لنشأة الفرق الكلامية الأولى." },
+                        { title: "منهج أهل السنة والجماعة", content: "الاعتدال والوسطية في مواجهة الشبهات والرد على المخالفين." }
+                    ]
+                },
+                {
+                    name: "التصوف الإسلامي (الأخلاق والتزكية)", units: 3, icon: "✨", 
+                    desc: "دراسة مدارس الإحسان وأعمال القلوب وتزكية النفوس.",
+                    lessons: [
+                        { title: "مفهوم التزكية والإحسان في الإسلام", content: "تطهير القلوب من أمراض الكبر والرياء وحب الدنيا." },
+                        { title: "أدب السير إلى الله تعالى", content: "المقامات والأحوال الصوفية المعتمدة وفق الكتاب والسنة." }
+                    ]
+                }
+            ],
+            "الفرقة الثالثة": [
+                {
+                    name: "التفسير التحليلي لآيات الأحكام", units: 4, icon: "📖", 
+                    desc: "دراسة الآيات القرآنية المتعلقة بالأحكام التشريعية وكيفية استنباطها.",
+                    lessons: [
+                        { title: "آيات الطهارة والصلاة في سورة المائدة", content: "استنباط أحكام الوضوء، التيمم، وشروط صحة العبادات." },
+                        { title: "آيات المعاملات والبيوع", content: "أحكام المال، الربا، والتحريمات الاقتصادية في القرآن." }
+                    ]
+                },
+                {
+                    name: "الحديث النبوي الشريف (تخريج وتحليل)", units: 4, icon: "📜", 
+                    desc: "دراسة أحاديث الأحكام في كتب السنن ومناهج الأئمة.",
+                    lessons: [
+                        { title: "منهج الإمام البخاري ومسلم في الصحیحين", content: "شروط اللقيا والصحبة عند صاحبي الصحيحين." },
+                        { title: "تخريج الأحاديث ومعرفة طرقها", content: "كيفية البحث عن الحديث في المعاجم والمسانيد." }
+                    ]
+                },
+                {
+                    name: "الفلسفة الإسلامية والحكمة", units: 3, icon: "🧠", 
+                    desc: "آراء فلاسفة الإسلام وموقف علم الكلام منها.",
+                    lessons: [
+                        { title: "موقف علماء الإسلام من الفلسفة اليونانية", content: "جهود الإمام الغزالي في 'تهافت الفلاسفة' وضبط الفكر الإسلامي." },
+                        { title: "قضايا العقل والنقل في الفكر الإسلامي", content: "تكامل البرهان العقلي مع النص الشرعي المعصوم." }
+                    ]
+                },
+                {
+                    name: "التاريخ والحضارة الإسلامية", units: 3, icon: "🏛️", 
+                    desc: "النظم الإسلامية، الإدارة، القضاء، والعلوم في الحضارة.",
+                    lessons: [
+                        { title: "نظام الحكم والوزارة والقضاء في الإسلام", content: "مؤسسات الدولة الإسلامية وأسس العدالة الاجتماعية." },
+                        { title: "ازدهار العلوم الشرعية والتجريبية", content: "دور علماء الأزهر الشريف عبر التاريخ في حفظ تراث الأمة." }
+                    ]
+                }
+            ],
+            "الفرقة الرابعة": [
+                {
+                    name: "مقارنة الأديان والمذاهب المعاصرة", units: 4, icon: "🌐", 
+                    desc: "دراسة الأديان السماوية المحرفة والوضعية والتيارات الفكرية المعاصرة.",
+                    lessons: [
+                        { title: "مفهوم النبوات في الأديان المقارنة", content: "دراسة الكتب السماوية وتحريفاتها وموقف الإسلام منها." },
+                        { title: "الرد على تيارات الإلحاد والعلمانية", content: "تفنيد الشبهات المعاصرة حول الدين والأخلاق والتشريع." }
+                    ]
+                },
+                {
+                    name: "الدعوة الإسلامية وأصول الخطابة", units: 3, icon: "🗣️", 
+                    desc: "فقه الدعوة ووسائل تبليغ الخطاب الديني الرشيد.",
+                    lessons: [
+                        { title: "أصول الحوار والجدال بالحكمة والموعظة", content: "قوله تعالى: (ادع إلى سبيل ربك بالحكمة والموعظة الحسنة)." },
+                        { title: "مهارات الداعية المعاصر", content: "الأساليب المؤثرة في إيصال الهداية للناس بالحسنى." }
+                    ]
+                },
+                {
+                    name: "التفسير المقارن", units: 3, icon: "🔍", 
+                    desc: "دراسة آيات اختلف المفسرون في تأويلها مع ترجيح الأقوال.",
+                    lessons: [
+                        { title: "نماذج من آيات الصفات والتشابه", content: "منهج السلف والخلف في التعامل مع المتشابهات." },
+                        { title: "اختلاف المفسرين وأثره في التنوع الفقهي", content: "رحمة الاختلاف السائغ في تفسير نصوص الذكر الحكيم." }
+                    ]
+                },
+                {
+                    name: "مشروع التخرج والبحث التخصصي", units: 4, icon: "📋", 
+                    desc: "بحث تخصصي ميداني أو مكتبي في أحد علوم أصول الدين.",
+                    lessons: [
+                        { title: "منهجية إعداد البحوث الإسلامية", content: "طريقة توثيق المراجع، عزو الآيات، وتخريج الأحاديث بدقة علمية." },
+                        { title: "كتابة ومناقشة المشروع التخصصي", content: "عرض الخاتمة والنتائج التوصيات العلمية المعتمدة." }
+                    ]
+                }
+            ]
+        }
+    };
+
+    function getCoursesForCurrentSelection(college, year) {
+        if (ALL_AZHAR_COURSES[college] && ALL_AZHAR_COURSES[college][year]) {
+            return ALL_AZHAR_COURSES[college][year];
+        }
+        return [
+            {
+                name: "المقرر العام المعتمد", units: 4, icon: "📖", desc: "المناهج المقررة للفرقة المحددة.",
+                lessons: [
+                    { title: "المحور الأساسي الأول", content: "شرح المبادئ والقواعد العامة للمقرر." },
+                    { title: "المحور المتقدم الثاني", content: "التطبيقات والأسئلة التدريبية للاختبار." }
+                ]
+            }
+        ];
+    }
+
+    function goToScreen(screenId) {
+        document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+        document.getElementById(screenId).classList.add('active');
+        if(screenId === 'screen-courses') {
+            renderCoursesList();
+        }
+    }
+
+    function updateHierarchy() {
+        const governorate = document.getElementById('edit-governorate').value;
+        const college = document.getElementById('edit-college').value;
+        const year = document.getElementById('edit-year').value;
+        
+        document.getElementById('dash-governorate-name').innerText = governorate;
+        document.getElementById('dash-college-name').innerText = college;
+        document.getElementById('dash-year-name').innerText = year;
+        
+        document.getElementById('filter-college').value = college;
+        document.getElementById('filter-year').value = year;
+        
+        alert('تم تحديث المسار والموسوعة الأكاديمية بنجاح!');
+        goToScreen('screen-dashboard');
+    }
+
+    function renderCoursesList() {
+        const college = document.getElementById('filter-college').value;
+        const year = document.getElementById('filter-year').value;
+        const container = document.getElementById('courses-list-container');
+        
+        const courses = getCoursesForCurrentSelection(college, year);
+
+        container.innerHTML = courses.map((c, idx) => `
+            <div class="card" onclick='openCourseDetail(${JSON.stringify(c)})' style="display: flex; align-items: center; justify-content: space-between; cursor: pointer;">
+                <div style="display: flex; align-items: center; gap: 12px;">
+                    <div style="font-size: 1.8rem; background: var(--accent-gold-light); padding: 10px; border-radius: 12px;">${c.icon}</div>
+                    <div>
+                        <h4 style="color: var(--primary-emerald); font-size: 0.9rem; margin-bottom: 2px;">${c.name}</h4>
+                        <p style="font-size: 0.7rem; color: var(--text-muted);">${c.units} وحدات • ${c.desc}</p>
+                    </div>
+                </div>
+                <span style="color: var(--text-muted); font-size: 1.1rem;">←</span>
+            </div>
+        `).join('');
+    }
+
+    function openCourseDetail(course) {
+        document.getElementById('detail-title').innerText = course.name;
+        document.getElementById('card-course-title').innerText = course.name;
+        document.getElementById('card-course-desc').innerText = course.desc;
+
+        const lessonsContainer = document.getElementById('lessons-container');
+        lessonsContainer.innerHTML = course.lessons.map((lesson, idx) => {
+            const lessonKey = course.name + "_" + idx;
+            const isDone = userProgress.completedLessons.includes(lessonKey);
+            return `
+                <div class="card" style="background: #f8fafc; margin-bottom: 8px; padding: 10px;">
+                    <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 4px;">
+                        <h5 style="color: var(--primary-emerald); font-size: 0.85rem;">${lesson.title}</h5>
+                        <button onclick="toggleLessonDone('${lessonKey}')" style="background: ${isDone ? 'var(--success-green)' : '#e2e8f0'}; color: ${isDone ? '#fff' : '#334155'}; border: none; padding: 4px 8px; border-radius: 6px; font-size: 0.7rem; cursor: pointer;">
+                            ${isDone ? '✓ تم إتمام الدرس' : 'تحديد كمنجَز'}
+                        </button>
+                    </div>
+                    <p style="font-size: 0.75rem; color: var(--text-main); line-height: 1.3;">${lesson.content}</p>
+                </div>
+            `;
+        }).join('');
+
+        goToScreen('screen-course-detail');
+    }
+
+    function toggleLessonDone(lessonKey) {
+        const index = userProgress.completedLessons.indexOf(lessonKey);
+        if (index > -1) {
+            userProgress.completedLessons.splice(index, 1);
+        } else {
+            userProgress.completedLessons.push(lessonKey);
+        }
+        localStorage.setItem('completedLessons', JSON.stringify(userProgress.completedLessons));
+        const college = document.getElementById('filter-college').value;
+        const year = document.getElementById('filter-year').value;
+        const courses = getCoursesForCurrentSelection(college, year);
+        const currentTitle = document.getElementById('card-course-title').innerText;
+        const found = courses.find(c => c.name === currentTitle);
+        if(found) openCourseDetail(found);
+    }
+
+    const quizQuestions = [
+        {
+            q: "ما هو المصدر الأساسي الثاني من أدلة التشريع الإسلامي المتفق عليها؟",
+            options: ["الإجماع", "السنة النبوية المطهرة", "القياس", "المصالح المرسلة"],
+            correct: 1
+        },
+        {
+            q: "ما هي صفات الوجوب الإلهية الواجبة عقلاً ونقلاً لله تعالى؟",
+            options: ["الوجود والبقاء والمخالفة للحوادث", "الفناء والحدوث", "الجواز المطلق", "التجسيم"],
+            correct: 0
+        },
+        {
+            q: "ما هو الفرق الرئيسي بين التفسير التحليلي والموضوعي؟",
+            options: ["التفسير الموضوعي يجمع آيات القضية الواحدة، والتحليلي يسير بحسب ترتيب المصحف", "لا توجد فروق", "التفسير التحليلي للقرآن كله والموضوعي لسورة واحدة فقط", "التفسير الموضوعي للحديث الشريف فقط"],
+            correct: 0
+        }
+    ];
+
+    let currentQuizIndex = 0;
+    let currentQuizScore = 0;
+
+    function startActiveQuiz() {
+        currentQuizIndex = 0;
+        currentQuizScore = 0;
+        goToScreen('screen-quiz-active');
+        loadQuizQuestion();
+    }
+
+    function loadQuizQuestion() {
+        if (currentQuizIndex >= quizQuestions.length) {
+            userProgress.passedQuizzes += 1;
+            localStorage.setItem('passedQuizzes', userProgress.passedQuizzes);
+            document.getElementById('final-score-msg').innerText = `لقد أجبت بنجاح وحصلت على ${currentQuizScore} من ${quizQuestions.length} درجات في بنك الأسئلة الأزهري!`;
+            goToScreen('screen-quiz-result');
+            return;
+        }
+
+        const qData = quizQuestions[currentQuizIndex];
+        document.getElementById('quiz-progress-text').innerText = `السؤال ${currentQuizIndex + 1} من ${quizQuestions.length}`;
+        document.getElementById('quiz-score-text').innerText = `الدرجة: ${currentQuizScore}`;
+        document.getElementById('quiz-question-box').innerText = qData.q;
+
+        const optionsBox = document.getElementById('quiz-options-box');
+        optionsBox.innerHTML = qData.options.map((opt, idx) => `
+            <div class="option-btn" onclick="submitQuizAnswer(${idx}, ${qData.correct})">${opt}</div>
+        `).join('');
+    }
+
+    function submitQuizAnswer(selected, correct) {
+        if (selected === correct) {
+            currentQuizScore++;
+            alert('إجابة صحيحة بارك الله فيك! 🌟');
+        } else {
+            alert('إجابة غير صائبة. الإجابة الصحيحة هي: ' + quizQuestions[currentQuizIndex].options[correct]);
+        }
+        currentQuizIndex++;
+        loadQuizQuestion();
+    }
+
+    function updateProgressScreen() {
+        const totalLessonsEstimated = 12;
+        const doneCount = userProgress.completedLessons.length;
+        const quizzesDone = userProgress.passedQuizzes;
+        
+        let percentage = Math.round(((doneCount + quizzesDone * 2) / (totalLessonsEstimated + 6)) * 100);
+        if (percentage > 100) percentage = 100;
+
+        document.getElementById('progress-percentage-val').innerText = percentage + '%';
+        document.getElementById('progress-bar-element').style.width = percentage + '%';
+        document.getElementById('stat-lessons-done').innerText = doneCount;
+        document.getElementById('stat-quizzes-done').innerText = quizzesDone;
+
+        goToScreen('screen-progress');
+    }
+
+    function sendChatMessage() {
+        const input = document.getElementById('chat-user-input');
+        const text = input.value.trim();
+        if(!text) return;
+
+        const chatBox = document.getElementById('chat-messages-box');
+        chatBox.innerHTML += `<div class="chat-bubble user">${text}</div>`;
+        input.value = '';
+        chatBox.scrollTop = chatBox.scrollHeight;
+
+        setTimeout(() => {
+            let reply = "أهلاً بك. بصفتي محاضرك الأزهري لأصول الدين، أنصحك بالتركيز على أمهات الكتب ومتون العقيدة والتفسير والحديث المعتمدة بجامعة الأزهر الشريف.";
+            if(text.includes("تفسير") || text.includes("قرآن")) {
+                reply = "في التفسير، نعتمد على فهم الآيات وفق سياقها النزولي وربطها بأقوال السلف الصالح ومناهج المفسرين المعتمدين كابن كثير والقرطبي والجلالين.";
+            } else if(text.includes("حديث") || text.includes("سنة")) {
+                reply = "في علوم الحديث، العناية بمتن الحديث وصحته وسنده هي أساس الحكم الفقهي والاعتقادي عند أهل السنة والجماعة.";
+            } else if(text.includes("توحيد") || text.includes("عقيدة")) {
+                reply = "في التوحيد والعقيدة، تقرير الإلهيات والصفات الواجبة لله تعالى وفق منهج الأشاعرة والماتريدية هو أساس العقيدة الأزهرية الوسطية.";
+            }
+
+            chatBox.innerHTML += `<div class="chat-bubble bot">${reply}</div>`;
+            chatBox.scrollTop = chatBox.scrollHeight;
+        }, 600);
+    }
+</script>
+</body>
+</html>
