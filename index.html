@@ -297,7 +297,7 @@
         <div class="dashboard-grid">
             <div class="dashboard-tile" onclick="goToScreen('screen-courses')">
                 <div class="icon">📖</div>
-                <div class="title">المقررات الرسمية</div>
+                <div class="title">المقررات الدراسية</div>
             </div>
             <div class="dashboard-tile" onclick="startActiveQuiz()">
                 <div class="icon">📋</div>
@@ -315,7 +315,7 @@
 
         <div class="card" style="background: #fffdf5; border-color: var(--accent-gold); padding: 12px;">
             <h4 style="font-size: 0.85rem; color: var(--primary-emerald); margin-bottom: 4px;">🌟 الموسوعة الشاملة</h4>
-            <p style="font-size: 0.75rem; color: var(--text-main);">"مقررات أصول الدين، الشريعة والقانون، اللغة العربية، والطب البشري لجميع الفرق."</p>
+            <p style="font-size: 0.75rem; color: var(--text-main);">"مقررات مدخلة لأربع كليات، قيد المطابقة مع اللوائح الرسمية لجامعة الأزهر."</p>
         </div>
     </div>
 
@@ -324,17 +324,18 @@
         <div class="app-header">
             <div style="display: flex; align-items: center; gap: 10px;">
                 <div class="back-btn" onclick="goToScreen('screen-dashboard')">←</div>
-                <span class="app-title">المقررات الرسمية المعتمدة</span>
+                <span class="app-title">المقررات الدراسية المدخلة</span>
             </div>
         </div>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 12px;">
             <div class="input-group" style="margin:0;">
                 <label style="font-size:0.7rem;">الكلية:</label>
-                <select id="filter-college" onchange="renderCoursesList()" style="font-size: 0.75rem; padding: 8px;">
+                <select id="filter-college" onchange="syncCourseFilters()" style="font-size: 0.75rem; padding: 8px;">
                     <option value="أصول الدين">أصول الدين</option>
                     <option value="الشريعة والقانون">الشريعة والقانون</option>
                     <option value="اللغة العربية">اللغة العربية</option>
                     <option value="كلية الطب البشري">كلية الطب البشري</option>
+                    <option value="كلية اللغات والترجمة">كلية اللغات والترجمة</option>
                 </select>
             </div>
             <div class="input-group" style="margin:0;">
@@ -347,6 +348,9 @@
                 </select>
             </div>
         </div>
+        <div class="input-group" id="filter-department-group" style="display:none"><label>القسم / البرنامج:</label><select id="filter-department" onchange="renderCoursesList()"><option value="اللغة الفرنسية وآدابها">اللغة الفرنسية وآدابها</option></select></div>
+        <div class="input-group" id="filter-semester-group" style="display:none"><label>الفصل الدراسي:</label><select id="filter-semester" onchange="renderCoursesList()"><option value="">الفصلان معاً</option><option value="1">الفصل الأول</option><option value="2">الفصل الثاني</option></select></div>
+        <div id="course-source-note" style="font-size:.72rem;color:var(--text-muted);margin-bottom:10px"></div>
         <div id="courses-list-container"></div>
     </div>
 
@@ -459,11 +463,12 @@
             </div>
             <div class="input-group">
                 <label>🏛️ الكلية:</label>
-                <select id="edit-college">
+                <select id="edit-college" onchange="syncEditDepartment()">
                     <option value="أصول الدين">أصول الدين</option>
                     <option value="الشريعة والقانون">الشريعة والقانون</option>
                     <option value="اللغة العربية">اللغة العربية</option>
                     <option value="كلية الطب البشري">كلية الطب البشري</option>
+                    <option value="كلية اللغات والترجمة">كلية اللغات والترجمة</option>
                 </select>
             </div>
             <div class="input-group">
@@ -475,6 +480,7 @@
                     <option value="الفرقة الرابعة">الفرقة الرابعة</option>
                 </select>
             </div>
+            <div class="input-group" id="edit-department-group" style="display:none"><label>القسم / البرنامج:</label><select id="edit-department"><option value="اللغة الفرنسية وآدابها">اللغة الفرنسية وآدابها</option></select></div>
             <button class="btn-primary" style="margin-top: 10px;" onclick="updateHierarchy()">حفظ وتحديث المسار</button>
         </div>
     </div>
@@ -602,27 +608,29 @@
         }
     };
 
+
+    const VERIFIED_FRENCH_COURSES = {"الفرقة الأولى": [{"name": "القرآن الكريم", "units": 2, "icon": "📘", "desc": "الفصل الدراسي الأول • 2 ساعات أسبوعياً • دليل الطالب 2024–2025", "semester": "1", "verified": true, "lessons": []}, {"name": "اللغة العربية", "units": 4, "icon": "📘", "desc": "الفصل الدراسي الأول • 4 ساعات أسبوعياً • دليل الطالب 2024–2025", "semester": "1", "verified": true, "lessons": []}, {"name": "استماع ومحادثة 1", "units": 4, "icon": "📘", "desc": "الفصل الدراسي الأول • 4 ساعات أسبوعياً • دليل الطالب 2024–2025", "semester": "1", "verified": true, "lessons": []}, {"name": "شرح نصوص 1", "units": 4, "icon": "📘", "desc": "الفصل الدراسي الأول • 4 ساعات أسبوعياً • دليل الطالب 2024–2025", "semester": "1", "verified": true, "lessons": []}, {"name": "تعبير 1", "units": 4, "icon": "📘", "desc": "الفصل الدراسي الأول • 4 ساعات أسبوعياً • دليل الطالب 2024–2025", "semester": "1", "verified": true, "lessons": []}, {"name": "قواعد اللغة", "units": 4, "icon": "📘", "desc": "الفصل الدراسي الأول • 4 ساعات أسبوعياً • دليل الطالب 2024–2025", "semester": "1", "verified": true, "lessons": []}, {"name": "اللغة الأجنبية الثانية (اختياري)", "units": 3, "icon": "📘", "desc": "الفصل الدراسي الأول • 3 ساعات أسبوعياً • دليل الطالب 2024–2025", "semester": "1", "verified": true, "lessons": []}, {"name": "القرآن الكريم", "units": 2, "icon": "📘", "desc": "الفصل الدراسي الثاني • 2 ساعات أسبوعياً • دليل الطالب 2024–2025", "semester": "2", "verified": true, "lessons": []}, {"name": "عقيدة وأخلاق", "units": 2, "icon": "📘", "desc": "الفصل الدراسي الثاني • 2 ساعات أسبوعياً • دليل الطالب 2024–2025", "semester": "2", "verified": true, "lessons": []}, {"name": "فقه", "units": 2, "icon": "📘", "desc": "الفصل الدراسي الثاني • 2 ساعات أسبوعياً • دليل الطالب 2024–2025", "semester": "2", "verified": true, "lessons": []}, {"name": "استماع ومحادثة 2", "units": 4, "icon": "📘", "desc": "الفصل الدراسي الثاني • 4 ساعات أسبوعياً • دليل الطالب 2024–2025", "semester": "2", "verified": true, "lessons": []}, {"name": "علم المعاجم", "units": 4, "icon": "📘", "desc": "الفصل الدراسي الثاني • 4 ساعات أسبوعياً • دليل الطالب 2024–2025", "semester": "2", "verified": true, "lessons": []}, {"name": "تعبير 2", "units": 4, "icon": "📘", "desc": "الفصل الدراسي الثاني • 4 ساعات أسبوعياً • دليل الطالب 2024–2025", "semester": "2", "verified": true, "lessons": []}, {"name": "ترجمة من الفرنسية إلى العربية", "units": 4, "icon": "📘", "desc": "الفصل الدراسي الثاني • 4 ساعات أسبوعياً • دليل الطالب 2024–2025", "semester": "2", "verified": true, "lessons": []}, {"name": "اللغة الأجنبية الثانية (اختياري)", "units": 3, "icon": "📘", "desc": "الفصل الدراسي الثاني • 3 ساعات أسبوعياً • دليل الطالب 2024–2025", "semester": "2", "verified": true, "lessons": []}], "الفرقة الثانية": [{"name": "القرآن الكريم", "units": 2, "icon": "📘", "desc": "الفصل الدراسي الأول • 2 ساعات أسبوعياً • دليل الطالب 2024–2025", "semester": "1", "verified": true, "lessons": []}, {"name": "اللغة العربية", "units": 4, "icon": "📘", "desc": "الفصل الدراسي الأول • 4 ساعات أسبوعياً • دليل الطالب 2024–2025", "semester": "1", "verified": true, "lessons": []}, {"name": "قواعد اللغة (مستوى متقدم)", "units": 4, "icon": "📘", "desc": "الفصل الدراسي الأول • 4 ساعات أسبوعياً • دليل الطالب 2024–2025", "semester": "1", "verified": true, "lessons": []}, {"name": "تدريبات وتمرينات", "units": 4, "icon": "📘", "desc": "الفصل الدراسي الأول • 4 ساعات أسبوعياً • دليل الطالب 2024–2025", "semester": "1", "verified": true, "lessons": []}, {"name": "ترجمة من العربية إلى الفرنسية", "units": 4, "icon": "📘", "desc": "الفصل الدراسي الأول • 4 ساعات أسبوعياً • دليل الطالب 2024–2025", "semester": "1", "verified": true, "lessons": []}, {"name": "مقدمة في الأدب الفرنسي", "units": 4, "icon": "📘", "desc": "الفصل الدراسي الأول • 4 ساعات أسبوعياً • دليل الطالب 2024–2025", "semester": "1", "verified": true, "lessons": []}, {"name": "مقال 1", "units": 4, "icon": "📘", "desc": "الفصل الدراسي الأول • 4 ساعات أسبوعياً • دليل الطالب 2024–2025", "semester": "1", "verified": true, "lessons": []}, {"name": "اللغة الأجنبية الثانية (اختياري)", "units": 3, "icon": "📘", "desc": "الفصل الدراسي الأول • 3 ساعات أسبوعياً • دليل الطالب 2024–2025", "semester": "1", "verified": true, "lessons": []}, {"name": "القرآن الكريم", "units": 2, "icon": "📘", "desc": "الفصل الدراسي الثاني • 2 ساعات أسبوعياً • دليل الطالب 2024–2025", "semester": "2", "verified": true, "lessons": []}, {"name": "السيرة النبوية وتاريخ الخلفاء الراشدين", "units": 2, "icon": "📘", "desc": "الفصل الدراسي الثاني • 2 ساعات أسبوعياً • دليل الطالب 2024–2025", "semester": "2", "verified": true, "lessons": []}, {"name": "لغويات 1 (علم الأصوات)", "units": 4, "icon": "📘", "desc": "الفصل الدراسي الثاني • 4 ساعات أسبوعياً • دليل الطالب 2024–2025", "semester": "2", "verified": true, "lessons": []}, {"name": "ترجمة متخصصة (علوم إنسانية واجتماعية) من الفرنسية إلى العربية", "units": 4, "icon": "📘", "desc": "الفصل الدراسي الثاني • 4 ساعات أسبوعياً • دليل الطالب 2024–2025", "semester": "2", "verified": true, "lessons": []}, {"name": "ترجمة شفهية 1", "units": 4, "icon": "📘", "desc": "الفصل الدراسي الثاني • 4 ساعات أسبوعياً • دليل الطالب 2024–2025", "semester": "2", "verified": true, "lessons": []}, {"name": "حضارة فرنسية", "units": 4, "icon": "📘", "desc": "الفصل الدراسي الثاني • 4 ساعات أسبوعياً • دليل الطالب 2024–2025", "semester": "2", "verified": true, "lessons": []}, {"name": "شرح نصوص 2", "units": 4, "icon": "📘", "desc": "الفصل الدراسي الثاني • 4 ساعات أسبوعياً • دليل الطالب 2024–2025", "semester": "2", "verified": true, "lessons": []}, {"name": "اللغة الأجنبية الثانية (اختياري)", "units": 3, "icon": "📘", "desc": "الفصل الدراسي الثاني • 3 ساعات أسبوعياً • دليل الطالب 2024–2025", "semester": "2", "verified": true, "lessons": []}], "الفرقة الثالثة": [{"name": "القرآن الكريم", "units": 2, "icon": "📘", "desc": "الفصل الدراسي الأول • 2 ساعات أسبوعياً • دليل الطالب 2024–2025", "semester": "1", "verified": true, "lessons": []}, {"name": "اللغة العربية", "units": 4, "icon": "📘", "desc": "الفصل الدراسي الأول • 4 ساعات أسبوعياً • دليل الطالب 2024–2025", "semester": "1", "verified": true, "lessons": []}, {"name": "لغويات 2 (نحو)", "units": 4, "icon": "📘", "desc": "الفصل الدراسي الأول • 4 ساعات أسبوعياً • دليل الطالب 2024–2025", "semester": "1", "verified": true, "lessons": []}, {"name": "ترجمة متخصصة إلى الفرنسية", "units": 4, "icon": "📘", "desc": "الفصل الدراسي الأول • 4 ساعات أسبوعياً • دليل الطالب 2024–2025", "semester": "1", "verified": true, "lessons": []}, {"name": "ترجمة تتبعية 1", "units": 4, "icon": "📘", "desc": "الفصل الدراسي الأول • 4 ساعات أسبوعياً • دليل الطالب 2024–2025", "semester": "1", "verified": true, "lessons": []}, {"name": "تاريخ الأدب الفرنسي", "units": 4, "icon": "📘", "desc": "الفصل الدراسي الأول • 4 ساعات أسبوعياً • دليل الطالب 2024–2025", "semester": "1", "verified": true, "lessons": []}, {"name": "مقال 2", "units": 4, "icon": "📘", "desc": "الفصل الدراسي الأول • 4 ساعات أسبوعياً • دليل الطالب 2024–2025", "semester": "1", "verified": true, "lessons": []}, {"name": "اللغة الأجنبية الثانية (اختياري)", "units": 3, "icon": "📘", "desc": "الفصل الدراسي الأول • 3 ساعات أسبوعياً • دليل الطالب 2024–2025", "semester": "1", "verified": true, "lessons": []}, {"name": "القرآن الكريم", "units": 2, "icon": "📘", "desc": "الفصل الدراسي الثاني • 2 ساعات أسبوعياً • دليل الطالب 2024–2025", "semester": "2", "verified": true, "lessons": []}, {"name": "تفسير", "units": 2, "icon": "📘", "desc": "الفصل الدراسي الثاني • 2 ساعات أسبوعياً • دليل الطالب 2024–2025", "semester": "2", "verified": true, "lessons": []}, {"name": "لغويات 3 (صرف)", "units": 4, "icon": "📘", "desc": "الفصل الدراسي الثاني • 4 ساعات أسبوعياً • دليل الطالب 2024–2025", "semester": "2", "verified": true, "lessons": []}, {"name": "ترجمة متخصصة (من العربية إلى الفرنسية)", "units": 4, "icon": "📘", "desc": "الفصل الدراسي الثاني • 4 ساعات أسبوعياً • دليل الطالب 2024–2025", "semester": "2", "verified": true, "lessons": []}, {"name": "نقد أدبي", "units": 4, "icon": "📘", "desc": "الفصل الدراسي الثاني • 4 ساعات أسبوعياً • دليل الطالب 2024–2025", "semester": "2", "verified": true, "lessons": []}, {"name": "قراءة في الأدب الفرنسي (رواية – مسرح – شعر)", "units": 4, "icon": "📘", "desc": "الفصل الدراسي الثاني • 4 ساعات أسبوعياً • دليل الطالب 2024–2025", "semester": "2", "verified": true, "lessons": []}, {"name": "شرح نصوص 3", "units": 4, "icon": "📘", "desc": "الفصل الدراسي الثاني • 4 ساعات أسبوعياً • دليل الطالب 2024–2025", "semester": "2", "verified": true, "lessons": []}, {"name": "اللغة الأجنبية الثانية (اختياري)", "units": 3, "icon": "📘", "desc": "الفصل الدراسي الثاني • 3 ساعات أسبوعياً • دليل الطالب 2024–2025", "semester": "2", "verified": true, "lessons": []}], "الفرقة الرابعة": [{"name": "القرآن الكريم", "units": 2, "icon": "📘", "desc": "الفصل الدراسي الأول • 2 ساعات أسبوعياً • دليل الطالب 2024–2025", "semester": "1", "verified": true, "lessons": []}, {"name": "اللغة العربية", "units": 4, "icon": "📘", "desc": "الفصل الدراسي الأول • 4 ساعات أسبوعياً • دليل الطالب 2024–2025", "semester": "1", "verified": true, "lessons": []}, {"name": "حديث", "units": 2, "icon": "📘", "desc": "الفصل الدراسي الأول • 2 ساعات أسبوعياً • دليل الطالب 2024–2025", "semester": "1", "verified": true, "lessons": []}, {"name": "لغويات 4 (علم الدلالة البرجماتية)", "units": 4, "icon": "📘", "desc": "الفصل الدراسي الأول • 4 ساعات أسبوعياً • دليل الطالب 2024–2025", "semester": "1", "verified": true, "lessons": []}, {"name": "ترجمة متخصصة علمية (من الفرنسية إلى العربية)", "units": 4, "icon": "📘", "desc": "الفصل الدراسي الأول • 4 ساعات أسبوعياً • دليل الطالب 2024–2025", "semester": "1", "verified": true, "lessons": []}, {"name": "ترجمة تتابعية 2", "units": 4, "icon": "📘", "desc": "الفصل الدراسي الأول • 4 ساعات أسبوعياً • دليل الطالب 2024–2025", "semester": "1", "verified": true, "lessons": []}, {"name": "مقدمة في الآداب الناطقة بالفرنسية", "units": 4, "icon": "📘", "desc": "الفصل الدراسي الأول • 4 ساعات أسبوعياً • دليل الطالب 2024–2025", "semester": "1", "verified": true, "lessons": []}, {"name": "أدب فرنسي معاصر", "units": 4, "icon": "📘", "desc": "الفصل الدراسي الأول • 4 ساعات أسبوعياً • دليل الطالب 2024–2025", "semester": "1", "verified": true, "lessons": []}, {"name": "اللغة الأجنبية الثانية (اختياري)", "units": 4, "icon": "📘", "desc": "الفصل الدراسي الأول • 4 ساعات أسبوعياً • دليل الطالب 2024–2025", "semester": "1", "verified": true, "lessons": []}, {"name": "القرآن الكريم", "units": 2, "icon": "📘", "desc": "الفصل الدراسي الثاني • 2 ساعات أسبوعياً • دليل الطالب 2024–2025", "semester": "2", "verified": true, "lessons": []}, {"name": "شرح نصوص 3 (تطبيقات نقدية)", "units": 4, "icon": "📘", "desc": "الفصل الدراسي الثاني • 4 ساعات أسبوعياً • دليل الطالب 2024–2025", "semester": "2", "verified": true, "lessons": []}, {"name": "ترجمة متخصصة علمية (من العربية إلى الفرنسية)", "units": 4, "icon": "📘", "desc": "الفصل الدراسي الثاني • 4 ساعات أسبوعياً • دليل الطالب 2024–2025", "semester": "2", "verified": true, "lessons": []}, {"name": "حلقات ترجمة", "units": 4, "icon": "📘", "desc": "الفصل الدراسي الثاني • 4 ساعات أسبوعياً • دليل الطالب 2024–2025", "semester": "2", "verified": true, "lessons": []}, {"name": "مقدمة في الأدب المقارن", "units": 4, "icon": "📘", "desc": "الفصل الدراسي الثاني • 4 ساعات أسبوعياً • دليل الطالب 2024–2025", "semester": "2", "verified": true, "lessons": []}, {"name": "قاعة بحث (تقديم بحث للمناقشة شفوي)", "units": 4, "icon": "📘", "desc": "الفصل الدراسي الثاني • 4 ساعات أسبوعياً • دليل الطالب 2024–2025", "semester": "2", "verified": true, "lessons": []}, {"name": "اللغة الأجنبية الثانية (اختياري)", "units": 4, "icon": "📘", "desc": "الفصل الدراسي الثاني • 4 ساعات أسبوعياً • دليل الطالب 2024–2025", "semester": "2", "verified": true, "lessons": []}]};
+
     function getCoursesForCurrentSelection(college, year) {
-        if (ALL_AZHAR_COURSES[college] && ALL_AZHAR_COURSES[college][year]) {
-            return ALL_AZHAR_COURSES[college][year];
-        }
-        return [
-            {
-                name: "المقرر العام المعتمد", units: 4, icon: "📖", desc: "المناهج المقررة للفرقة المحددة.",
-                lessons: [
-                    { title: "المحور الأساسي الأول", content: "شرح المبادئ والقواعد العامة للمقرر." },
-                    { title: "المحور المتقدم الثاني", content: "التطبيقات والأسئلة التدريبية للاختبار." }
-                ]
-            }
-        ];
+        return college === "كلية اللغات والترجمة" ? (document.getElementById("filter-department").value === "اللغة الفرنسية وآدابها" ? (VERIFIED_FRENCH_COURSES[year] || []).filter(c => !document.getElementById("filter-semester").value || c.semester === document.getElementById("filter-semester").value) : []) : (ALL_AZHAR_COURSES[college]?.[year] || []);
     }
 
     function goToScreen(screenId) {
         document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
         document.getElementById(screenId).classList.add('active');
         if(screenId === 'screen-courses') {
-            renderCoursesList();
+            syncCourseFilters();
         }
+    }
+
+    function syncCourseFilters() {
+        const french = document.getElementById('filter-college').value === 'كلية اللغات والترجمة';
+        document.getElementById('filter-department-group').style.display = french ? 'block' : 'none';
+        document.getElementById('filter-semester-group').style.display = french ? 'block' : 'none';
+        renderCoursesList();
+    }
+    function syncEditDepartment() {
+        document.getElementById('edit-department-group').style.display = document.getElementById('edit-college').value === 'كلية اللغات والترجمة' ? 'block' : 'none';
     }
 
     function updateHierarchy() {
@@ -636,8 +644,10 @@
         
         document.getElementById('filter-college').value = college;
         document.getElementById('filter-year').value = year;
+        syncCourseFilters();
         
-        alert('تم تحديث المسار والموسوعة الأكاديمية بنجاح!');
+        localStorage.setItem('azharStudentPath', JSON.stringify({governorate, college, year}));
+        alert('تم حفظ المسار الدراسي بنجاح.');
         goToScreen('screen-dashboard');
     }
 
@@ -645,21 +655,47 @@
         const college = document.getElementById('filter-college').value;
         const year = document.getElementById('filter-year').value;
         const container = document.getElementById('courses-list-container');
-        
         const courses = getCoursesForCurrentSelection(college, year);
-
-        container.innerHTML = courses.map((c, idx) => `
-            <div class="card" onclick='openCourseDetail(${JSON.stringify(c)})' style="display: flex; align-items: center; justify-content: space-between; cursor: pointer;">
-                <div style="display: flex; align-items: center; gap: 12px;">
-                    <div style="font-size: 1.8rem; background: var(--accent-gold-light); padding: 10px; border-radius: 12px;">${c.icon}</div>
-                    <div>
-                        <h4 style="color: var(--primary-emerald); font-size: 0.9rem; margin-bottom: 2px;">${c.name}</h4>
-                        <p style="font-size: 0.7rem; color: var(--text-muted);">${c.units} وحدات • ${c.desc}</p>
-                    </div>
-                </div>
-                <span style="color: var(--text-muted); font-size: 1.1rem;">←</span>
-            </div>
-        `).join('');
+        const isFrench = college === 'كلية اللغات والترجمة';
+        document.getElementById('course-source-note').textContent = isFrench ? 'المصدر: دليل الطالب الرسمي 2024–2025، برنامج اللغة الفرنسية وآدابها، جامعة الأزهر. أسماء المقررات والساعات موثقة؛ الدروس لم تُضف بعد.' : 'تنبيه: المقررات الموجودة لهذا الاختيار من النسخة الأصلية ولم تُراجع بعد مقابل اللائحة الرسمية.';
+        container.replaceChildren();
+        if (!courses.length) {
+            const notice = document.createElement('div');
+            notice.className = 'card';
+            notice.textContent = 'لا توجد مقررات مدخلة لهذا الاختيار بعد.';
+            container.appendChild(notice);
+            return;
+        }
+        courses.forEach((course) => {
+            const card = document.createElement('div');
+            card.className = 'card';
+            card.style.cssText = 'display:flex;align-items:center;justify-content:space-between;cursor:pointer;';
+            card.setAttribute('role', 'button');
+            card.tabIndex = 0;
+            const body = document.createElement('div');
+            body.style.cssText = 'display:flex;align-items:center;gap:12px;';
+            const emoji = document.createElement('div');
+            emoji.style.cssText = 'font-size:1.8rem;background:var(--accent-gold-light);padding:10px;border-radius:12px;';
+            emoji.textContent = course.icon || '📖';
+            const details = document.createElement('div');
+            const heading = document.createElement('h4');
+            heading.style.cssText = 'color:var(--primary-emerald);font-size:.9rem;margin-bottom:2px;';
+            heading.textContent = course.name;
+            const desc = document.createElement('p');
+            desc.style.cssText = 'font-size:.7rem;color:var(--text-muted);';
+            desc.textContent = course.verified ? course.desc : `${course.units} وحدات • ${course.desc} • غير موثق`;
+            details.append(heading, desc);
+            body.append(emoji, details);
+            const arrow = document.createElement('span');
+            arrow.style.cssText = 'color:var(--text-muted);font-size:1.1rem;';
+            arrow.textContent = '←';
+            card.append(body, arrow);
+            card.addEventListener('click', () => openCourseDetail(course));
+            card.addEventListener('keydown', (e) => {
+                if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); openCourseDetail(course); }
+            });
+            container.appendChild(card);
+        });
     }
 
     function openCourseDetail(course) {
@@ -668,6 +704,7 @@
         document.getElementById('card-course-desc').innerText = course.desc;
 
         const lessonsContainer = document.getElementById('lessons-container');
+        if (!course.lessons.length) { lessonsContainer.textContent = 'تم توثيق اسم المقرر وساعاته من الدليل الرسمي؛ محتوى الدروس غير متاح في المصدر بعد.'; goToScreen('screen-course-detail'); return; }
         lessonsContainer.innerHTML = course.lessons.map((lesson, idx) => {
             const lessonKey = course.name + "_" + idx;
             const isDone = userProgress.completedLessons.includes(lessonKey);
@@ -778,6 +815,24 @@
         goToScreen('screen-progress');
     }
 
+    // Restore the student's chosen path without changing the approved layout.
+    (function restoreStudentPath() {
+        try {
+            const saved = JSON.parse(localStorage.getItem('azharStudentPath') || 'null');
+            if (!saved) return;
+            for (const [id, value] of [
+                ['edit-governorate', saved.governorate], ['edit-college', saved.college],
+                ['edit-year', saved.year], ['filter-college', saved.college], ['filter-year', saved.year]
+            ]) {
+                const element = document.getElementById(id);
+                if (element && [...element.options].some(option => option.value === value)) element.value = value;
+            }
+            document.getElementById('dash-governorate-name').textContent = document.getElementById('edit-governorate').value;
+            document.getElementById('dash-college-name').textContent = document.getElementById('edit-college').value;
+            document.getElementById('dash-year-name').textContent = document.getElementById('edit-year').value;
+        } catch (error) { console.warn('تعذر استعادة المسار المحفوظ', error); }
+    })();
+
     function sendChatMessage() {
         const input = document.getElementById('chat-user-input');
         const text = input.value.trim();
@@ -802,6 +857,8 @@
             chatBox.scrollTop = chatBox.scrollHeight;
         }, 600);
     }
+    syncEditDepartment();
+    syncCourseFilters();
 </script>
 </body>
 </html>
