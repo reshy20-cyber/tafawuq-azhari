@@ -1,0 +1,1857 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>تفوق الأزهري - الصف الثالث الإعدادي</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Readex+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-ivory: #FAF8F3;
+      --bg-card: #FFFFFF;
+      --bg-soft: #F3EFE6;
+      --azhar-green: #0D6E52;
+      --azhar-green-dark: #084C38;
+      --azhar-green-light: #E6F3EF;
+      --azhar-gold: #C59B27;
+      --azhar-gold-light: #FBF5E4;
+      --text-main: #1C2522;
+      --text-muted: #5C6B66;
+      --border-subtle: #E6E0D3;
+      --danger: #D9534F;
+      --danger-light: #FDF0EF;
+      --shadow-sm: 0 2px 8px rgba(13, 110, 82, 0.06);
+      --shadow-md: 0 6px 20px rgba(13, 110, 82, 0.10);
+      --radius-lg: 20px;
+      --radius-md: 14px;
+      --radius-sm: 10px;
+      --lesson-font-size: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      font-family: 'Cairo', 'Readex Pro', sans-serif;
+      background-color: #EAE5D9;
+      color: var(--text-main);
+      display: flex;
+      justify-content: center;
+      min-height: 100vh;
+    }
+
+    .app-shell {
+      width: 100%;
+      max-width: 480px;
+      min-height: 100vh;
+      background-color: var(--bg-ivory);
+      background-image: radial-gradient(rgba(13, 110, 82, 0.05) 1px, transparent 1px),
+                        radial-gradient(rgba(197, 155, 39, 0.05) 1px, var(--bg-ivory) 1px);
+      background-size: 28px 28px;
+      background-position: 0 0, 14px 14px;
+      position: relative;
+      padding-bottom: 88px;
+      box-shadow: 0 0 40px rgba(0,0,0,0.08);
+      overflow-x: hidden;
+    }
+
+    /* Top Bar */
+    .top-header {
+      background: linear-gradient(135deg, var(--azhar-green) 0%, var(--azhar-green-dark) 100%);
+      color: #fff;
+      padding: 18px 18px 24px;
+      border-bottom-left-radius: 26px;
+      border-bottom-right-radius: 26px;
+      position: relative;
+      overflow: hidden;
+      box-shadow: var(--shadow-md);
+    }
+
+    .top-header::before {
+      content: "";
+      position: absolute;
+      top: -30px;
+      left: -30px;
+      width: 140px;
+      height: 140px;
+      border: 14px solid rgba(197, 155, 39, 0.16);
+      border-radius: 50%;
+      pointer-events: none;
+    }
+
+    .header-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      position: relative;
+      z-index: 2;
+    }
+
+    .brand-title h1 {
+      font-size: 19px;
+      font-weight: 800;
+      letter-spacing: -0.2px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .brand-title p {
+      font-size: 12px;
+      color: #D2EBE3;
+      margin-top: 2px;
+    }
+
+    .stats-pills {
+      display: flex;
+      gap: 8px;
+    }
+
+    .pill-stat {
+      background: rgba(255, 255, 255, 0.14);
+      backdrop-filter: blur(6px);
+      border: 1px solid rgba(255, 255, 255, 0.22);
+      padding: 5px 10px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      color: #FFFDF7;
+    }
+
+    /* Views */
+    .view-section {
+      display: none;
+      padding: 16px;
+      animation: fadeIn 0.25s ease;
+    }
+
+    .view-section.active {
+      display: block;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(6px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Cards & Containers */
+    .card {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-lg);
+      padding: 16px;
+      box-shadow: var(--shadow-sm);
+      margin-bottom: 16px;
+    }
+
+    .section-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 12px;
+    }
+
+    .section-header h2 {
+      font-size: 16px;
+      font-weight: 800;
+      color: var(--azhar-green-dark);
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .section-header span {
+      font-size: 12px;
+      color: var(--azhar-gold);
+      font-weight: 700;
+    }
+
+    /* Journey Hero Card */
+    .journey-card {
+      background: linear-gradient(135deg, #FFFFFF 0%, #FBF5E4 100%);
+      border: 1.5px solid rgba(197, 155, 39, 0.35);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 14px;
+    }
+
+    .journey-info h3 {
+      font-size: 15px;
+      font-weight: 800;
+      color: var(--azhar-green-dark);
+      margin-bottom: 4px;
+    }
+
+    .journey-info p {
+      font-size: 12.5px;
+      color: var(--text-muted);
+      margin-bottom: 12px;
+      line-height: 1.5;
+    }
+
+    .btn-primary {
+      background: var(--azhar-green);
+      color: #fff;
+      border: none;
+      padding: 9px 16px;
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: transform 0.15s, background 0.2s;
+    }
+
+    .btn-primary:active {
+      transform: scale(0.97);
+    }
+
+    .btn-gold {
+      background: var(--azhar-gold);
+      color: #fff;
+      border: none;
+      padding: 9px 16px;
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .btn-outline {
+      background: transparent;
+      color: var(--azhar-green);
+      border: 1.5px solid var(--azhar-green);
+      padding: 8px 14px;
+      border-radius: var(--radius-sm);
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .progress-ring-box {
+      position: relative;
+      width: 74px;
+      height: 74px;
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .progress-ring-box svg {
+      transform: rotate(-90deg);
+      width: 74px;
+      height: 74px;
+    }
+
+    .progress-ring-text {
+      position: absolute;
+      font-size: 14px;
+      font-weight: 800;
+      color: var(--azhar-green-dark);
+    }
+
+    /* Subject Categories Grid */
+    .subjects-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+
+    .subject-tile {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      cursor: pointer;
+      transition: all 0.2s;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .subject-tile:hover {
+      border-color: var(--azhar-green);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-sm);
+    }
+
+    .subject-icon {
+      width: 40px;
+      height: 40px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      margin-bottom: 10px;
+    }
+
+    .subject-tile h4 {
+      font-size: 14px;
+      font-weight: 800;
+      margin-bottom: 3px;
+    }
+
+    .subject-tile p {
+      font-size: 11.5px;
+      color: var(--text-muted);
+    }
+
+    /* Badges Row */
+    .badges-scroll {
+      display: flex;
+      gap: 10px;
+      overflow-x: auto;
+      padding-bottom: 4px;
+    }
+
+    .badge-item {
+      min-width: 105px;
+      background: var(--bg-soft);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 10px 8px;
+      text-align: center;
+      opacity: 0.55;
+      transition: all 0.25s;
+    }
+
+    .badge-item.unlocked {
+      opacity: 1;
+      background: var(--azhar-gold-light);
+      border-color: var(--azhar-gold);
+    }
+
+    .badge-item .b-icon {
+      font-size: 24px;
+      margin-bottom: 4px;
+    }
+
+    .badge-item .b-name {
+      font-size: 11.5px;
+      font-weight: 700;
+      color: var(--text-main);
+    }
+
+    /* Filter Chips */
+    .chips-row {
+      display: flex;
+      gap: 8px;
+      overflow-x: auto;
+      padding-bottom: 10px;
+      margin-bottom: 8px;
+    }
+
+    .chip {
+      padding: 6px 14px;
+      border-radius: 999px;
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      font-size: 12.5px;
+      font-weight: 700;
+      color: var(--text-muted);
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .chip.active {
+      background: var(--azhar-green);
+      color: #fff;
+      border-color: var(--azhar-green);
+    }
+
+    /* Lesson List Items */
+    .lesson-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: var(--radius-md);
+      padding: 14px;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      cursor: pointer;
+      transition: border-color 0.2s;
+    }
+
+    .lesson-item:hover {
+      border-color: var(--azhar-green);
+    }
+
+    .lesson-meta {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .lesson-badge {
+      width: 38px;
+      height: 38px;
+      border-radius: 12px;
+      background: var(--azhar-green-light);
+      color: var(--azhar-green);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 15px;
+      flex-shrink: 0;
+    }
+
+    .lesson-item.completed .lesson-badge {
+      background: var(--azhar-green);
+      color: #fff;
+    }
+
+    .lesson-item.locked .lesson-badge {
+      background: var(--azhar-gold-light);
+      color: var(--azhar-gold);
+    }
+
+    .lesson-title h4 {
+      font-size: 14px;
+      font-weight: 800;
+      margin-bottom: 2px;
+    }
+
+    .lesson-title span {
+      font-size: 11.5px;
+      color: var(--text-muted);
+    }
+
+    /* Smart Lesson Viewer */
+    .lesson-viewer-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 12px;
+    }
+
+    .font-controls {
+      display: flex;
+      gap: 6px;
+    }
+
+    .font-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: 8px;
+      border: 1px solid var(--border-subtle);
+      background: var(--bg-card);
+      font-weight: 800;
+      cursor: pointer;
+      color: var(--azhar-green-dark);
+    }
+
+    .smart-tabs {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      background: var(--bg-soft);
+      padding: 4px;
+      border-radius: 12px;
+      margin-bottom: 14px;
+      border: 1px solid var(--border-subtle);
+    }
+
+    .smart-tab {
+      padding: 8px 4px;
+      text-align: center;
+      font-size: 12.5px;
+      font-weight: 700;
+      border-radius: 9px;
+      cursor: pointer;
+      color: var(--text-muted);
+      transition: all 0.2s;
+    }
+
+    .smart-tab.active {
+      background: var(--bg-card);
+      color: var(--azhar-green);
+      box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    }
+
+    .lesson-body {
+      font-size: var(--lesson-font-size);
+      line-height: 1.85;
+      color: var(--text-main);
+    }
+
+    .lesson-body h3 {
+      color: var(--azhar-green-dark);
+      font-size: 1.08em;
+      margin: 14px 0 6px;
+      border-right: 4px solid var(--azhar-gold);
+      padding-right: 8px;
+    }
+
+    .dalil-box {
+      background: var(--azhar-green-light);
+      border-right: 4px solid var(--azhar-green);
+      padding: 12px 14px;
+      border-radius: 10px;
+      margin: 12px 0;
+      font-weight: 600;
+      color: var(--azhar-green-dark);
+    }
+
+    .rule-box {
+      background: var(--azhar-gold-light);
+      border-right: 4px solid var(--azhar-gold);
+      padding: 12px 14px;
+      border-radius: 10px;
+      margin: 12px 0;
+    }
+
+    /* Mind Map Tree */
+    .mindmap-root {
+      background: var(--azhar-green);
+      color: #fff;
+      padding: 10px 16px;
+      border-radius: 12px;
+      text-align: center;
+      font-weight: 800;
+      margin-bottom: 14px;
+      box-shadow: var(--shadow-sm);
+    }
+
+    .mindmap-branch {
+      border-right: 3px solid var(--azhar-gold);
+      padding-right: 14px;
+      margin-right: 12px;
+      margin-bottom: 14px;
+    }
+
+    .mindmap-node {
+      background: var(--bg-soft);
+      border: 1px solid var(--border-subtle);
+      padding: 10px 12px;
+      border-radius: 10px;
+      margin-bottom: 8px;
+    }
+
+    .mindmap-node strong {
+      color: var(--azhar-green-dark);
+      display: block;
+      margin-bottom: 3px;
+    }
+
+    /* 3D Flashcards */
+    .flashcard-container {
+      perspective: 1000px;
+      height: 210px;
+      margin: 10px 0 14px;
+      cursor: pointer;
+    }
+
+    .flashcard-inner {
+      position: relative;
+      width: 100%;
+      height: 100%;
+      text-align: center;
+      transition: transform 0.55s;
+      transform-style: preserve-3d;
+    }
+
+    .flashcard-container.flipped .flashcard-inner {
+      transform: rotateY(180deg);
+    }
+
+    .flashcard-front, .flashcard-back {
+      position: absolute;
+      width: 100%;
+      height: 100%;
+      backface-visibility: hidden;
+      border-radius: var(--radius-lg);
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      box-shadow: var(--shadow-sm);
+      border: 1.5px solid var(--border-subtle);
+    }
+
+    .flashcard-front {
+      background: linear-gradient(135deg, #FFFFFF 0%, #F3EFE6 100%);
+    }
+
+    .flashcard-back {
+      background: linear-gradient(135deg, var(--azhar-green) 0%, var(--azhar-green-dark) 100%);
+      color: #fff;
+      transform: rotateY(180deg);
+    }
+
+    .fc-hint {
+      font-size: 11px;
+      color: var(--azhar-gold);
+      font-weight: 700;
+      margin-top: 12px;
+    }
+
+    /* Quiz Section */
+    .quiz-header-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: var(--azhar-green-light);
+      padding: 10px 14px;
+      border-radius: 12px;
+      margin-bottom: 14px;
+      font-weight: 700;
+      font-size: 13px;
+      color: var(--azhar-green-dark);
+    }
+
+    .quiz-option {
+      width: 100%;
+      text-align: right;
+      background: var(--bg-card);
+      border: 1.5px solid var(--border-subtle);
+      padding: 12px 14px;
+      border-radius: 12px;
+      margin-bottom: 10px;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      color: var(--text-main);
+      cursor: pointer;
+      transition: all 0.18s;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .quiz-option:hover:not(:disabled) {
+      border-color: var(--azhar-green);
+      background: var(--bg-soft);
+    }
+
+    .quiz-option.correct {
+      background: var(--azhar-green-light);
+      border-color: var(--azhar-green);
+      color: var(--azhar-green-dark);
+    }
+
+    .quiz-option.wrong {
+      background: var(--danger-light);
+      border-color: var(--danger);
+      color: var(--danger);
+    }
+
+    .rationale-box {
+      background: var(--azhar-gold-light);
+      border: 1px solid var(--azhar-gold);
+      border-radius: 12px;
+      padding: 12px;
+      margin-top: 10px;
+      font-size: 13px;
+      line-height: 1.6;
+      display: none;
+    }
+
+    /* Pomodoro & Planner */
+    .timer-display {
+      text-align: center;
+      padding: 16px;
+      background: linear-gradient(135deg, var(--azhar-green-light) 0%, #FFFFFF 100%);
+      border-radius: var(--radius-lg);
+      border: 1px solid rgba(13, 110, 82, 0.2);
+      margin-bottom: 14px;
+    }
+
+    .timer-digits {
+      font-size: 42px;
+      font-weight: 800;
+      color: var(--azhar-green-dark);
+      font-variant-numeric: tabular-nums;
+      margin: 6px 0;
+    }
+
+    .task-input-row {
+      display: flex;
+      gap: 8px;
+      margin-bottom: 12px;
+    }
+
+    .input-field {
+      flex: 1;
+      padding: 10px 12px;
+      border-radius: 10px;
+      border: 1.5px solid var(--border-subtle);
+      font-family: inherit;
+      font-size: 13.5px;
+      background: var(--bg-ivory);
+    }
+
+    .input-field:focus {
+      outline: none;
+      border-color: var(--azhar-green);
+    }
+
+    .todo-item {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 12px;
+      background: var(--bg-soft);
+      border-radius: 10px;
+      margin-bottom: 8px;
+      font-size: 13.5px;
+    }
+
+    .todo-item.done span {
+      text-decoration: line-through;
+      color: var(--text-muted);
+    }
+
+    /* Bottom Navigation */
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      width: 100%;
+      max-width: 480px;
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(10px);
+      border-top: 1px solid var(--border-subtle);
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      padding: 8px 6px 10px;
+      z-index: 50;
+    }
+
+    .nav-btn {
+      background: none;
+      border: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      color: var(--text-muted);
+      font-family: inherit;
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .nav-btn.active {
+      color: var(--azhar-green);
+    }
+
+    .nav-icon {
+      font-size: 20px;
+      height: 26px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* Toast */
+    .toast {
+      position: fixed;
+      top: 18px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--azhar-green-dark);
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      box-shadow: var(--shadow-md);
+      z-index: 100;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="app-shell">
+    <div id="toast" class="toast"></div>
+
+    <!-- Header -->
+    <header class="top-header">
+      <div class="header-row">
+        <div class="brand-title">
+          <h1>🕌 تفوق الأزهري</h1>
+          <p>الشهادة الإعدادية الأزهرية • منهج متكامل</p>
+        </div>
+        <div class="stats-pills">
+          <div class="pill-stat" title="أيام المذاكرة المتتالية">🔥 <span id="streak-count">4</span></div>
+          <div class="pill-stat" title="نقاط التفوق">⭐ <span id="points-count">120</span></div>
+        </div>
+      </div>
+    </header>
+
+    <!-- VIEW 1: HOME -->
+    <section id="view-home" class="view-section active">
+      <!-- Journey Card -->
+      <div class="card journey-card">
+        <div class="journey-info">
+          <h3>رحلة التفوق الأزهري</h3>
+          <p id="journey-subtitle">راجعت <strong id="completed-lessons-num">0</strong> من <strong id="total-lessons-num">7</strong> كتب مدرجة. واصل الاطلاع!</p>
+          <button class="btn-primary" onclick="continueLastLesson()">متابعة المذاكرة ◀</button>
+        </div>
+        <div class="progress-ring-box">
+          <svg viewBox="0 0 74 74">
+            <circle cx="37" cy="37" r="30" fill="none" stroke="#E6E0D3" stroke-width="7"></circle>
+            <circle id="progress-circle" cx="37" cy="37" r="30" fill="none" stroke="#0D6E52" stroke-width="7" stroke-dasharray="188.5" stroke-dashoffset="150" stroke-linecap="round"></circle>
+          </svg>
+          <span class="progress-ring-text" id="progress-percent">20%</span>
+        </div>
+      </div>
+
+      <!-- Subjects -->
+      <div class="section-header">
+        <h2>📚 الأقسام الدراسية</h2>
+        <span>اختر المادة</span>
+      </div>
+      <div class="subjects-grid">
+        <div class="subject-tile" onclick="openSubjectFilter('شرعي')">
+          <div class="subject-icon" style="background:#E6F3EF; color:#0D6E52;">⚖️</div>
+          <h4>العلوم الشرعية</h4>
+          <p>الفقه • التوحيد • التفسير والحديث</p>
+        </div>
+        <div class="subject-tile" onclick="openSubjectFilter('عربي')">
+          <div class="subject-icon" style="background:#FBF5E4; color:#C59B27;">✒️</div>
+          <h4>اللغة العربية</h4>
+          <p>النحو • الصرف • المطالعة والنصوص</p>
+        </div>
+        <div class="subject-tile" onclick="openSubjectFilter('ثقافي')">
+          <div class="subject-icon" style="background:#EAF2F8; color:#2471A3;">🌍</div>
+          <h4>المواد الثقافية</h4>
+          <p>العلوم • الرياضيات • الدراسات</p>
+        </div>
+        <div class="subject-tile" onclick="switchView('quiz')">
+          <div class="subject-icon" style="background:#FDF2E9; color:#D35400;">📝</div>
+          <h4>نماذج المناطق</h4>
+          <p>اختبارات تفاعلية بالتعليل</p>
+        </div>
+      </div>
+
+      <!-- Badges -->
+      <div class="section-header">
+        <h2>🏅 أوسمة الأزهري</h2>
+        <span>حقق الإنجازات</span>
+      </div>
+      <div class="card" style="padding: 12px;">
+        <div class="badges-scroll" id="badges-container"></div>
+      </div>
+    </section>
+
+    <!-- VIEW 2: SUBJECTS & LESSONS LIST -->
+    <section id="view-lessons" class="view-section">
+      <div class="section-header">
+        <h2>📖 المقررات والكتب الرسمية</h2>
+        <span id="activation-status-badge">كتب قطاع المعاهد ٢٠٢٦–٢٠٢٧</span>
+      </div>
+
+      <div class="chips-row" id="category-chips">
+        <button class="chip active" onclick="filterLessons('الكل', this)">الكل</button>
+        <button class="chip" onclick="filterLessons('شرعي', this)">العلوم الشرعية</button>
+        <button class="chip" onclick="filterLessons('عربي', this)">اللغة العربية</button>
+        <button class="chip" onclick="filterLessons('ثقافي', this)">المواد الثقافية</button>
+      </div>
+
+      <div id="lessons-list-container"></div>
+    </section>
+
+    <!-- VIEW 3: SMART LESSON VIEWER -->
+    <section id="view-lesson-detail" class="view-section">
+      <div class="lesson-viewer-header">
+        <button class="btn-outline" onclick="switchView('lessons')">→ رجوع للدروس</button>
+        <div class="font-controls">
+          <button class="font-btn" onclick="changeFontSize(-1)" title="تصغير الخط">أ-</button>
+          <button class="font-btn" onclick="changeFontSize(1)" title="تكبير الخط">أ+</button>
+        </div>
+      </div>
+
+      <div class="card">
+        <span id="detail-subject-tag" style="font-size:11.5px; font-weight:700; color:var(--azhar-gold);"></span>
+        <h2 id="detail-title" style="font-size:19px; font-weight:800; color:var(--azhar-green-dark); margin:4px 0 14px;"></h2>
+
+        <!-- 3 Smart Tabs -->
+        <div class="smart-tabs">
+          <div class="smart-tab active" onclick="switchLessonTab('summary', this)">📄 الشرح المبسط</div>
+          <div class="smart-tab" onclick="switchLessonTab('mindmap', this)">🧠 خريطة ذهنية</div>
+          <div class="smart-tab" onclick="switchLessonTab('flashcards', this)">🗂️ تسميع ذاتي</div>
+        </div>
+
+        <!-- Tab 1: Summary -->
+        <div id="tab-summary" class="lesson-body"></div>
+        <div id="fiqh-pdf-reader" style="display:none; margin-top:14px"></div>
+
+        <!-- Tab 2: Mind Map -->
+        <div id="tab-mindmap" style="display:none;"></div>
+
+        <!-- Tab 3: Flashcards -->
+        <div id="tab-flashcards" style="display:none;">
+          <div class="flashcard-container" id="flashcard-box" onclick="this.classList.toggle('flipped')">
+            <div class="flashcard-inner">
+              <div class="flashcard-front">
+                <span style="font-size:12px; color:var(--azhar-green); font-weight:700; margin-bottom:8px;">السؤال</span>
+                <p id="fc-question" style="font-size:16px; font-weight:800;"></p>
+                <span class="fc-hint">اضغط لقلب البطاقة وإظهار الإجابة ↻</span>
+              </div>
+              <div class="flashcard-back">
+                <span style="font-size:12px; color:#FBF5E4; font-weight:700; margin-bottom:8px;">الإجابة النموذجية</span>
+                <p id="fc-answer" style="font-size:15px; font-weight:600; line-height:1.6;"></p>
+              </div>
+            </div>
+          </div>
+          <div style="display:flex; justify-content:space-between; align-items:center;">
+            <button class="btn-outline" onclick="prevFlashcard()">السابق</button>
+            <span id="fc-counter" style="font-size:13px; font-weight:700; color:var(--text-muted);">1 / 3</span>
+            <button class="btn-primary" onclick="nextFlashcard()">التالي</button>
+          </div>
+        </div>
+
+        <hr style="border:none; border-top:1px solid var(--border-subtle); margin:18px 0;">
+        <button id="complete-lesson-btn" class="btn-primary" style="width:100%; justify-content:center; padding:12px;" onclick="markLessonComplete()">
+          ✅ أتممت مذاكرة هذا الدرس (+25 نقطة)
+        </button>
+      </div>
+    </section>
+
+    <!-- VIEW 4: QUIZ BANK -->
+    <section id="view-quiz" class="view-section">
+      <div class="section-header">
+        <h2>📝 أسئلة تدريبية تجريبية</h2>
+        <span>غير مطابقة بعد لخطة ٢٠٢٦–٢٠٢٧</span>
+      </div>
+
+      <div id="quiz-active-box" class="card">
+        <div class="quiz-header-bar">
+          <span id="quiz-progress-text">السؤال 1 من 5</span>
+          <span id="quiz-live-score">الدرجة: 0</span>
+        </div>
+        <span id="quiz-subject-badge" style="font-size:11.5px; font-weight:700; color:var(--azhar-gold);"></span>
+        <h3 id="quiz-question-text" style="font-size:16px; font-weight:800; margin:6px 0 14px; line-height:1.6;"></h3>
+        <div id="quiz-options-list"></div>
+        <div id="quiz-rationale" class="rationale-box"></div>
+        <button id="quiz-next-btn" class="btn-primary" style="width:100%; justify-content:center; margin-top:14px; display:none;" onclick="nextQuestion()">السؤال التالي ◀</button>
+      </div>
+
+      <div id="quiz-result-box" class="card" style="display:none; text-align:center; padding:24px 16px;">
+        <div style="font-size:46px; margin-bottom:8px;">🏆</div>
+        <h3 style="font-size:20px; font-weight:800; color:var(--azhar-green-dark);">أحسنت يا بطل الأزهر!</h3>
+        <p id="quiz-final-summary" style="font-size:14px; color:var(--text-muted); margin:8px 0 18px;"></p>
+        <button class="btn-primary" onclick="restartQuiz()">إعادة الاختبار ↻</button>
+      </div>
+    </section>
+
+    <!-- VIEW 5: PLANNER & ACTIVATION -->
+    <section id="view-planner" class="view-section">
+      <div class="section-header">
+        <h2>⏳ مؤقت التركيز وجدول اليوم</h2>
+        <span>نظام بومودورو</span>
+      </div>
+
+      <div class="card">
+        <div class="timer-display">
+          <span id="timer-mode-label" style="font-size:12.5px; font-weight:700; color:var(--azhar-green);">جلسة مذاكرة مركزة (25 دقيقة)</span>
+          <div class="timer-digits" id="pomodoro-time">25:00</div>
+          <div style="display:flex; gap:8px; justify-content:center;">
+            <button class="btn-primary" id="timer-toggle-btn" onclick="toggleTimer()">▶ ابدأ الجلسة</button>
+            <button class="btn-outline" onclick="resetTimer()">إعادة</button>
+          </div>
+        </div>
+
+        <h3 style="font-size:14.5px; font-weight:800; margin-bottom:8px;">📋 مهامي الدراسية اليوم</h3>
+        <div class="task-input-row">
+          <input type="text" id="new-task-input" class="input-field" placeholder="أضف مهمة (مثال: حل نموذج فقه)..." />
+          <button class="btn-primary" onclick="addTask()">إضافة</button>
+        </div>
+        <div id="tasks-list"></div>
+      </div>
+
+      <!-- Activation Card -->
+      <div class="card" style="border: 1.5px solid var(--azhar-gold); background: var(--azhar-gold-light);">
+        <h3 style="font-size:15px; font-weight:800; color:var(--azhar-green-dark); margin-bottom:4px;">🔑 تفعيل النسخة الكاملة</h3>
+        <p style="font-size:12.5px; color:var(--text-muted); margin-bottom:10px;">أدخل كود التفعيل لفتح جميع الدروس المغلقة والعمل بدون إنترنت (الكود التجريبي: <strong>AZHAR2026</strong>)</p>
+        <div class="task-input-row" style="margin-bottom:0;">
+          <input type="text" id="activation-code-input" class="input-field" placeholder="اكتب كود التفعيل هنا..." style="background:#fff;" />
+          <button class="btn-gold" onclick="activateApp()">تفعيل</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Bottom Nav -->
+    <nav class="bottom-nav">
+      <button class="nav-btn active" id="nav-home" onclick="switchView('home')">
+        <span class="nav-icon">🏠</span>
+        <span>الرئيسية</span>
+      </button>
+      <button class="nav-btn" id="nav-lessons" onclick="switchView('lessons')">
+        <span class="nav-icon">📚</span>
+        <span>المواد</span>
+      </button>
+      <button class="nav-btn" id="nav-quiz" onclick="switchView('quiz')">
+        <span class="nav-icon">✍️</span>
+        <span>الاختبارات</span>
+      </button>
+      <button class="nav-btn" id="nav-planner" onclick="switchView('planner')">
+        <span class="nav-icon">🗓️</span>
+        <span>جدولي</span>
+      </button>
+    </nav>
+  </div>
+
+  <script>
+    // App State
+    const state = {
+      points: 0,
+      streak: 0,
+      isActivated: false,
+      completedLessons: [],
+      currentLessonId: 1,
+      currentFlashcardIndex: 0,
+      fontSize: 16,
+      tasks: [
+        { text: "مراجعة كتاب الفقه حسب المذهب", done: true },
+        { text: "مراجعة كتاب اللغة العربية", done: false }
+      ]
+    };
+
+    // دروس موثقة العنوان من بوابة الأزهر التعليمية، مع شرح أصلي داخل التطبيق.
+    const verifiedInteractiveLessons = [
+    {
+        "id": 1001,
+        "category": "عربي",
+        "subjectName": "النحو",
+        "title": "البدل — درس تفاعلي",
+        "locked": false,
+        "summary": "<div class=\"dalil-box\">درس ورد اسمه في مواد تعليمية منشورة على بوابة الأزهر. الشرح التالي صياغة تعليمية أصلية، وليس نص الكتاب الرسمي أو إثبات توزيعه في 2026–2027.</div><h3>شرح الدرس</h3><p>البدل تابع مقصود بالحكم بلا واسطة. من أنواعه بدل كل من كل، وبدل بعض من كل، وبدل الاشتمال.</p><div class=\"rule-box\"><strong>مثال محلول:</strong> حضر المعلمُ أحمدُ: أحمدُ بدل كل من كل مرفوع.</div><h3>تدريب</h3><p>ما نوع البدل في: قرأت الكتاب نصفه؟</p><details><summary style=\"cursor:pointer;color:#0D6E52;font-weight:800\">إظهار الإجابة</summary><p>بدل بعض من كل</p></details>",
+        "mindmap": "<div class=\"mindmap-root\">البدل</div><div class=\"mindmap-branch\"><div class=\"mindmap-node\"><strong>المفهوم</strong>البدل تابع مقصود بالحكم بلا واسطة. من أنواعه بدل كل من كل، وبدل بعض من كل، وبدل الاشتمال.</div><div class=\"mindmap-node\"><strong>التطبيق</strong>حضر المعلمُ أحمدُ: أحمدُ بدل كل من كل مرفوع.</div></div>",
+        "flashcards": [
+            {
+                "q": "ما نوع البدل في: قرأت الكتاب نصفه؟",
+                "a": "بدل بعض من كل"
+            },
+            {
+                "q": "اذكر مثالًا على البدل",
+                "a": "حضر المعلمُ أحمدُ: أحمدُ بدل كل من كل مرفوع."
+            }
+        ],
+        "officialBook": false
+    },
+    {
+        "id": 1002,
+        "category": "عربي",
+        "subjectName": "النحو",
+        "title": "التوكيد — درس تفاعلي",
+        "locked": false,
+        "summary": "<div class=\"dalil-box\">درس ورد اسمه في مواد تعليمية منشورة على بوابة الأزهر. الشرح التالي صياغة تعليمية أصلية، وليس نص الكتاب الرسمي أو إثبات توزيعه في 2026–2027.</div><h3>شرح الدرس</h3><p>التوكيد تابع يزيل الشك أو الاحتمال في متبوعه. التوكيد لفظي بتكرار اللفظ، ومعنوي بألفاظ مثل نفس وعين وكل وجميع مع الضمير المناسب.</p><div class=\"rule-box\"><strong>مثال محلول:</strong> حضر المدير نفسه: نفسه توكيد معنوي مرفوع.</div><h3>تدريب</h3><p>ما نوع التوكيد في: جاء جاء الطالب؟</p><details><summary style=\"cursor:pointer;color:#0D6E52;font-weight:800\">إظهار الإجابة</summary><p>توكيد لفظي</p></details>",
+        "mindmap": "<div class=\"mindmap-root\">التوكيد</div><div class=\"mindmap-branch\"><div class=\"mindmap-node\"><strong>المفهوم</strong>التوكيد تابع يزيل الشك أو الاحتمال في متبوعه. التوكيد لفظي بتكرار اللفظ، ومعنوي بألفاظ مثل نفس وعين وكل وجميع مع الضمير المناسب.</div><div class=\"mindmap-node\"><strong>التطبيق</strong>حضر المدير نفسه: نفسه توكيد معنوي مرفوع.</div></div>",
+        "flashcards": [
+            {
+                "q": "ما نوع التوكيد في: جاء جاء الطالب؟",
+                "a": "توكيد لفظي"
+            },
+            {
+                "q": "اذكر مثالًا على التوكيد",
+                "a": "حضر المدير نفسه: نفسه توكيد معنوي مرفوع."
+            }
+        ],
+        "officialBook": false
+    },
+    {
+        "id": 1003,
+        "category": "عربي",
+        "subjectName": "الصرف",
+        "title": "اسما الزمان والمكان — درس تفاعلي",
+        "locked": false,
+        "summary": "<div class=\"dalil-box\">درس ورد اسمه في مواد تعليمية منشورة على بوابة الأزهر. الشرح التالي صياغة تعليمية أصلية، وليس نص الكتاب الرسمي أو إثبات توزيعه في 2026–2027.</div><h3>شرح الدرس</h3><p>اسم الزمان يدل على زمن وقوع الفعل، واسم المكان يدل على موضع وقوعه. ويُشتقان من الفعل الثلاثي غالبًا على وزني مَفْعَل ومَفْعِل وفق الضوابط الصرفية.</p><div class=\"rule-box\"><strong>مثال محلول:</strong> مَوْعِد اللقاء صباحًا: موعد اسم زمان. ومَلْعَب الأطفال واسع: ملعب اسم مكان.</div><h3>تدريب</h3><p>ماذا يدل اسم المكان؟</p><details><summary style=\"cursor:pointer;color:#0D6E52;font-weight:800\">إظهار الإجابة</summary><p>موضع وقوع الفعل</p></details>",
+        "mindmap": "<div class=\"mindmap-root\">اسما الزمان والمكان</div><div class=\"mindmap-branch\"><div class=\"mindmap-node\"><strong>المفهوم</strong>اسم الزمان يدل على زمن وقوع الفعل، واسم المكان يدل على موضع وقوعه. ويُشتقان من الفعل الثلاثي غالبًا على وزني مَفْعَل ومَفْعِل وفق الضوابط الصرفية.</div><div class=\"mindmap-node\"><strong>التطبيق</strong>مَوْعِد اللقاء صباحًا: موعد اسم زمان. ومَلْعَب الأطفال واسع: ملعب اسم مكان.</div></div>",
+        "flashcards": [
+            {
+                "q": "ماذا يدل اسم المكان؟",
+                "a": "موضع وقوع الفعل"
+            },
+            {
+                "q": "اذكر مثالًا على اسما الزمان والمكان",
+                "a": "مَوْعِد اللقاء صباحًا: موعد اسم زمان. ومَلْعَب الأطفال واسع: ملعب اسم مكان."
+            }
+        ],
+        "officialBook": false
+    }
+];
+
+    // فهرس كتب الصف الثالث الإعدادي من مكتبة قطاع المعاهد الأزهرية 2026–2027.
+    // ليست هذه بيانات دروس مفصلة أو خطة توزيع الفصلين.
+    const lessonsData = [
+    {
+        "id": 1,
+        "category": "شرعي",
+        "subjectName": "أصول الدين",
+        "title": "أصول الدين — العام الدراسي",
+        "locked": false,
+        "summary": "<div class=\"dalil-box\">نشاط تعليمي تمهيدي داخل التطبيق — ليس نقلًا لدرس محدد من كتاب الأزهر، ولا بديلًا عن المنهج الرسمي.</div><h3>مدخل إلى المادة</h3><p>راجع المفاهيم الأساسية للمادة مع معلمك، واكتب تعريفات المصطلحات الرئيسة وأمثلة عليها.</p><div class=\"rule-box\"><strong>راجع فهمك:</strong> كيف تراجع المادة؟<details style=\"margin-top:8px\"><summary style=\"cursor:pointer;color:#0D6E52;font-weight:800\">اضغط لإظهار الإجابة</summary><p>بتحديد المفاهيم الأساسية والتدرب على تطبيقها.</p></details></div><p>ستُضاف وحدات المنهج الرسمية بعد التحقق من نصوص كتب الصف الثالث الإعدادي وتوزيع الفصلين.</p>",
+        "mindmap": "<div class=\"mindmap-root\">أصول الدين</div><div class=\"mindmap-node\"><strong>التوزيع الدراسي</strong>لم تُستخرج وحدات ودروس هذا المقرر بالكامل من خطة التوزيع الرسمية بعد.</div>",
+        "flashcards": [
+            {
+                "q": "أين أجد كتاب هذا المقرر؟",
+                "a": "في رابط مكتبة قطاع المعاهد الأزهرية الموجود في صفحة المقرر."
+            }
+        ],
+        "officialBook": true
+    },
+    {
+        "id": 2,
+        "category": "شرعي",
+        "subjectName": "الفقه الحنفي",
+        "title": "الفقه الحنفي — العام الدراسي",
+        "locked": false,
+        "summary": "<div class=\"dalil-box\">نشاط تعليمي تمهيدي داخل التطبيق — ليس نقلًا لدرس محدد من كتاب الأزهر، ولا بديلًا عن المنهج الرسمي.</div><h3>مدخل إلى المادة</h3><p>راجع المفاهيم الأساسية للمادة مع معلمك، واكتب تعريفات المصطلحات الرئيسة وأمثلة عليها.</p><div class=\"rule-box\"><strong>راجع فهمك:</strong> كيف تراجع المادة؟<details style=\"margin-top:8px\"><summary style=\"cursor:pointer;color:#0D6E52;font-weight:800\">اضغط لإظهار الإجابة</summary><p>بتحديد المفاهيم الأساسية والتدرب على تطبيقها.</p></details></div><p>ستُضاف وحدات المنهج الرسمية بعد التحقق من نصوص كتب الصف الثالث الإعدادي وتوزيع الفصلين.</p>",
+        "mindmap": "<div class=\"mindmap-root\">الفقه الحنفي</div><div class=\"mindmap-node\"><strong>التوزيع الدراسي</strong>لم تُستخرج وحدات ودروس هذا المقرر بالكامل من خطة التوزيع الرسمية بعد.</div>",
+        "flashcards": [
+            {
+                "q": "أين أجد كتاب هذا المقرر؟",
+                "a": "في رابط مكتبة قطاع المعاهد الأزهرية الموجود في صفحة المقرر."
+            }
+        ],
+        "officialBook": true
+    },
+    {
+        "id": 3,
+        "category": "شرعي",
+        "subjectName": "الفقه الشافعي",
+        "title": "الفقه الشافعي — العام الدراسي",
+        "locked": false,
+        "summary": "<div class=\"dalil-box\">نشاط تعليمي تمهيدي داخل التطبيق — ليس نقلًا لدرس محدد من كتاب الأزهر، ولا بديلًا عن المنهج الرسمي.</div><h3>مدخل إلى المادة</h3><p>راجع المفاهيم الأساسية للمادة مع معلمك، واكتب تعريفات المصطلحات الرئيسة وأمثلة عليها.</p><div class=\"rule-box\"><strong>راجع فهمك:</strong> كيف تراجع المادة؟<details style=\"margin-top:8px\"><summary style=\"cursor:pointer;color:#0D6E52;font-weight:800\">اضغط لإظهار الإجابة</summary><p>بتحديد المفاهيم الأساسية والتدرب على تطبيقها.</p></details></div><p>ستُضاف وحدات المنهج الرسمية بعد التحقق من نصوص كتب الصف الثالث الإعدادي وتوزيع الفصلين.</p>",
+        "mindmap": "<div class=\"mindmap-root\">الفقه الشافعي</div><div class=\"mindmap-node\"><strong>التوزيع الدراسي</strong>لم تُستخرج وحدات ودروس هذا المقرر بالكامل من خطة التوزيع الرسمية بعد.</div>",
+        "flashcards": [
+            {
+                "q": "أين أجد كتاب هذا المقرر؟",
+                "a": "في رابط مكتبة قطاع المعاهد الأزهرية الموجود في صفحة المقرر."
+            }
+        ],
+        "officialBook": true
+    },
+    {
+        "id": 4,
+        "category": "شرعي",
+        "subjectName": "الفقه المالكي",
+        "title": "الفقه المالكي — العام الدراسي",
+        "locked": false,
+        "summary": "<div class=\"dalil-box\">نشاط تعليمي تمهيدي داخل التطبيق — ليس نقلًا لدرس محدد من كتاب الأزهر، ولا بديلًا عن المنهج الرسمي.</div><h3>مدخل إلى المادة</h3><p>راجع المفاهيم الأساسية للمادة مع معلمك، واكتب تعريفات المصطلحات الرئيسة وأمثلة عليها.</p><div class=\"rule-box\"><strong>راجع فهمك:</strong> كيف تراجع المادة؟<details style=\"margin-top:8px\"><summary style=\"cursor:pointer;color:#0D6E52;font-weight:800\">اضغط لإظهار الإجابة</summary><p>بتحديد المفاهيم الأساسية والتدرب على تطبيقها.</p></details></div><p>ستُضاف وحدات المنهج الرسمية بعد التحقق من نصوص كتب الصف الثالث الإعدادي وتوزيع الفصلين.</p>",
+        "mindmap": "<div class=\"mindmap-root\">الفقه المالكي</div><div class=\"mindmap-node\"><strong>التوزيع الدراسي</strong>لم تُستخرج وحدات ودروس هذا المقرر بالكامل من خطة التوزيع الرسمية بعد.</div>",
+        "flashcards": [
+            {
+                "q": "أين أجد كتاب هذا المقرر؟",
+                "a": "في رابط مكتبة قطاع المعاهد الأزهرية الموجود في صفحة المقرر."
+            }
+        ],
+        "officialBook": true
+    },
+    {
+        "id": 5,
+        "category": "عربي",
+        "subjectName": "اللغة العربية – الفصل الأول",
+        "title": "اللغة العربية – الفصل الأول — الفصل الدراسي الأول",
+        "locked": false,
+        "summary": "<div class=\"dalil-box\">نشاط تعليمي تمهيدي داخل التطبيق — ليس نقلًا لدرس محدد من كتاب الأزهر، ولا بديلًا عن المنهج الرسمي.</div><h3>مدخل إلى المادة</h3><p>راجع المفاهيم الأساسية للمادة مع معلمك، واكتب تعريفات المصطلحات الرئيسة وأمثلة عليها.</p><div class=\"rule-box\"><strong>راجع فهمك:</strong> كيف تراجع المادة؟<details style=\"margin-top:8px\"><summary style=\"cursor:pointer;color:#0D6E52;font-weight:800\">اضغط لإظهار الإجابة</summary><p>بتحديد المفاهيم الأساسية والتدرب على تطبيقها.</p></details></div><p>ستُضاف وحدات المنهج الرسمية بعد التحقق من نصوص كتب الصف الثالث الإعدادي وتوزيع الفصلين.</p>",
+        "mindmap": "<div class=\"mindmap-root\">اللغة العربية – الفصل الأول</div><div class=\"mindmap-node\"><strong>التوزيع الدراسي</strong>لم تُستخرج وحدات ودروس هذا المقرر بالكامل من خطة التوزيع الرسمية بعد.</div>",
+        "flashcards": [
+            {
+                "q": "أين أجد كتاب هذا المقرر؟",
+                "a": "في رابط مكتبة قطاع المعاهد الأزهرية الموجود في صفحة المقرر."
+            }
+        ],
+        "officialBook": true
+    },
+    {
+        "id": 6,
+        "category": "عربي",
+        "subjectName": "اللغة العربية – الفصل الثاني",
+        "title": "اللغة العربية – الفصل الثاني — الفصل الدراسي الثاني",
+        "locked": false,
+        "summary": "<div class=\"dalil-box\">نشاط تعليمي تمهيدي داخل التطبيق — ليس نقلًا لدرس محدد من كتاب الأزهر، ولا بديلًا عن المنهج الرسمي.</div><h3>مدخل إلى المادة</h3><p>راجع المفاهيم الأساسية للمادة مع معلمك، واكتب تعريفات المصطلحات الرئيسة وأمثلة عليها.</p><div class=\"rule-box\"><strong>راجع فهمك:</strong> كيف تراجع المادة؟<details style=\"margin-top:8px\"><summary style=\"cursor:pointer;color:#0D6E52;font-weight:800\">اضغط لإظهار الإجابة</summary><p>بتحديد المفاهيم الأساسية والتدرب على تطبيقها.</p></details></div><p>ستُضاف وحدات المنهج الرسمية بعد التحقق من نصوص كتب الصف الثالث الإعدادي وتوزيع الفصلين.</p>",
+        "mindmap": "<div class=\"mindmap-root\">اللغة العربية – الفصل الثاني</div><div class=\"mindmap-node\"><strong>التوزيع الدراسي</strong>لم تُستخرج وحدات ودروس هذا المقرر بالكامل من خطة التوزيع الرسمية بعد.</div>",
+        "flashcards": [
+            {
+                "q": "أين أجد كتاب هذا المقرر؟",
+                "a": "في رابط مكتبة قطاع المعاهد الأزهرية الموجود في صفحة المقرر."
+            }
+        ],
+        "officialBook": true
+    },
+    {
+        "id": 7,
+        "category": "شرعي",
+        "subjectName": "الثقافة الإسلامية",
+        "title": "الثقافة الإسلامية — العام الدراسي",
+        "locked": false,
+        "summary": "<div class=\"dalil-box\">نشاط تعليمي تمهيدي داخل التطبيق — ليس نقلًا لدرس محدد من كتاب الأزهر، ولا بديلًا عن المنهج الرسمي.</div><h3>مدخل إلى المادة</h3><p>راجع المفاهيم الأساسية للمادة مع معلمك، واكتب تعريفات المصطلحات الرئيسة وأمثلة عليها.</p><div class=\"rule-box\"><strong>راجع فهمك:</strong> كيف تراجع المادة؟<details style=\"margin-top:8px\"><summary style=\"cursor:pointer;color:#0D6E52;font-weight:800\">اضغط لإظهار الإجابة</summary><p>بتحديد المفاهيم الأساسية والتدرب على تطبيقها.</p></details></div><p>ستُضاف وحدات المنهج الرسمية بعد التحقق من نصوص كتب الصف الثالث الإعدادي وتوزيع الفصلين.</p>",
+        "mindmap": "<div class=\"mindmap-root\">الثقافة الإسلامية</div><div class=\"mindmap-node\"><strong>التوزيع الدراسي</strong>لم تُستخرج وحدات ودروس هذا المقرر بالكامل من خطة التوزيع الرسمية بعد.</div>",
+        "flashcards": [
+            {
+                "q": "أين أجد كتاب هذا المقرر؟",
+                "a": "في رابط مكتبة قطاع المعاهد الأزهرية الموجود في صفحة المقرر."
+            }
+        ],
+        "officialBook": true
+    },
+    {
+        "id": 8,
+        "category": "شرعي",
+        "subjectName": "القرآن الكريم وتجويده",
+        "title": "القرآن الكريم وتجويده — الصف الثالث الإعدادي",
+        "locked": false,
+        "summary": "<div class=\"dalil-box\">نشاط تعليمي تمهيدي داخل التطبيق — ليس نقلًا لدرس محدد من كتاب الأزهر، ولا بديلًا عن المنهج الرسمي.</div><h3>التلاوة والتجويد</h3><p>التجويد هو إعطاء الحروف حقوقها من المخارج والصفات عند القراءة. ابدأ بتلاوة الآيات المقررة على معلمك، ثم حدد مواضع أحكام النون الساكنة والتنوين والمدود.</p><div class=\"rule-box\"><strong>راجع فهمك:</strong> ما المقصود بالتجويد؟<details style=\"margin-top:8px\"><summary style=\"cursor:pointer;color:#0D6E52;font-weight:800\">اضغط لإظهار الإجابة</summary><p>إتقان نطق الحروف ومراعاة أحكام التلاوة.</p></details></div><p>ستُضاف وحدات المنهج الرسمية بعد التحقق من نصوص كتب الصف الثالث الإعدادي وتوزيع الفصلين.</p>",
+        "mindmap": "<div class=\"mindmap-root\">القرآن الكريم وتجويده</div><div class=\"mindmap-node\"><strong>حالة التوثيق</strong>المادة واردة في الخطة المرجعية؛ توزيع دروس 2026–2027 لم يتم التحقق منه.</div>",
+        "flashcards": [
+            {
+                "q": "ما مصدر إثبات هذا المقرر؟",
+                "a": "الخطة الدراسية الرسمية لقطاع المعاهد الأزهرية لعام 2024–2025، وليست خطة توزيع 2026–2027."
+            }
+        ],
+        "officialBook": true
+    },
+    {
+        "id": 9,
+        "category": "عربي",
+        "subjectName": "النحو",
+        "title": "النحو — الصف الثالث الإعدادي",
+        "locked": false,
+        "summary": "<div class=\"dalil-box\">نشاط تعليمي تمهيدي داخل التطبيق — ليس نقلًا لدرس محدد من كتاب الأزهر، ولا بديلًا عن المنهج الرسمي.</div><h3>بناء الجملة</h3><p>تتكون الجملة الاسمية من مبتدأ وخبر، وتبدأ الجملة الفعلية بفعل. عند الإعراب حدد نوع الكلمة وموقعها والعلامة الإعرابية. مثال: العلمُ نافعٌ؛ العلمُ مبتدأ مرفوع، ونافعٌ خبر مرفوع.</p><div class=\"rule-box\"><strong>راجع فهمك:</strong> مم تتكون الجملة الاسمية؟<details style=\"margin-top:8px\"><summary style=\"cursor:pointer;color:#0D6E52;font-weight:800\">اضغط لإظهار الإجابة</summary><p>من مبتدأ وخبر.</p></details></div><p>ستُضاف وحدات المنهج الرسمية بعد التحقق من نصوص كتب الصف الثالث الإعدادي وتوزيع الفصلين.</p>",
+        "mindmap": "<div class=\"mindmap-root\">النحو</div><div class=\"mindmap-node\"><strong>حالة التوثيق</strong>المادة واردة في الخطة المرجعية؛ توزيع دروس 2026–2027 لم يتم التحقق منه.</div>",
+        "flashcards": [
+            {
+                "q": "ما مصدر إثبات هذا المقرر؟",
+                "a": "الخطة الدراسية الرسمية لقطاع المعاهد الأزهرية لعام 2024–2025، وليست خطة توزيع 2026–2027."
+            }
+        ],
+        "officialBook": true
+    },
+    {
+        "id": 10,
+        "category": "عربي",
+        "subjectName": "الصرف",
+        "title": "الصرف — الصف الثالث الإعدادي",
+        "locked": false,
+        "summary": "<div class=\"dalil-box\">نشاط تعليمي تمهيدي داخل التطبيق — ليس نقلًا لدرس محدد من كتاب الأزهر، ولا بديلًا عن المنهج الرسمي.</div><h3>بنية الكلمة</h3><p>يدرس الصرف صيغ الكلمات وما يطرأ عليها من تغيير. مثال: كَتَبَ فعل ماضٍ، وكاتِب اسم فاعل، ومكتوب اسم مفعول. لاحظ الحروف الأصلية والزيادة في كل صيغة.</p><div class=\"rule-box\"><strong>راجع فهمك:</strong> ما اسم الصيغة «كاتب»؟<details style=\"margin-top:8px\"><summary style=\"cursor:pointer;color:#0D6E52;font-weight:800\">اضغط لإظهار الإجابة</summary><p>اسم فاعل.</p></details></div><p>ستُضاف وحدات المنهج الرسمية بعد التحقق من نصوص كتب الصف الثالث الإعدادي وتوزيع الفصلين.</p>",
+        "mindmap": "<div class=\"mindmap-root\">الصرف</div><div class=\"mindmap-node\"><strong>حالة التوثيق</strong>المادة واردة في الخطة المرجعية؛ توزيع دروس 2026–2027 لم يتم التحقق منه.</div>",
+        "flashcards": [
+            {
+                "q": "ما مصدر إثبات هذا المقرر؟",
+                "a": "الخطة الدراسية الرسمية لقطاع المعاهد الأزهرية لعام 2024–2025، وليست خطة توزيع 2026–2027."
+            }
+        ],
+        "officialBook": true
+    },
+    {
+        "id": 11,
+        "category": "عربي",
+        "subjectName": "المطالعة والنصوص",
+        "title": "المطالعة والنصوص — الصف الثالث الإعدادي",
+        "locked": false,
+        "summary": "<div class=\"dalil-box\">نشاط تعليمي تمهيدي داخل التطبيق — ليس نقلًا لدرس محدد من كتاب الأزهر، ولا بديلًا عن المنهج الرسمي.</div><h3>فهم النص</h3><p>اقرأ النص قراءة متأنية، وحدد فكرته العامة وأفكاره الفرعية، ثم استخرج معاني المفردات من السياق. ميّز بين الفكرة التي يصرح بها الكاتب والاستنتاج الذي تتوصل إليه.</p><div class=\"rule-box\"><strong>راجع فهمك:</strong> كيف تحدد الفكرة العامة؟<details style=\"margin-top:8px\"><summary style=\"cursor:pointer;color:#0D6E52;font-weight:800\">اضغط لإظهار الإجابة</summary><p>بتحديد المعنى الرئيس الذي يدور حوله النص.</p></details></div><p>ستُضاف وحدات المنهج الرسمية بعد التحقق من نصوص كتب الصف الثالث الإعدادي وتوزيع الفصلين.</p>",
+        "mindmap": "<div class=\"mindmap-root\">المطالعة والنصوص</div><div class=\"mindmap-node\"><strong>حالة التوثيق</strong>المادة واردة في الخطة المرجعية؛ توزيع دروس 2026–2027 لم يتم التحقق منه.</div>",
+        "flashcards": [
+            {
+                "q": "ما مصدر إثبات هذا المقرر؟",
+                "a": "الخطة الدراسية الرسمية لقطاع المعاهد الأزهرية لعام 2024–2025، وليست خطة توزيع 2026–2027."
+            }
+        ],
+        "officialBook": true
+    },
+    {
+        "id": 12,
+        "category": "عربي",
+        "subjectName": "الإنشاء",
+        "title": "الإنشاء — الصف الثالث الإعدادي",
+        "locked": false,
+        "summary": "<div class=\"dalil-box\">نشاط تعليمي تمهيدي داخل التطبيق — ليس نقلًا لدرس محدد من كتاب الأزهر، ولا بديلًا عن المنهج الرسمي.</div><h3>كتابة فقرة مترابطة</h3><p>ابدأ بفكرة رئيسية واضحة، ثم أضف جملًا تشرحها مع أمثلة، واختتم بخلاصة. راجع علامات الترقيم وترابط الأفكار قبل تسليم الموضوع.</p><div class=\"rule-box\"><strong>راجع فهمك:</strong> ما أول خطوة في كتابة فقرة؟<details style=\"margin-top:8px\"><summary style=\"cursor:pointer;color:#0D6E52;font-weight:800\">اضغط لإظهار الإجابة</summary><p>تحديد الفكرة الرئيسة.</p></details></div><p>ستُضاف وحدات المنهج الرسمية بعد التحقق من نصوص كتب الصف الثالث الإعدادي وتوزيع الفصلين.</p>",
+        "mindmap": "<div class=\"mindmap-root\">الإنشاء</div><div class=\"mindmap-node\"><strong>حالة التوثيق</strong>المادة واردة في الخطة المرجعية؛ توزيع دروس 2026–2027 لم يتم التحقق منه.</div>",
+        "flashcards": [
+            {
+                "q": "ما مصدر إثبات هذا المقرر؟",
+                "a": "الخطة الدراسية الرسمية لقطاع المعاهد الأزهرية لعام 2024–2025، وليست خطة توزيع 2026–2027."
+            }
+        ],
+        "officialBook": true
+    },
+    {
+        "id": 13,
+        "category": "عربي",
+        "subjectName": "الإملاء",
+        "title": "الإملاء — الصف الثالث الإعدادي",
+        "locked": false,
+        "summary": "<div class=\"dalil-box\">نشاط تعليمي تمهيدي داخل التطبيق — ليس نقلًا لدرس محدد من كتاب الأزهر، ولا بديلًا عن المنهج الرسمي.</div><h3>الكتابة الصحيحة</h3><p>راجع مواضع الهمزات والتاء المربوطة والمفتوحة وعلامات الترقيم. قارن بين «مدرسة» بالتاء المربوطة و«كتبت» بالتاء المفتوحة، ثم تدرب على الكتابة من الإملاء.</p><div class=\"rule-box\"><strong>راجع فهمك:</strong> ما نوع التاء في كلمة «مدرسة»؟<details style=\"margin-top:8px\"><summary style=\"cursor:pointer;color:#0D6E52;font-weight:800\">اضغط لإظهار الإجابة</summary><p>تاء مربوطة.</p></details></div><p>ستُضاف وحدات المنهج الرسمية بعد التحقق من نصوص كتب الصف الثالث الإعدادي وتوزيع الفصلين.</p>",
+        "mindmap": "<div class=\"mindmap-root\">الإملاء</div><div class=\"mindmap-node\"><strong>حالة التوثيق</strong>المادة واردة في الخطة المرجعية؛ توزيع دروس 2026–2027 لم يتم التحقق منه.</div>",
+        "flashcards": [
+            {
+                "q": "ما مصدر إثبات هذا المقرر؟",
+                "a": "الخطة الدراسية الرسمية لقطاع المعاهد الأزهرية لعام 2024–2025، وليست خطة توزيع 2026–2027."
+            }
+        ],
+        "officialBook": true
+    },
+    {
+        "id": 14,
+        "category": "عربي",
+        "subjectName": "الخط العربي",
+        "title": "الخط العربي — الصف الثالث الإعدادي",
+        "locked": false,
+        "summary": "<div class=\"dalil-box\">نشاط تعليمي تمهيدي داخل التطبيق — ليس نقلًا لدرس محدد من كتاب الأزهر، ولا بديلًا عن المنهج الرسمي.</div><h3>وضوح الكتابة</h3><p>راعِ حجم الحروف واتصالها واستقرار الكلمات على السطر والمسافات بينها. اكتب جملة قصيرة ببطء، ثم أعد كتابتها مع تحسين تناسب الحروف.</p><div class=\"rule-box\"><strong>راجع فهمك:</strong> ما فائدة ترك مسافات مناسبة بين الكلمات؟<details style=\"margin-top:8px\"><summary style=\"cursor:pointer;color:#0D6E52;font-weight:800\">اضغط لإظهار الإجابة</summary><p>تسهيل القراءة ووضوح الكتابة.</p></details></div><p>ستُضاف وحدات المنهج الرسمية بعد التحقق من نصوص كتب الصف الثالث الإعدادي وتوزيع الفصلين.</p>",
+        "mindmap": "<div class=\"mindmap-root\">الخط العربي</div><div class=\"mindmap-node\"><strong>حالة التوثيق</strong>المادة واردة في الخطة المرجعية؛ توزيع دروس 2026–2027 لم يتم التحقق منه.</div>",
+        "flashcards": [
+            {
+                "q": "ما مصدر إثبات هذا المقرر؟",
+                "a": "الخطة الدراسية الرسمية لقطاع المعاهد الأزهرية لعام 2024–2025، وليست خطة توزيع 2026–2027."
+            }
+        ],
+        "officialBook": true
+    },
+    {
+        "id": 15,
+        "category": "ثقافي",
+        "subjectName": "الدراسات الاجتماعية",
+        "title": "الدراسات الاجتماعية — الصف الثالث الإعدادي",
+        "locked": false,
+        "summary": "<div class=\"dalil-box\">نشاط تعليمي تمهيدي داخل التطبيق — ليس نقلًا لدرس محدد من كتاب الأزهر، ولا بديلًا عن المنهج الرسمي.</div><h3>قراءة الخريطة والمصادر</h3><p>ابدأ بتحديد عنوان الخريطة ومفتاحها واتجاه الشمال، ثم اربط الرموز بالمواقع. وعند دراسة حدث تاريخي ميّز بين أسبابه ونتائجه وترتيبه الزمني.</p><div class=\"rule-box\"><strong>راجع فهمك:</strong> ما وظيفة مفتاح الخريطة؟<details style=\"margin-top:8px\"><summary style=\"cursor:pointer;color:#0D6E52;font-weight:800\">اضغط لإظهار الإجابة</summary><p>تفسير الرموز والألوان المستخدمة فيها.</p></details></div><p>ستُضاف وحدات المنهج الرسمية بعد التحقق من نصوص كتب الصف الثالث الإعدادي وتوزيع الفصلين.</p>",
+        "mindmap": "<div class=\"mindmap-root\">الدراسات الاجتماعية</div><div class=\"mindmap-node\"><strong>حالة التوثيق</strong>المادة واردة في الخطة المرجعية؛ توزيع دروس 2026–2027 لم يتم التحقق منه.</div>",
+        "flashcards": [
+            {
+                "q": "ما مصدر إثبات هذا المقرر؟",
+                "a": "الخطة الدراسية الرسمية لقطاع المعاهد الأزهرية لعام 2024–2025، وليست خطة توزيع 2026–2027."
+            }
+        ],
+        "officialBook": true
+    },
+    {
+        "id": 16,
+        "category": "ثقافي",
+        "subjectName": "العلوم",
+        "title": "العلوم — الصف الثالث الإعدادي",
+        "locked": false,
+        "summary": "<div class=\"dalil-box\">نشاط تعليمي تمهيدي داخل التطبيق — ليس نقلًا لدرس محدد من كتاب الأزهر، ولا بديلًا عن المنهج الرسمي.</div><h3>الملاحظة والتفسير</h3><p>تبدأ الدراسة العلمية بالملاحظة وطرح السؤال، ثم صياغة فرضية قابلة للاختبار، وإجراء تجربة وتسجيل النتائج. لا تخلط بين الملاحظة والاستنتاج.</p><div class=\"rule-box\"><strong>راجع فهمك:</strong> ما الفرق بين الملاحظة والاستنتاج؟<details style=\"margin-top:8px\"><summary style=\"cursor:pointer;color:#0D6E52;font-weight:800\">اضغط لإظهار الإجابة</summary><p>الملاحظة وصف ما نرصده، والاستنتاج تفسير مبني على الأدلة.</p></details></div><p>ستُضاف وحدات المنهج الرسمية بعد التحقق من نصوص كتب الصف الثالث الإعدادي وتوزيع الفصلين.</p>",
+        "mindmap": "<div class=\"mindmap-root\">العلوم</div><div class=\"mindmap-node\"><strong>حالة التوثيق</strong>المادة واردة في الخطة المرجعية؛ توزيع دروس 2026–2027 لم يتم التحقق منه.</div>",
+        "flashcards": [
+            {
+                "q": "ما مصدر إثبات هذا المقرر؟",
+                "a": "الخطة الدراسية الرسمية لقطاع المعاهد الأزهرية لعام 2024–2025، وليست خطة توزيع 2026–2027."
+            }
+        ],
+        "officialBook": true
+    },
+    {
+        "id": 17,
+        "category": "ثقافي",
+        "subjectName": "الرياضيات",
+        "title": "الرياضيات — الصف الثالث الإعدادي",
+        "locked": false,
+        "summary": "<div class=\"dalil-box\">نشاط تعليمي تمهيدي داخل التطبيق — ليس نقلًا لدرس محدد من كتاب الأزهر، ولا بديلًا عن المنهج الرسمي.</div><h3>حل المسألة</h3><p>اقرأ المعطيات والمطلوب، واختر العملية المناسبة، ثم نفذ الحل وتحقق منه. مثال: إذا كان 3س = 15، فإن س = 5 بقسمة الطرفين على 3.</p><div class=\"rule-box\"><strong>راجع فهمك:</strong> إذا كان 4س = 20 فما قيمة س؟<details style=\"margin-top:8px\"><summary style=\"cursor:pointer;color:#0D6E52;font-weight:800\">اضغط لإظهار الإجابة</summary><p>5.</p></details></div><p>ستُضاف وحدات المنهج الرسمية بعد التحقق من نصوص كتب الصف الثالث الإعدادي وتوزيع الفصلين.</p>",
+        "mindmap": "<div class=\"mindmap-root\">الرياضيات</div><div class=\"mindmap-node\"><strong>حالة التوثيق</strong>المادة واردة في الخطة المرجعية؛ توزيع دروس 2026–2027 لم يتم التحقق منه.</div>",
+        "flashcards": [
+            {
+                "q": "ما مصدر إثبات هذا المقرر؟",
+                "a": "الخطة الدراسية الرسمية لقطاع المعاهد الأزهرية لعام 2024–2025، وليست خطة توزيع 2026–2027."
+            }
+        ],
+        "officialBook": true
+    },
+    {
+        "id": 18,
+        "category": "ثقافي",
+        "subjectName": "اللغة الإنجليزية",
+        "title": "اللغة الإنجليزية — الصف الثالث الإعدادي",
+        "locked": false,
+        "summary": "<div class=\"dalil-box\">نشاط تعليمي تمهيدي داخل التطبيق — ليس نقلًا لدرس محدد من كتاب الأزهر، ولا بديلًا عن المنهج الرسمي.</div><h3>قراءة جملة بسيطة</h3><p>In English, a basic sentence may contain a subject and a verb. Example: She studies every day. «She» is the subject and «studies» is the verb. Practice reading and identifying the main idea.</p><div class=\"rule-box\"><strong>راجع فهمك:</strong> What is the subject in “She studies”?<details style=\"margin-top:8px\"><summary style=\"cursor:pointer;color:#0D6E52;font-weight:800\">اضغط لإظهار الإجابة</summary><p>She.</p></details></div><p>ستُضاف وحدات المنهج الرسمية بعد التحقق من نصوص كتب الصف الثالث الإعدادي وتوزيع الفصلين.</p>",
+        "mindmap": "<div class=\"mindmap-root\">اللغة الإنجليزية</div><div class=\"mindmap-node\"><strong>حالة التوثيق</strong>المادة واردة في الخطة المرجعية؛ توزيع دروس 2026–2027 لم يتم التحقق منه.</div>",
+        "flashcards": [
+            {
+                "q": "ما مصدر إثبات هذا المقرر؟",
+                "a": "الخطة الدراسية الرسمية لقطاع المعاهد الأزهرية لعام 2024–2025، وليست خطة توزيع 2026–2027."
+            }
+        ],
+        "officialBook": true
+    },
+    {
+        "id": 19,
+        "category": "ثقافي",
+        "subjectName": "الحاسب الآلي",
+        "title": "الحاسب الآلي — الصف الثالث الإعدادي",
+        "locked": false,
+        "summary": "<div class=\"dalil-box\">نشاط تعليمي تمهيدي داخل التطبيق — ليس نقلًا لدرس محدد من كتاب الأزهر، ولا بديلًا عن المنهج الرسمي.</div><h3>أساسيات الحاسب</h3><p>تتكون منظومة الحاسب من أجهزة وبرمجيات. لوحة المفاتيح وسيلة إدخال، والشاشة وسيلة إخراج. احرص على حماية كلمات المرور وعدم مشاركة بياناتك الشخصية.</p><div class=\"rule-box\"><strong>راجع فهمك:</strong> هل لوحة المفاتيح وحدة إدخال أم إخراج؟<details style=\"margin-top:8px\"><summary style=\"cursor:pointer;color:#0D6E52;font-weight:800\">اضغط لإظهار الإجابة</summary><p>وحدة إدخال.</p></details></div><p>ستُضاف وحدات المنهج الرسمية بعد التحقق من نصوص كتب الصف الثالث الإعدادي وتوزيع الفصلين.</p>",
+        "mindmap": "<div class=\"mindmap-root\">الحاسب الآلي</div><div class=\"mindmap-node\"><strong>حالة التوثيق</strong>المادة واردة في الخطة المرجعية؛ توزيع دروس 2026–2027 لم يتم التحقق منه.</div>",
+        "flashcards": [
+            {
+                "q": "ما مصدر إثبات هذا المقرر؟",
+                "a": "الخطة الدراسية الرسمية لقطاع المعاهد الأزهرية لعام 2024–2025، وليست خطة توزيع 2026–2027."
+            }
+        ],
+        "officialBook": true
+    },
+    {
+        "id": 20,
+        "category": "ثقافي",
+        "subjectName": "التربية الفنية",
+        "title": "التربية الفنية — الصف الثالث الإعدادي",
+        "locked": false,
+        "summary": "<div class=\"dalil-box\">نشاط تعليمي تمهيدي داخل التطبيق — ليس نقلًا لدرس محدد من كتاب الأزهر، ولا بديلًا عن المنهج الرسمي.</div><h3>عناصر العمل الفني</h3><p>من عناصر التكوين الفني الخط والشكل واللون والمساحة. جرّب رسم شكلين باستخدام خطوط مختلفة، ثم لاحظ أثر التباين في الألوان على وضوحهما.</p><div class=\"rule-box\"><strong>راجع فهمك:</strong> اذكر عنصرين من عناصر العمل الفني.<details style=\"margin-top:8px\"><summary style=\"cursor:pointer;color:#0D6E52;font-weight:800\">اضغط لإظهار الإجابة</summary><p>الخط واللون.</p></details></div><p>ستُضاف وحدات المنهج الرسمية بعد التحقق من نصوص كتب الصف الثالث الإعدادي وتوزيع الفصلين.</p>",
+        "mindmap": "<div class=\"mindmap-root\">التربية الفنية</div><div class=\"mindmap-node\"><strong>حالة التوثيق</strong>المادة واردة في الخطة المرجعية؛ توزيع دروس 2026–2027 لم يتم التحقق منه.</div>",
+        "flashcards": [
+            {
+                "q": "ما مصدر إثبات هذا المقرر؟",
+                "a": "الخطة الدراسية الرسمية لقطاع المعاهد الأزهرية لعام 2024–2025، وليست خطة توزيع 2026–2027."
+            }
+        ],
+        "officialBook": true
+    },
+    {
+        "id": 21,
+        "category": "ثقافي",
+        "subjectName": "الاقتصاد المنزلي",
+        "title": "الاقتصاد المنزلي — الصف الثالث الإعدادي",
+        "locked": false,
+        "summary": "<div class=\"dalil-box\">نشاط تعليمي تمهيدي داخل التطبيق — ليس نقلًا لدرس محدد من كتاب الأزهر، ولا بديلًا عن المنهج الرسمي.</div><h3>التخطيط للموارد</h3><p>يساعد تنظيم الوقت والموارد على إنجاز المهام اليومية. ابدأ بتحديد الاحتياجات الأساسية، ثم رتب الأولويات وقلل الهدر في الطعام والطاقة.</p><div class=\"rule-box\"><strong>راجع فهمك:</strong> ما المقصود بترتيب الأولويات؟<details style=\"margin-top:8px\"><summary style=\"cursor:pointer;color:#0D6E52;font-weight:800\">اضغط لإظهار الإجابة</summary><p>تقديم الاحتياجات الأكثر أهمية.</p></details></div><p>ستُضاف وحدات المنهج الرسمية بعد التحقق من نصوص كتب الصف الثالث الإعدادي وتوزيع الفصلين.</p>",
+        "mindmap": "<div class=\"mindmap-root\">الاقتصاد المنزلي</div><div class=\"mindmap-node\"><strong>حالة التوثيق</strong>المادة واردة في الخطة المرجعية؛ توزيع دروس 2026–2027 لم يتم التحقق منه.</div>",
+        "flashcards": [
+            {
+                "q": "ما مصدر إثبات هذا المقرر؟",
+                "a": "الخطة الدراسية الرسمية لقطاع المعاهد الأزهرية لعام 2024–2025، وليست خطة توزيع 2026–2027."
+            }
+        ],
+        "officialBook": true
+    },
+    {
+        "id": 22,
+        "category": "ثقافي",
+        "subjectName": "التربية الرياضية",
+        "title": "التربية الرياضية — الصف الثالث الإعدادي",
+        "locked": false,
+        "summary": "<div class=\"dalil-box\">نشاط تعليمي تمهيدي داخل التطبيق — ليس نقلًا لدرس محدد من كتاب الأزهر، ولا بديلًا عن المنهج الرسمي.</div><h3>النشاط البدني الآمن</h3><p>ابدأ بالإحماء التدريجي قبل النشاط، واحرص على شرب الماء والراحة المناسبة. يساعد الانتظام في الحركة على تحسين اللياقة، مع مراعاة تعليمات المعلم.</p><div class=\"rule-box\"><strong>راجع فهمك:</strong> لماذا نبدأ بالإحماء؟<details style=\"margin-top:8px\"><summary style=\"cursor:pointer;color:#0D6E52;font-weight:800\">اضغط لإظهار الإجابة</summary><p>لتهيئة الجسم للنشاط البدني.</p></details></div><p>ستُضاف وحدات المنهج الرسمية بعد التحقق من نصوص كتب الصف الثالث الإعدادي وتوزيع الفصلين.</p>",
+        "mindmap": "<div class=\"mindmap-root\">التربية الرياضية</div><div class=\"mindmap-node\"><strong>حالة التوثيق</strong>المادة واردة في الخطة المرجعية؛ توزيع دروس 2026–2027 لم يتم التحقق منه.</div>",
+        "flashcards": [
+            {
+                "q": "ما مصدر إثبات هذا المقرر؟",
+                "a": "الخطة الدراسية الرسمية لقطاع المعاهد الأزهرية لعام 2024–2025، وليست خطة توزيع 2026–2027."
+            }
+        ],
+        "officialBook": true
+    }
+];
+
+    // الأسئلة التالية تجريبية من النسخة الأصلية، ولم تُطابق مع كتب 2026–2027.
+    const quizQuestions = [
+      {
+        subject: "الفقه الشافعي",
+        q: "مقابلة مال بمال على وجه مخصوص، هو تعريف:",
+        options: ["الربا", "البيع شرعاً", "الإجارة", "الرهن"],
+        correct: 1,
+        rationale: "البيع شرعاً هو مقابلة مال بمال على وجه مخصوص، لقوله تعالى: ﴿وَأَحَلَّ اللَّهُ الْبَيْعَ﴾."
+      },
+      {
+        subject: "النحو العربي",
+        q: "في جملة: (يا طالبُ اجتهد في دروسك)، نوع المنادى:",
+        options: ["مضاف", "شبيه بالمضاف", "نكرة مقصودة", "نكرة غير مقصودة"],
+        correct: 2,
+        rationale: "كلمة (طالبُ) مرفوعة بالضمة وليست منونة، فهي نكرة مقصودة مبنية على الضم في محل نصب."
+      },
+      {
+        subject: "أصول الدين (التوحيد)",
+        q: "حكم الإيمان بسؤال الملكين وعذاب القبر ونعيمه:",
+        options: ["واجب", "مستحب", "جائز", "مكروه"],
+        correct: 0,
+        rationale: "يجب الإيمان بسؤال القبر ونعيمه وعذابه لثبوته بالكتاب والسنة الصحيحة المتواترة."
+      },
+      {
+        subject: "الصرف",
+        q: "المصدر القياسي للفعل الرباعي (علَّم) هو:",
+        options: ["عِلْم", "تَعْلِيم", "إِعْلام", "مُعَالَمَة"],
+        correct: 1,
+        rationale: "الفعل المضعف العين على وزن (فَعَّلَ) يأتي مصدره القياسي على وزن (تَفْعِيل) مثل: علَّم ← تعليم."
+      },
+      {
+        subject: "العلوم",
+        q: "إذا قطع جسم مسافة 100 متر في زمن قدره 5 ثوانٍ، فإن سرعته تساوي:",
+        options: ["500 م/ث", "20 م/ث", "25 م/ث", "10 م/ث"],
+        correct: 1,
+        rationale: "السرعة = المسافة ÷ الزمن = 100 ÷ 5 = 20 م/ث."
+      }
+    ];
+
+    const badgesList = [
+      { id: "b1", name: "بداية موفقة", icon: "🌱", reqPoints: 50 },
+      { id: "b2", name: "فقيه صغير", icon: "⚖️", reqPoints: 120 },
+      { id: "b3", name: "نحوي بارع", icon: "✒️", reqPoints: 160 },
+      { id: "b4", name: "متفوق الأزهر", icon: "👑", reqPoints: 220 }
+    ];
+
+    lessonsData.push(...verifiedInteractiveLessons);
+    // عناوين الأبواب موثقة من فهارس كتابي الفقه المرفوعين؛ صفحات الكتاب مدمجة محليًا.
+    const fiqhBookLessons = [{"id":3000,"category":"شرعي","subjectName":"الفقه الشافعي","title":"أحكام الظهار","page":6,"end":9,"pdf":"fiqh_shafii_2026.pdf","locked":false,"officialBook":true,"integratedPdf":true,"summary":"<div class=\"dalil-box\">من كتاب الفقه الشافعي الرسمي للصف الثالث الإعدادي الأزهري ٢٠٢٦–٢٠٢٧ — الصفحة 6. اقرأ الصفحات الأصلية أدناه، ثم أجب عن التدريب.</div><h3>درس: أحكام الظهار</h3><p>تجد شرح الدرس الأصلي وأمثلته وأدلته في صفحات الكتاب المدمج أسفل هذا العنوان. اضغط «قراءة صفحات الدرس» لعرضها دون الذهاب إلى مكتبة الأزهر.</p><div class=\"rule-box\"><strong>تدريب فهم:</strong> بعد قراءة الدرس، لخّص أهم حكم أو تعريف ورد فيه، واذكر دليلًا أو مثالًا من الصفحات.</div>","mindmap":"<div class=\"mindmap-root\">أحكام الظهار</div><div class=\"mindmap-node\"><strong>مرجع الدرس</strong>الفقه الشافعي — الصفحات 6 إلى 9 من الكتاب الرسمي.</div>","flashcards":[{"q":"ما أهم مفهوم أو حكم في درس «أحكام الظهار»؟","a":"راجع شرح الدرس في كتاب الفقه الشافعي، صفحة 6، واستخرج الإجابة بدقة من النص."}]},{"id":3001,"category":"شرعي","subjectName":"الفقه الشافعي","title":"أحكام العدة","page":10,"end":11,"pdf":"fiqh_shafii_2026.pdf","locked":false,"officialBook":true,"integratedPdf":true,"summary":"<div class=\"dalil-box\">من كتاب الفقه الشافعي الرسمي للصف الثالث الإعدادي الأزهري ٢٠٢٦–٢٠٢٧ — الصفحة 10. اقرأ الصفحات الأصلية أدناه، ثم أجب عن التدريب.</div><h3>درس: أحكام العدة</h3><p>تجد شرح الدرس الأصلي وأمثلته وأدلته في صفحات الكتاب المدمج أسفل هذا العنوان. اضغط «قراءة صفحات الدرس» لعرضها دون الذهاب إلى مكتبة الأزهر.</p><div class=\"rule-box\"><strong>تدريب فهم:</strong> بعد قراءة الدرس، لخّص أهم حكم أو تعريف ورد فيه، واذكر دليلًا أو مثالًا من الصفحات.</div>","mindmap":"<div class=\"mindmap-root\">أحكام العدة</div><div class=\"mindmap-node\"><strong>مرجع الدرس</strong>الفقه الشافعي — الصفحات 10 إلى 11 من الكتاب الرسمي.</div>","flashcards":[{"q":"ما أهم مفهوم أو حكم في درس «أحكام العدة»؟","a":"راجع شرح الدرس في كتاب الفقه الشافعي، صفحة 10، واستخرج الإجابة بدقة من النص."}]},{"id":3002,"category":"شرعي","subjectName":"الفقه الشافعي","title":"أحكام المعتدة","page":12,"end":14,"pdf":"fiqh_shafii_2026.pdf","locked":false,"officialBook":true,"integratedPdf":true,"summary":"<div class=\"dalil-box\">من كتاب الفقه الشافعي الرسمي للصف الثالث الإعدادي الأزهري ٢٠٢٦–٢٠٢٧ — الصفحة 12. اقرأ الصفحات الأصلية أدناه، ثم أجب عن التدريب.</div><h3>درس: أحكام المعتدة</h3><p>تجد شرح الدرس الأصلي وأمثلته وأدلته في صفحات الكتاب المدمج أسفل هذا العنوان. اضغط «قراءة صفحات الدرس» لعرضها دون الذهاب إلى مكتبة الأزهر.</p><div class=\"rule-box\"><strong>تدريب فهم:</strong> بعد قراءة الدرس، لخّص أهم حكم أو تعريف ورد فيه، واذكر دليلًا أو مثالًا من الصفحات.</div>","mindmap":"<div class=\"mindmap-root\">أحكام المعتدة</div><div class=\"mindmap-node\"><strong>مرجع الدرس</strong>الفقه الشافعي — الصفحات 12 إلى 14 من الكتاب الرسمي.</div>","flashcards":[{"q":"ما أهم مفهوم أو حكم في درس «أحكام المعتدة»؟","a":"راجع شرح الدرس في كتاب الفقه الشافعي، صفحة 12، واستخرج الإجابة بدقة من النص."}]},{"id":3003,"category":"شرعي","subjectName":"الفقه الشافعي","title":"أحكام الرضاع","page":15,"end":19,"pdf":"fiqh_shafii_2026.pdf","locked":false,"officialBook":true,"integratedPdf":true,"summary":"<div class=\"dalil-box\">من كتاب الفقه الشافعي الرسمي للصف الثالث الإعدادي الأزهري ٢٠٢٦–٢٠٢٧ — الصفحة 15. اقرأ الصفحات الأصلية أدناه، ثم أجب عن التدريب.</div><h3>درس: أحكام الرضاع</h3><p>تجد شرح الدرس الأصلي وأمثلته وأدلته في صفحات الكتاب المدمج أسفل هذا العنوان. اضغط «قراءة صفحات الدرس» لعرضها دون الذهاب إلى مكتبة الأزهر.</p><div class=\"rule-box\"><strong>تدريب فهم:</strong> بعد قراءة الدرس، لخّص أهم حكم أو تعريف ورد فيه، واذكر دليلًا أو مثالًا من الصفحات.</div>","mindmap":"<div class=\"mindmap-root\">أحكام الرضاع</div><div class=\"mindmap-node\"><strong>مرجع الدرس</strong>الفقه الشافعي — الصفحات 15 إلى 19 من الكتاب الرسمي.</div>","flashcards":[{"q":"ما أهم مفهوم أو حكم في درس «أحكام الرضاع»؟","a":"راجع شرح الدرس في كتاب الفقه الشافعي، صفحة 15، واستخرج الإجابة بدقة من النص."}]},{"id":3004,"category":"شرعي","subjectName":"الفقه الشافعي","title":"أحكام النفقات","page":20,"end":23,"pdf":"fiqh_shafii_2026.pdf","locked":false,"officialBook":true,"integratedPdf":true,"summary":"<div class=\"dalil-box\">من كتاب الفقه الشافعي الرسمي للصف الثالث الإعدادي الأزهري ٢٠٢٦–٢٠٢٧ — الصفحة 20. اقرأ الصفحات الأصلية أدناه، ثم أجب عن التدريب.</div><h3>درس: أحكام النفقات</h3><p>تجد شرح الدرس الأصلي وأمثلته وأدلته في صفحات الكتاب المدمج أسفل هذا العنوان. اضغط «قراءة صفحات الدرس» لعرضها دون الذهاب إلى مكتبة الأزهر.</p><div class=\"rule-box\"><strong>تدريب فهم:</strong> بعد قراءة الدرس، لخّص أهم حكم أو تعريف ورد فيه، واذكر دليلًا أو مثالًا من الصفحات.</div>","mindmap":"<div class=\"mindmap-root\">أحكام النفقات</div><div class=\"mindmap-node\"><strong>مرجع الدرس</strong>الفقه الشافعي — الصفحات 20 إلى 23 من الكتاب الرسمي.</div>","flashcards":[{"q":"ما أهم مفهوم أو حكم في درس «أحكام النفقات»؟","a":"راجع شرح الدرس في كتاب الفقه الشافعي، صفحة 20، واستخرج الإجابة بدقة من النص."}]},{"id":3005,"category":"شرعي","subjectName":"الفقه الشافعي","title":"أحكام الحضانة","page":24,"end":32,"pdf":"fiqh_shafii_2026.pdf","locked":false,"officialBook":true,"integratedPdf":true,"summary":"<div class=\"dalil-box\">من كتاب الفقه الشافعي الرسمي للصف الثالث الإعدادي الأزهري ٢٠٢٦–٢٠٢٧ — الصفحة 24. اقرأ الصفحات الأصلية أدناه، ثم أجب عن التدريب.</div><h3>درس: أحكام الحضانة</h3><p>تجد شرح الدرس الأصلي وأمثلته وأدلته في صفحات الكتاب المدمج أسفل هذا العنوان. اضغط «قراءة صفحات الدرس» لعرضها دون الذهاب إلى مكتبة الأزهر.</p><div class=\"rule-box\"><strong>تدريب فهم:</strong> بعد قراءة الدرس، لخّص أهم حكم أو تعريف ورد فيه، واذكر دليلًا أو مثالًا من الصفحات.</div>","mindmap":"<div class=\"mindmap-root\">أحكام الحضانة</div><div class=\"mindmap-node\"><strong>مرجع الدرس</strong>الفقه الشافعي — الصفحات 24 إلى 32 من الكتاب الرسمي.</div>","flashcards":[{"q":"ما أهم مفهوم أو حكم في درس «أحكام الحضانة»؟","a":"راجع شرح الدرس في كتاب الفقه الشافعي، صفحة 24، واستخرج الإجابة بدقة من النص."}]},{"id":3006,"category":"شرعي","subjectName":"الفقه الشافعي","title":"أحكام الدية","page":33,"end":39,"pdf":"fiqh_shafii_2026.pdf","locked":false,"officialBook":true,"integratedPdf":true,"summary":"<div class=\"dalil-box\">من كتاب الفقه الشافعي الرسمي للصف الثالث الإعدادي الأزهري ٢٠٢٦–٢٠٢٧ — الصفحة 33. اقرأ الصفحات الأصلية أدناه، ثم أجب عن التدريب.</div><h3>درس: أحكام الدية</h3><p>تجد شرح الدرس الأصلي وأمثلته وأدلته في صفحات الكتاب المدمج أسفل هذا العنوان. اضغط «قراءة صفحات الدرس» لعرضها دون الذهاب إلى مكتبة الأزهر.</p><div class=\"rule-box\"><strong>تدريب فهم:</strong> بعد قراءة الدرس، لخّص أهم حكم أو تعريف ورد فيه، واذكر دليلًا أو مثالًا من الصفحات.</div>","mindmap":"<div class=\"mindmap-root\">أحكام الدية</div><div class=\"mindmap-node\"><strong>مرجع الدرس</strong>الفقه الشافعي — الصفحات 33 إلى 39 من الكتاب الرسمي.</div>","flashcards":[{"q":"ما أهم مفهوم أو حكم في درس «أحكام الدية»؟","a":"راجع شرح الدرس في كتاب الفقه الشافعي، صفحة 33، واستخرج الإجابة بدقة من النص."}]},{"id":3007,"category":"شرعي","subjectName":"الفقه الشافعي","title":"أحكام الزنا","page":40,"end":42,"pdf":"fiqh_shafii_2026.pdf","locked":false,"officialBook":true,"integratedPdf":true,"summary":"<div class=\"dalil-box\">من كتاب الفقه الشافعي الرسمي للصف الثالث الإعدادي الأزهري ٢٠٢٦–٢٠٢٧ — الصفحة 40. اقرأ الصفحات الأصلية أدناه، ثم أجب عن التدريب.</div><h3>درس: أحكام الزنا</h3><p>تجد شرح الدرس الأصلي وأمثلته وأدلته في صفحات الكتاب المدمج أسفل هذا العنوان. اضغط «قراءة صفحات الدرس» لعرضها دون الذهاب إلى مكتبة الأزهر.</p><div class=\"rule-box\"><strong>تدريب فهم:</strong> بعد قراءة الدرس، لخّص أهم حكم أو تعريف ورد فيه، واذكر دليلًا أو مثالًا من الصفحات.</div>","mindmap":"<div class=\"mindmap-root\">أحكام الزنا</div><div class=\"mindmap-node\"><strong>مرجع الدرس</strong>الفقه الشافعي — الصفحات 40 إلى 42 من الكتاب الرسمي.</div>","flashcards":[{"q":"ما أهم مفهوم أو حكم في درس «أحكام الزنا»؟","a":"راجع شرح الدرس في كتاب الفقه الشافعي، صفحة 40، واستخرج الإجابة بدقة من النص."}]},{"id":3008,"category":"شرعي","subjectName":"الفقه الشافعي","title":"أحكام القذف","page":43,"end":46,"pdf":"fiqh_shafii_2026.pdf","locked":false,"officialBook":true,"integratedPdf":true,"summary":"<div class=\"dalil-box\">من كتاب الفقه الشافعي الرسمي للصف الثالث الإعدادي الأزهري ٢٠٢٦–٢٠٢٧ — الصفحة 43. اقرأ الصفحات الأصلية أدناه، ثم أجب عن التدريب.</div><h3>درس: أحكام القذف</h3><p>تجد شرح الدرس الأصلي وأمثلته وأدلته في صفحات الكتاب المدمج أسفل هذا العنوان. اضغط «قراءة صفحات الدرس» لعرضها دون الذهاب إلى مكتبة الأزهر.</p><div class=\"rule-box\"><strong>تدريب فهم:</strong> بعد قراءة الدرس، لخّص أهم حكم أو تعريف ورد فيه، واذكر دليلًا أو مثالًا من الصفحات.</div>","mindmap":"<div class=\"mindmap-root\">أحكام القذف</div><div class=\"mindmap-node\"><strong>مرجع الدرس</strong>الفقه الشافعي — الصفحات 43 إلى 46 من الكتاب الرسمي.</div>","flashcards":[{"q":"ما أهم مفهوم أو حكم في درس «أحكام القذف»؟","a":"راجع شرح الدرس في كتاب الفقه الشافعي، صفحة 43، واستخرج الإجابة بدقة من النص."}]},{"id":3009,"category":"شرعي","subjectName":"الفقه الشافعي","title":"حد شارب المسكر","page":47,"end":49,"pdf":"fiqh_shafii_2026.pdf","locked":false,"officialBook":true,"integratedPdf":true,"summary":"<div class=\"dalil-box\">من كتاب الفقه الشافعي الرسمي للصف الثالث الإعدادي الأزهري ٢٠٢٦–٢٠٢٧ — الصفحة 47. اقرأ الصفحات الأصلية أدناه، ثم أجب عن التدريب.</div><h3>درس: حد شارب المسكر</h3><p>تجد شرح الدرس الأصلي وأمثلته وأدلته في صفحات الكتاب المدمج أسفل هذا العنوان. اضغط «قراءة صفحات الدرس» لعرضها دون الذهاب إلى مكتبة الأزهر.</p><div class=\"rule-box\"><strong>تدريب فهم:</strong> بعد قراءة الدرس، لخّص أهم حكم أو تعريف ورد فيه، واذكر دليلًا أو مثالًا من الصفحات.</div>","mindmap":"<div class=\"mindmap-root\">حد شارب المسكر</div><div class=\"mindmap-node\"><strong>مرجع الدرس</strong>الفقه الشافعي — الصفحات 47 إلى 49 من الكتاب الرسمي.</div>","flashcards":[{"q":"ما أهم مفهوم أو حكم في درس «حد شارب المسكر»؟","a":"راجع شرح الدرس في كتاب الفقه الشافعي، صفحة 47، واستخرج الإجابة بدقة من النص."}]},{"id":3010,"category":"شرعي","subjectName":"الفقه الشافعي","title":"أحكام السرقة","page":50,"end":53,"pdf":"fiqh_shafii_2026.pdf","locked":false,"officialBook":true,"integratedPdf":true,"summary":"<div class=\"dalil-box\">من كتاب الفقه الشافعي الرسمي للصف الثالث الإعدادي الأزهري ٢٠٢٦–٢٠٢٧ — الصفحة 50. اقرأ الصفحات الأصلية أدناه، ثم أجب عن التدريب.</div><h3>درس: أحكام السرقة</h3><p>تجد شرح الدرس الأصلي وأمثلته وأدلته في صفحات الكتاب المدمج أسفل هذا العنوان. اضغط «قراءة صفحات الدرس» لعرضها دون الذهاب إلى مكتبة الأزهر.</p><div class=\"rule-box\"><strong>تدريب فهم:</strong> بعد قراءة الدرس، لخّص أهم حكم أو تعريف ورد فيه، واذكر دليلًا أو مثالًا من الصفحات.</div>","mindmap":"<div class=\"mindmap-root\">أحكام السرقة</div><div class=\"mindmap-node\"><strong>مرجع الدرس</strong>الفقه الشافعي — الصفحات 50 إلى 53 من الكتاب الرسمي.</div>","flashcards":[{"q":"ما أهم مفهوم أو حكم في درس «أحكام السرقة»؟","a":"راجع شرح الدرس في كتاب الفقه الشافعي، صفحة 50، واستخرج الإجابة بدقة من النص."}]},{"id":3011,"category":"شرعي","subjectName":"الفقه الشافعي","title":"أحكام قاطع الطريق","page":54,"end":57,"pdf":"fiqh_shafii_2026.pdf","locked":false,"officialBook":true,"integratedPdf":true,"summary":"<div class=\"dalil-box\">من كتاب الفقه الشافعي الرسمي للصف الثالث الإعدادي الأزهري ٢٠٢٦–٢٠٢٧ — الصفحة 54. اقرأ الصفحات الأصلية أدناه، ثم أجب عن التدريب.</div><h3>درس: أحكام قاطع الطريق</h3><p>تجد شرح الدرس الأصلي وأمثلته وأدلته في صفحات الكتاب المدمج أسفل هذا العنوان. اضغط «قراءة صفحات الدرس» لعرضها دون الذهاب إلى مكتبة الأزهر.</p><div class=\"rule-box\"><strong>تدريب فهم:</strong> بعد قراءة الدرس، لخّص أهم حكم أو تعريف ورد فيه، واذكر دليلًا أو مثالًا من الصفحات.</div>","mindmap":"<div class=\"mindmap-root\">أحكام قاطع الطريق</div><div class=\"mindmap-node\"><strong>مرجع الدرس</strong>الفقه الشافعي — الصفحات 54 إلى 57 من الكتاب الرسمي.</div>","flashcards":[{"q":"ما أهم مفهوم أو حكم في درس «أحكام قاطع الطريق»؟","a":"راجع شرح الدرس في كتاب الفقه الشافعي، صفحة 54، واستخرج الإجابة بدقة من النص."}]},{"id":3012,"category":"شرعي","subjectName":"الفقه الشافعي","title":"أحكام البغاة","page":58,"end":60,"pdf":"fiqh_shafii_2026.pdf","locked":false,"officialBook":true,"integratedPdf":true,"summary":"<div class=\"dalil-box\">من كتاب الفقه الشافعي الرسمي للصف الثالث الإعدادي الأزهري ٢٠٢٦–٢٠٢٧ — الصفحة 58. اقرأ الصفحات الأصلية أدناه، ثم أجب عن التدريب.</div><h3>درس: أحكام البغاة</h3><p>تجد شرح الدرس الأصلي وأمثلته وأدلته في صفحات الكتاب المدمج أسفل هذا العنوان. اضغط «قراءة صفحات الدرس» لعرضها دون الذهاب إلى مكتبة الأزهر.</p><div class=\"rule-box\"><strong>تدريب فهم:</strong> بعد قراءة الدرس، لخّص أهم حكم أو تعريف ورد فيه، واذكر دليلًا أو مثالًا من الصفحات.</div>","mindmap":"<div class=\"mindmap-root\">أحكام البغاة</div><div class=\"mindmap-node\"><strong>مرجع الدرس</strong>الفقه الشافعي — الصفحات 58 إلى 60 من الكتاب الرسمي.</div>","flashcards":[{"q":"ما أهم مفهوم أو حكم في درس «أحكام البغاة»؟","a":"راجع شرح الدرس في كتاب الفقه الشافعي، صفحة 58، واستخرج الإجابة بدقة من النص."}]},{"id":3013,"category":"شرعي","subjectName":"الفقه الشافعي","title":"حكم تارك الصلاة","page":61,"end":65,"pdf":"fiqh_shafii_2026.pdf","locked":false,"officialBook":true,"integratedPdf":true,"summary":"<div class=\"dalil-box\">من كتاب الفقه الشافعي الرسمي للصف الثالث الإعدادي الأزهري ٢٠٢٦–٢٠٢٧ — الصفحة 61. اقرأ الصفحات الأصلية أدناه، ثم أجب عن التدريب.</div><h3>درس: حكم تارك الصلاة</h3><p>تجد شرح الدرس الأصلي وأمثلته وأدلته في صفحات الكتاب المدمج أسفل هذا العنوان. اضغط «قراءة صفحات الدرس» لعرضها دون الذهاب إلى مكتبة الأزهر.</p><div class=\"rule-box\"><strong>تدريب فهم:</strong> بعد قراءة الدرس، لخّص أهم حكم أو تعريف ورد فيه، واذكر دليلًا أو مثالًا من الصفحات.</div>","mindmap":"<div class=\"mindmap-root\">حكم تارك الصلاة</div><div class=\"mindmap-node\"><strong>مرجع الدرس</strong>الفقه الشافعي — الصفحات 61 إلى 65 من الكتاب الرسمي.</div>","flashcards":[{"q":"ما أهم مفهوم أو حكم في درس «حكم تارك الصلاة»؟","a":"راجع شرح الدرس في كتاب الفقه الشافعي، صفحة 61، واستخرج الإجابة بدقة من النص."}]},{"id":3014,"category":"شرعي","subjectName":"الفقه الشافعي","title":"الصيد والذبائح والضحايا","page":66,"end":67,"pdf":"fiqh_shafii_2026.pdf","locked":false,"officialBook":true,"integratedPdf":true,"summary":"<div class=\"dalil-box\">من كتاب الفقه الشافعي الرسمي للصف الثالث الإعدادي الأزهري ٢٠٢٦–٢٠٢٧ — الصفحة 66. اقرأ الصفحات الأصلية أدناه، ثم أجب عن التدريب.</div><h3>درس: الصيد والذبائح والضحايا</h3><p>تجد شرح الدرس الأصلي وأمثلته وأدلته في صفحات الكتاب المدمج أسفل هذا العنوان. اضغط «قراءة صفحات الدرس» لعرضها دون الذهاب إلى مكتبة الأزهر.</p><div class=\"rule-box\"><strong>تدريب فهم:</strong> بعد قراءة الدرس، لخّص أهم حكم أو تعريف ورد فيه، واذكر دليلًا أو مثالًا من الصفحات.</div>","mindmap":"<div class=\"mindmap-root\">الصيد والذبائح والضحايا</div><div class=\"mindmap-node\"><strong>مرجع الدرس</strong>الفقه الشافعي — الصفحات 66 إلى 67 من الكتاب الرسمي.</div>","flashcards":[{"q":"ما أهم مفهوم أو حكم في درس «الصيد والذبائح والضحايا»؟","a":"راجع شرح الدرس في كتاب الفقه الشافعي، صفحة 66، واستخرج الإجابة بدقة من النص."}]},{"id":3015,"category":"شرعي","subjectName":"الفقه الشافعي","title":"أحكام الأطعمة","page":68,"end":70,"pdf":"fiqh_shafii_2026.pdf","locked":false,"officialBook":true,"integratedPdf":true,"summary":"<div class=\"dalil-box\">من كتاب الفقه الشافعي الرسمي للصف الثالث الإعدادي الأزهري ٢٠٢٦–٢٠٢٧ — الصفحة 68. اقرأ الصفحات الأصلية أدناه، ثم أجب عن التدريب.</div><h3>درس: أحكام الأطعمة</h3><p>تجد شرح الدرس الأصلي وأمثلته وأدلته في صفحات الكتاب المدمج أسفل هذا العنوان. اضغط «قراءة صفحات الدرس» لعرضها دون الذهاب إلى مكتبة الأزهر.</p><div class=\"rule-box\"><strong>تدريب فهم:</strong> بعد قراءة الدرس، لخّص أهم حكم أو تعريف ورد فيه، واذكر دليلًا أو مثالًا من الصفحات.</div>","mindmap":"<div class=\"mindmap-root\">أحكام الأطعمة</div><div class=\"mindmap-node\"><strong>مرجع الدرس</strong>الفقه الشافعي — الصفحات 68 إلى 70 من الكتاب الرسمي.</div>","flashcards":[{"q":"ما أهم مفهوم أو حكم في درس «أحكام الأطعمة»؟","a":"راجع شرح الدرس في كتاب الفقه الشافعي، صفحة 68، واستخرج الإجابة بدقة من النص."}]},{"id":3016,"category":"شرعي","subjectName":"الفقه الشافعي","title":"أحكام الأضحية","page":71,"end":75,"pdf":"fiqh_shafii_2026.pdf","locked":false,"officialBook":true,"integratedPdf":true,"summary":"<div class=\"dalil-box\">من كتاب الفقه الشافعي الرسمي للصف الثالث الإعدادي الأزهري ٢٠٢٦–٢٠٢٧ — الصفحة 71. اقرأ الصفحات الأصلية أدناه، ثم أجب عن التدريب.</div><h3>درس: أحكام الأضحية</h3><p>تجد شرح الدرس الأصلي وأمثلته وأدلته في صفحات الكتاب المدمج أسفل هذا العنوان. اضغط «قراءة صفحات الدرس» لعرضها دون الذهاب إلى مكتبة الأزهر.</p><div class=\"rule-box\"><strong>تدريب فهم:</strong> بعد قراءة الدرس، لخّص أهم حكم أو تعريف ورد فيه، واذكر دليلًا أو مثالًا من الصفحات.</div>","mindmap":"<div class=\"mindmap-root\">أحكام الأضحية</div><div class=\"mindmap-node\"><strong>مرجع الدرس</strong>الفقه الشافعي — الصفحات 71 إلى 75 من الكتاب الرسمي.</div>","flashcards":[{"q":"ما أهم مفهوم أو حكم في درس «أحكام الأضحية»؟","a":"راجع شرح الدرس في كتاب الفقه الشافعي، صفحة 71، واستخرج الإجابة بدقة من النص."}]},{"id":3017,"category":"شرعي","subjectName":"الفقه الشافعي","title":"أحكام العقيقة","page":76,"end":81,"pdf":"fiqh_shafii_2026.pdf","locked":false,"officialBook":true,"integratedPdf":true,"summary":"<div class=\"dalil-box\">من كتاب الفقه الشافعي الرسمي للصف الثالث الإعدادي الأزهري ٢٠٢٦–٢٠٢٧ — الصفحة 76. اقرأ الصفحات الأصلية أدناه، ثم أجب عن التدريب.</div><h3>درس: أحكام العقيقة</h3><p>تجد شرح الدرس الأصلي وأمثلته وأدلته في صفحات الكتاب المدمج أسفل هذا العنوان. اضغط «قراءة صفحات الدرس» لعرضها دون الذهاب إلى مكتبة الأزهر.</p><div class=\"rule-box\"><strong>تدريب فهم:</strong> بعد قراءة الدرس، لخّص أهم حكم أو تعريف ورد فيه، واذكر دليلًا أو مثالًا من الصفحات.</div>","mindmap":"<div class=\"mindmap-root\">أحكام العقيقة</div><div class=\"mindmap-node\"><strong>مرجع الدرس</strong>الفقه الشافعي — الصفحات 76 إلى 81 من الكتاب الرسمي.</div>","flashcards":[{"q":"ما أهم مفهوم أو حكم في درس «أحكام العقيقة»؟","a":"راجع شرح الدرس في كتاب الفقه الشافعي، صفحة 76، واستخرج الإجابة بدقة من النص."}]},{"id":3018,"category":"شرعي","subjectName":"الفقه الشافعي","title":"أحكام الأيمان","page":82,"end":86,"pdf":"fiqh_shafii_2026.pdf","locked":false,"officialBook":true,"integratedPdf":true,"summary":"<div class=\"dalil-box\">من كتاب الفقه الشافعي الرسمي للصف الثالث الإعدادي الأزهري ٢٠٢٦–٢٠٢٧ — الصفحة 82. اقرأ الصفحات الأصلية أدناه، ثم أجب عن التدريب.</div><h3>درس: أحكام الأيمان</h3><p>تجد شرح الدرس الأصلي وأمثلته وأدلته في صفحات الكتاب المدمج أسفل هذا العنوان. اضغط «قراءة صفحات الدرس» لعرضها دون الذهاب إلى مكتبة الأزهر.</p><div class=\"rule-box\"><strong>تدريب فهم:</strong> بعد قراءة الدرس، لخّص أهم حكم أو تعريف ورد فيه، واذكر دليلًا أو مثالًا من الصفحات.</div>","mindmap":"<div class=\"mindmap-root\">أحكام الأيمان</div><div class=\"mindmap-node\"><strong>مرجع الدرس</strong>الفقه الشافعي — الصفحات 82 إلى 86 من الكتاب الرسمي.</div>","flashcards":[{"q":"ما أهم مفهوم أو حكم في درس «أحكام الأيمان»؟","a":"راجع شرح الدرس في كتاب الفقه الشافعي، صفحة 82، واستخرج الإجابة بدقة من النص."}]},{"id":3019,"category":"شرعي","subjectName":"الفقه الشافعي","title":"أحكام النذور","page":87,"end":89,"pdf":"fiqh_shafii_2026.pdf","locked":false,"officialBook":true,"integratedPdf":true,"summary":"<div class=\"dalil-box\">من كتاب الفقه الشافعي الرسمي للصف الثالث الإعدادي الأزهري ٢٠٢٦–٢٠٢٧ — الصفحة 87. اقرأ الصفحات الأصلية أدناه، ثم أجب عن التدريب.</div><h3>درس: أحكام النذور</h3><p>تجد شرح الدرس الأصلي وأمثلته وأدلته في صفحات الكتاب المدمج أسفل هذا العنوان. اضغط «قراءة صفحات الدرس» لعرضها دون الذهاب إلى مكتبة الأزهر.</p><div class=\"rule-box\"><strong>تدريب فهم:</strong> بعد قراءة الدرس، لخّص أهم حكم أو تعريف ورد فيه، واذكر دليلًا أو مثالًا من الصفحات.</div>","mindmap":"<div class=\"mindmap-root\">أحكام النذور</div><div class=\"mindmap-node\"><strong>مرجع الدرس</strong>الفقه الشافعي — الصفحات 87 إلى 89 من الكتاب الرسمي.</div>","flashcards":[{"q":"ما أهم مفهوم أو حكم في درس «أحكام النذور»؟","a":"راجع شرح الدرس في كتاب الفقه الشافعي، صفحة 87، واستخرج الإجابة بدقة من النص."}]},{"id":3020,"category":"شرعي","subjectName":"الفقه الشافعي","title":"أحكام الأقضية والشهادات","page":90,"end":95,"pdf":"fiqh_shafii_2026.pdf","locked":false,"officialBook":true,"integratedPdf":true,"summary":"<div class=\"dalil-box\">من كتاب الفقه الشافعي الرسمي للصف الثالث الإعدادي الأزهري ٢٠٢٦–٢٠٢٧ — الصفحة 90. اقرأ الصفحات الأصلية أدناه، ثم أجب عن التدريب.</div><h3>درس: أحكام الأقضية والشهادات</h3><p>تجد شرح الدرس الأصلي وأمثلته وأدلته في صفحات الكتاب المدمج أسفل هذا العنوان. اضغط «قراءة صفحات الدرس» لعرضها دون الذهاب إلى مكتبة الأزهر.</p><div class=\"rule-box\"><strong>تدريب فهم:</strong> بعد قراءة الدرس، لخّص أهم حكم أو تعريف ورد فيه، واذكر دليلًا أو مثالًا من الصفحات.</div>","mindmap":"<div class=\"mindmap-root\">أحكام الأقضية والشهادات</div><div class=\"mindmap-node\"><strong>مرجع الدرس</strong>الفقه الشافعي — الصفحات 90 إلى 95 من الكتاب الرسمي.</div>","flashcards":[{"q":"ما أهم مفهوم أو حكم في درس «أحكام الأقضية والشهادات»؟","a":"راجع شرح الدرس في كتاب الفقه الشافعي، صفحة 90، واستخرج الإجابة بدقة من النص."}]},{"id":3021,"category":"شرعي","subjectName":"الفقه الشافعي","title":"أحكام الدعوى والبينات","page":96,"end":97,"pdf":"fiqh_shafii_2026.pdf","locked":false,"officialBook":true,"integratedPdf":true,"summary":"<div class=\"dalil-box\">من كتاب الفقه الشافعي الرسمي للصف الثالث الإعدادي الأزهري ٢٠٢٦–٢٠٢٧ — الصفحة 96. اقرأ الصفحات الأصلية أدناه، ثم أجب عن التدريب.</div><h3>درس: أحكام الدعوى والبينات</h3><p>تجد شرح الدرس الأصلي وأمثلته وأدلته في صفحات الكتاب المدمج أسفل هذا العنوان. اضغط «قراءة صفحات الدرس» لعرضها دون الذهاب إلى مكتبة الأزهر.</p><div class=\"rule-box\"><strong>تدريب فهم:</strong> بعد قراءة الدرس، لخّص أهم حكم أو تعريف ورد فيه، واذكر دليلًا أو مثالًا من الصفحات.</div>","mindmap":"<div class=\"mindmap-root\">أحكام الدعوى والبينات</div><div class=\"mindmap-node\"><strong>مرجع الدرس</strong>الفقه الشافعي — الصفحات 96 إلى 97 من الكتاب الرسمي.</div>","flashcards":[{"q":"ما أهم مفهوم أو حكم في درس «أحكام الدعوى والبينات»؟","a":"راجع شرح الدرس في كتاب الفقه الشافعي، صفحة 96، واستخرج الإجابة بدقة من النص."}]},{"id":3022,"category":"شرعي","subjectName":"الفقه الشافعي","title":"شروط الشاهد","page":98,"end":103,"pdf":"fiqh_shafii_2026.pdf","locked":false,"officialBook":true,"integratedPdf":true,"summary":"<div class=\"dalil-box\">من كتاب الفقه الشافعي الرسمي للصف الثالث الإعدادي الأزهري ٢٠٢٦–٢٠٢٧ — الصفحة 98. اقرأ الصفحات الأصلية أدناه، ثم أجب عن التدريب.</div><h3>درس: شروط الشاهد</h3><p>تجد شرح الدرس الأصلي وأمثلته وأدلته في صفحات الكتاب المدمج أسفل هذا العنوان. اضغط «قراءة صفحات الدرس» لعرضها دون الذهاب إلى مكتبة الأزهر.</p><div class=\"rule-box\"><strong>تدريب فهم:</strong> بعد قراءة الدرس، لخّص أهم حكم أو تعريف ورد فيه، واذكر دليلًا أو مثالًا من الصفحات.</div>","mindmap":"<div class=\"mindmap-root\">شروط الشاهد</div><div class=\"mindmap-node\"><strong>مرجع الدرس</strong>الفقه الشافعي — الصفحات 98 إلى 103 من الكتاب الرسمي.</div>","flashcards":[{"q":"ما أهم مفهوم أو حكم في درس «شروط الشاهد»؟","a":"راجع شرح الدرس في كتاب الفقه الشافعي، صفحة 98، واستخرج الإجابة بدقة من النص."}]},{"id":3023,"category":"شرعي","subjectName":"الفقه الشافعي","title":"أحكام الفرائض والمواريث","page":104,"end":113,"pdf":"fiqh_shafii_2026.pdf","locked":false,"officialBook":true,"integratedPdf":true,"summary":"<div class=\"dalil-box\">من كتاب الفقه الشافعي الرسمي للصف الثالث الإعدادي الأزهري ٢٠٢٦–٢٠٢٧ — الصفحة 104. اقرأ الصفحات الأصلية أدناه، ثم أجب عن التدريب.</div><h3>درس: أحكام الفرائض والمواريث</h3><p>تجد شرح الدرس الأصلي وأمثلته وأدلته في صفحات الكتاب المدمج أسفل هذا العنوان. اضغط «قراءة صفحات الدرس» لعرضها دون الذهاب إلى مكتبة الأزهر.</p><div class=\"rule-box\"><strong>تدريب فهم:</strong> بعد قراءة الدرس، لخّص أهم حكم أو تعريف ورد فيه، واذكر دليلًا أو مثالًا من الصفحات.</div>","mindmap":"<div class=\"mindmap-root\">أحكام الفرائض والمواريث</div><div class=\"mindmap-node\"><strong>مرجع الدرس</strong>الفقه الشافعي — الصفحات 104 إلى 113 من الكتاب الرسمي.</div>","flashcards":[{"q":"ما أهم مفهوم أو حكم في درس «أحكام الفرائض والمواريث»؟","a":"راجع شرح الدرس في كتاب الفقه الشافعي، صفحة 104، واستخرج الإجابة بدقة من النص."}]},{"id":3024,"category":"شرعي","subjectName":"الفقه الشافعي","title":"الفروض المقدرة","page":114,"end":164,"pdf":"fiqh_shafii_2026.pdf","locked":false,"officialBook":true,"integratedPdf":true,"summary":"<div class=\"dalil-box\">من كتاب الفقه الشافعي الرسمي للصف الثالث الإعدادي الأزهري ٢٠٢٦–٢٠٢٧ — الصفحة 114. اقرأ الصفحات الأصلية أدناه، ثم أجب عن التدريب.</div><h3>درس: الفروض المقدرة</h3><p>تجد شرح الدرس الأصلي وأمثلته وأدلته في صفحات الكتاب المدمج أسفل هذا العنوان. اضغط «قراءة صفحات الدرس» لعرضها دون الذهاب إلى مكتبة الأزهر.</p><div class=\"rule-box\"><strong>تدريب فهم:</strong> بعد قراءة الدرس، لخّص أهم حكم أو تعريف ورد فيه، واذكر دليلًا أو مثالًا من الصفحات.</div>","mindmap":"<div class=\"mindmap-root\">الفروض المقدرة</div><div class=\"mindmap-node\"><strong>مرجع الدرس</strong>الفقه الشافعي — الصفحات 114 إلى 164 من الكتاب الرسمي.</div>","flashcards":[{"q":"ما أهم مفهوم أو حكم في درس «الفروض المقدرة»؟","a":"راجع شرح الدرس في كتاب الفقه الشافعي، صفحة 114، واستخرج الإجابة بدقة من النص."}]},{"id":3025,"category":"شرعي","subjectName":"الفقه الحنفي","title":"كتاب الجنايات وأنواعها","page":5,"end":19,"pdf":"fiqh_hanafi_2026.pdf","locked":false,"officialBook":true,"integratedPdf":true,"summary":"<div class=\"dalil-box\">من كتاب الفقه الحنفي الرسمي للصف الثالث الإعدادي الأزهري ٢٠٢٦–٢٠٢٧ — الصفحة 5. اقرأ الصفحات الأصلية أدناه، ثم أجب عن التدريب.</div><h3>درس: كتاب الجنايات وأنواعها</h3><p>تجد شرح الدرس الأصلي وأمثلته وأدلته في صفحات الكتاب المدمج أسفل هذا العنوان. اضغط «قراءة صفحات الدرس» لعرضها دون الذهاب إلى مكتبة الأزهر.</p><div class=\"rule-box\"><strong>تدريب فهم:</strong> بعد قراءة الدرس، لخّص أهم حكم أو تعريف ورد فيه، واذكر دليلًا أو مثالًا من الصفحات.</div>","mindmap":"<div class=\"mindmap-root\">كتاب الجنايات وأنواعها</div><div class=\"mindmap-node\"><strong>مرجع الدرس</strong>الفقه الحنفي — الصفحات 5 إلى 19 من الكتاب الرسمي.</div>","flashcards":[{"q":"ما أهم مفهوم أو حكم في درس «كتاب الجنايات وأنواعها»؟","a":"راجع شرح الدرس في كتاب الفقه الحنفي، صفحة 5، واستخرج الإجابة بدقة من النص."}]},{"id":3026,"category":"شرعي","subjectName":"الفقه الحنفي","title":"كتاب الديات","page":20,"end":26,"pdf":"fiqh_hanafi_2026.pdf","locked":false,"officialBook":true,"integratedPdf":true,"summary":"<div class=\"dalil-box\">من كتاب الفقه الحنفي الرسمي للصف الثالث الإعدادي الأزهري ٢٠٢٦–٢٠٢٧ — الصفحة 20. اقرأ الصفحات الأصلية أدناه، ثم أجب عن التدريب.</div><h3>درس: كتاب الديات</h3><p>تجد شرح الدرس الأصلي وأمثلته وأدلته في صفحات الكتاب المدمج أسفل هذا العنوان. اضغط «قراءة صفحات الدرس» لعرضها دون الذهاب إلى مكتبة الأزهر.</p><div class=\"rule-box\"><strong>تدريب فهم:</strong> بعد قراءة الدرس، لخّص أهم حكم أو تعريف ورد فيه، واذكر دليلًا أو مثالًا من الصفحات.</div>","mindmap":"<div class=\"mindmap-root\">كتاب الديات</div><div class=\"mindmap-node\"><strong>مرجع الدرس</strong>الفقه الحنفي — الصفحات 20 إلى 26 من الكتاب الرسمي.</div>","flashcards":[{"q":"ما أهم مفهوم أو حكم في درس «كتاب الديات»؟","a":"راجع شرح الدرس في كتاب الفقه الحنفي، صفحة 20، واستخرج الإجابة بدقة من النص."}]},{"id":3027,"category":"شرعي","subjectName":"الفقه الحنفي","title":"كتاب الحدود","page":27,"end":27,"pdf":"fiqh_hanafi_2026.pdf","locked":false,"officialBook":true,"integratedPdf":true,"summary":"<div class=\"dalil-box\">من كتاب الفقه الحنفي الرسمي للصف الثالث الإعدادي الأزهري ٢٠٢٦–٢٠٢٧ — الصفحة 27. اقرأ الصفحات الأصلية أدناه، ثم أجب عن التدريب.</div><h3>درس: كتاب الحدود</h3><p>تجد شرح الدرس الأصلي وأمثلته وأدلته في صفحات الكتاب المدمج أسفل هذا العنوان. اضغط «قراءة صفحات الدرس» لعرضها دون الذهاب إلى مكتبة الأزهر.</p><div class=\"rule-box\"><strong>تدريب فهم:</strong> بعد قراءة الدرس، لخّص أهم حكم أو تعريف ورد فيه، واذكر دليلًا أو مثالًا من الصفحات.</div>","mindmap":"<div class=\"mindmap-root\">كتاب الحدود</div><div class=\"mindmap-node\"><strong>مرجع الدرس</strong>الفقه الحنفي — الصفحات 27 إلى 27 من الكتاب الرسمي.</div>","flashcards":[{"q":"ما أهم مفهوم أو حكم في درس «كتاب الحدود»؟","a":"راجع شرح الدرس في كتاب الفقه الحنفي، صفحة 27، واستخرج الإجابة بدقة من النص."}]},{"id":3028,"category":"شرعي","subjectName":"الفقه الحنفي","title":"حد الزنا","page":28,"end":35,"pdf":"fiqh_hanafi_2026.pdf","locked":false,"officialBook":true,"integratedPdf":true,"summary":"<div class=\"dalil-box\">من كتاب الفقه الحنفي الرسمي للصف الثالث الإعدادي الأزهري ٢٠٢٦–٢٠٢٧ — الصفحة 28. اقرأ الصفحات الأصلية أدناه، ثم أجب عن التدريب.</div><h3>درس: حد الزنا</h3><p>تجد شرح الدرس الأصلي وأمثلته وأدلته في صفحات الكتاب المدمج أسفل هذا العنوان. اضغط «قراءة صفحات الدرس» لعرضها دون الذهاب إلى مكتبة الأزهر.</p><div class=\"rule-box\"><strong>تدريب فهم:</strong> بعد قراءة الدرس، لخّص أهم حكم أو تعريف ورد فيه، واذكر دليلًا أو مثالًا من الصفحات.</div>","mindmap":"<div class=\"mindmap-root\">حد الزنا</div><div class=\"mindmap-node\"><strong>مرجع الدرس</strong>الفقه الحنفي — الصفحات 28 إلى 35 من الكتاب الرسمي.</div>","flashcards":[{"q":"ما أهم مفهوم أو حكم في درس «حد الزنا»؟","a":"راجع شرح الدرس في كتاب الفقه الحنفي، صفحة 28، واستخرج الإجابة بدقة من النص."}]},{"id":3029,"category":"شرعي","subjectName":"الفقه الحنفي","title":"حد القذف","page":36,"end":38,"pdf":"fiqh_hanafi_2026.pdf","locked":false,"officialBook":true,"integratedPdf":true,"summary":"<div class=\"dalil-box\">من كتاب الفقه الحنفي الرسمي للصف الثالث الإعدادي الأزهري ٢٠٢٦–٢٠٢٧ — الصفحة 36. اقرأ الصفحات الأصلية أدناه، ثم أجب عن التدريب.</div><h3>درس: حد القذف</h3><p>تجد شرح الدرس الأصلي وأمثلته وأدلته في صفحات الكتاب المدمج أسفل هذا العنوان. اضغط «قراءة صفحات الدرس» لعرضها دون الذهاب إلى مكتبة الأزهر.</p><div class=\"rule-box\"><strong>تدريب فهم:</strong> بعد قراءة الدرس، لخّص أهم حكم أو تعريف ورد فيه، واذكر دليلًا أو مثالًا من الصفحات.</div>","mindmap":"<div class=\"mindmap-root\">حد القذف</div><div class=\"mindmap-node\"><strong>مرجع الدرس</strong>الفقه الحنفي — الصفحات 36 إلى 38 من الكتاب الرسمي.</div>","flashcards":[{"q":"ما أهم مفهوم أو حكم في درس «حد القذف»؟","a":"راجع شرح الدرس في كتاب الفقه الحنفي، صفحة 36، واستخرج الإجابة بدقة من النص."}]},{"id":3030,"category":"شرعي","subjectName":"الفقه الحنفي","title":"التعزير","page":39,"end":41,"pdf":"fiqh_hanafi_2026.pdf","locked":false,"officialBook":true,"integratedPdf":true,"summary":"<div class=\"dalil-box\">من كتاب الفقه الحنفي الرسمي للصف الثالث الإعدادي الأزهري ٢٠٢٦–٢٠٢٧ — الصفحة 39. اقرأ الصفحات الأصلية أدناه، ثم أجب عن التدريب.</div><h3>درس: التعزير</h3><p>تجد شرح الدرس الأصلي وأمثلته وأدلته في صفحات الكتاب المدمج أسفل هذا العنوان. اضغط «قراءة صفحات الدرس» لعرضها دون الذهاب إلى مكتبة الأزهر.</p><div class=\"rule-box\"><strong>تدريب فهم:</strong> بعد قراءة الدرس، لخّص أهم حكم أو تعريف ورد فيه، واذكر دليلًا أو مثالًا من الصفحات.</div>","mindmap":"<div class=\"mindmap-root\">التعزير</div><div class=\"mindmap-node\"><strong>مرجع الدرس</strong>الفقه الحنفي — الصفحات 39 إلى 41 من الكتاب الرسمي.</div>","flashcards":[{"q":"ما أهم مفهوم أو حكم في درس «التعزير»؟","a":"راجع شرح الدرس في كتاب الفقه الحنفي، صفحة 39، واستخرج الإجابة بدقة من النص."}]},{"id":3031,"category":"شرعي","subjectName":"الفقه الحنفي","title":"السرقة","page":42,"end":43,"pdf":"fiqh_hanafi_2026.pdf","locked":false,"officialBook":true,"integratedPdf":true,"summary":"<div class=\"dalil-box\">من كتاب الفقه الحنفي الرسمي للصف الثالث الإعدادي الأزهري ٢٠٢٦–٢٠٢٧ — الصفحة 42. اقرأ الصفحات الأصلية أدناه، ثم أجب عن التدريب.</div><h3>درس: السرقة</h3><p>تجد شرح الدرس الأصلي وأمثلته وأدلته في صفحات الكتاب المدمج أسفل هذا العنوان. اضغط «قراءة صفحات الدرس» لعرضها دون الذهاب إلى مكتبة الأزهر.</p><div class=\"rule-box\"><strong>تدريب فهم:</strong> بعد قراءة الدرس، لخّص أهم حكم أو تعريف ورد فيه، واذكر دليلًا أو مثالًا من الصفحات.</div>","mindmap":"<div class=\"mindmap-root\">السرقة</div><div class=\"mindmap-node\"><strong>مرجع الدرس</strong>الفقه الحنفي — الصفحات 42 إلى 43 من الكتاب الرسمي.</div>","flashcards":[{"q":"ما أهم مفهوم أو حكم في درس «السرقة»؟","a":"راجع شرح الدرس في كتاب الفقه الحنفي، صفحة 42، واستخرج الإجابة بدقة من النص."}]},{"id":3032,"category":"شرعي","subjectName":"الفقه الحنفي","title":"حد قاطع الطريق","page":44,"end":46,"pdf":"fiqh_hanafi_2026.pdf","locked":false,"officialBook":true,"integratedPdf":true,"summary":"<div class=\"dalil-box\">من كتاب الفقه الحنفي الرسمي للصف الثالث الإعدادي الأزهري ٢٠٢٦–٢٠٢٧ — الصفحة 44. اقرأ الصفحات الأصلية أدناه، ثم أجب عن التدريب.</div><h3>درس: حد قاطع الطريق</h3><p>تجد شرح الدرس الأصلي وأمثلته وأدلته في صفحات الكتاب المدمج أسفل هذا العنوان. اضغط «قراءة صفحات الدرس» لعرضها دون الذهاب إلى مكتبة الأزهر.</p><div class=\"rule-box\"><strong>تدريب فهم:</strong> بعد قراءة الدرس، لخّص أهم حكم أو تعريف ورد فيه، واذكر دليلًا أو مثالًا من الصفحات.</div>","mindmap":"<div class=\"mindmap-root\">حد قاطع الطريق</div><div class=\"mindmap-node\"><strong>مرجع الدرس</strong>الفقه الحنفي — الصفحات 44 إلى 46 من الكتاب الرسمي.</div>","flashcards":[{"q":"ما أهم مفهوم أو حكم في درس «حد قاطع الطريق»؟","a":"راجع شرح الدرس في كتاب الفقه الحنفي، صفحة 44، واستخرج الإجابة بدقة من النص."}]},{"id":3033,"category":"شرعي","subjectName":"الفقه الحنفي","title":"كتاب الأشربة","page":47,"end":53,"pdf":"fiqh_hanafi_2026.pdf","locked":false,"officialBook":true,"integratedPdf":true,"summary":"<div class=\"dalil-box\">من كتاب الفقه الحنفي الرسمي للصف الثالث الإعدادي الأزهري ٢٠٢٦–٢٠٢٧ — الصفحة 47. اقرأ الصفحات الأصلية أدناه، ثم أجب عن التدريب.</div><h3>درس: كتاب الأشربة</h3><p>تجد شرح الدرس الأصلي وأمثلته وأدلته في صفحات الكتاب المدمج أسفل هذا العنوان. اضغط «قراءة صفحات الدرس» لعرضها دون الذهاب إلى مكتبة الأزهر.</p><div class=\"rule-box\"><strong>تدريب فهم:</strong> بعد قراءة الدرس، لخّص أهم حكم أو تعريف ورد فيه، واذكر دليلًا أو مثالًا من الصفحات.</div>","mindmap":"<div class=\"mindmap-root\">كتاب الأشربة</div><div class=\"mindmap-node\"><strong>مرجع الدرس</strong>الفقه الحنفي — الصفحات 47 إلى 53 من الكتاب الرسمي.</div>","flashcards":[{"q":"ما أهم مفهوم أو حكم في درس «كتاب الأشربة»؟","a":"راجع شرح الدرس في كتاب الفقه الحنفي، صفحة 47، واستخرج الإجابة بدقة من النص."}]},{"id":3034,"category":"شرعي","subjectName":"الفقه الحنفي","title":"الصيد والذبائح","page":54,"end":54,"pdf":"fiqh_hanafi_2026.pdf","locked":false,"officialBook":true,"integratedPdf":true,"summary":"<div class=\"dalil-box\">من كتاب الفقه الحنفي الرسمي للصف الثالث الإعدادي الأزهري ٢٠٢٦–٢٠٢٧ — الصفحة 54. اقرأ الصفحات الأصلية أدناه، ثم أجب عن التدريب.</div><h3>درس: الصيد والذبائح</h3><p>تجد شرح الدرس الأصلي وأمثلته وأدلته في صفحات الكتاب المدمج أسفل هذا العنوان. اضغط «قراءة صفحات الدرس» لعرضها دون الذهاب إلى مكتبة الأزهر.</p><div class=\"rule-box\"><strong>تدريب فهم:</strong> بعد قراءة الدرس، لخّص أهم حكم أو تعريف ورد فيه، واذكر دليلًا أو مثالًا من الصفحات.</div>","mindmap":"<div class=\"mindmap-root\">الصيد والذبائح</div><div class=\"mindmap-node\"><strong>مرجع الدرس</strong>الفقه الحنفي — الصفحات 54 إلى 54 من الكتاب الرسمي.</div>","flashcards":[{"q":"ما أهم مفهوم أو حكم في درس «الصيد والذبائح»؟","a":"راجع شرح الدرس في كتاب الفقه الحنفي، صفحة 54، واستخرج الإجابة بدقة من النص."}]},{"id":3035,"category":"شرعي","subjectName":"الفقه الحنفي","title":"شروط المذكي","page":55,"end":61,"pdf":"fiqh_hanafi_2026.pdf","locked":false,"officialBook":true,"integratedPdf":true,"summary":"<div class=\"dalil-box\">من كتاب الفقه الحنفي الرسمي للصف الثالث الإعدادي الأزهري ٢٠٢٦–٢٠٢٧ — الصفحة 55. اقرأ الصفحات الأصلية أدناه، ثم أجب عن التدريب.</div><h3>درس: شروط المذكي</h3><p>تجد شرح الدرس الأصلي وأمثلته وأدلته في صفحات الكتاب المدمج أسفل هذا العنوان. اضغط «قراءة صفحات الدرس» لعرضها دون الذهاب إلى مكتبة الأزهر.</p><div class=\"rule-box\"><strong>تدريب فهم:</strong> بعد قراءة الدرس، لخّص أهم حكم أو تعريف ورد فيه، واذكر دليلًا أو مثالًا من الصفحات.</div>","mindmap":"<div class=\"mindmap-root\">شروط المذكي</div><div class=\"mindmap-node\"><strong>مرجع الدرس</strong>الفقه الحنفي — الصفحات 55 إلى 61 من الكتاب الرسمي.</div>","flashcards":[{"q":"ما أهم مفهوم أو حكم في درس «شروط المذكي»؟","a":"راجع شرح الدرس في كتاب الفقه الحنفي، صفحة 55، واستخرج الإجابة بدقة من النص."}]},{"id":3036,"category":"شرعي","subjectName":"الفقه الحنفي","title":"كتاب الأضحية","page":62,"end":67,"pdf":"fiqh_hanafi_2026.pdf","locked":false,"officialBook":true,"integratedPdf":true,"summary":"<div class=\"dalil-box\">من كتاب الفقه الحنفي الرسمي للصف الثالث الإعدادي الأزهري ٢٠٢٦–٢٠٢٧ — الصفحة 62. اقرأ الصفحات الأصلية أدناه، ثم أجب عن التدريب.</div><h3>درس: كتاب الأضحية</h3><p>تجد شرح الدرس الأصلي وأمثلته وأدلته في صفحات الكتاب المدمج أسفل هذا العنوان. اضغط «قراءة صفحات الدرس» لعرضها دون الذهاب إلى مكتبة الأزهر.</p><div class=\"rule-box\"><strong>تدريب فهم:</strong> بعد قراءة الدرس، لخّص أهم حكم أو تعريف ورد فيه، واذكر دليلًا أو مثالًا من الصفحات.</div>","mindmap":"<div class=\"mindmap-root\">كتاب الأضحية</div><div class=\"mindmap-node\"><strong>مرجع الدرس</strong>الفقه الحنفي — الصفحات 62 إلى 67 من الكتاب الرسمي.</div>","flashcards":[{"q":"ما أهم مفهوم أو حكم في درس «كتاب الأضحية»؟","a":"راجع شرح الدرس في كتاب الفقه الحنفي، صفحة 62، واستخرج الإجابة بدقة من النص."}]},{"id":3037,"category":"شرعي","subjectName":"الفقه الحنفي","title":"كتاب الأيمان","page":68,"end":78,"pdf":"fiqh_hanafi_2026.pdf","locked":false,"officialBook":true,"integratedPdf":true,"summary":"<div class=\"dalil-box\">من كتاب الفقه الحنفي الرسمي للصف الثالث الإعدادي الأزهري ٢٠٢٦–٢٠٢٧ — الصفحة 68. اقرأ الصفحات الأصلية أدناه، ثم أجب عن التدريب.</div><h3>درس: كتاب الأيمان</h3><p>تجد شرح الدرس الأصلي وأمثلته وأدلته في صفحات الكتاب المدمج أسفل هذا العنوان. اضغط «قراءة صفحات الدرس» لعرضها دون الذهاب إلى مكتبة الأزهر.</p><div class=\"rule-box\"><strong>تدريب فهم:</strong> بعد قراءة الدرس، لخّص أهم حكم أو تعريف ورد فيه، واذكر دليلًا أو مثالًا من الصفحات.</div>","mindmap":"<div class=\"mindmap-root\">كتاب الأيمان</div><div class=\"mindmap-node\"><strong>مرجع الدرس</strong>الفقه الحنفي — الصفحات 68 إلى 78 من الكتاب الرسمي.</div>","flashcards":[{"q":"ما أهم مفهوم أو حكم في درس «كتاب الأيمان»؟","a":"راجع شرح الدرس في كتاب الفقه الحنفي، صفحة 68، واستخرج الإجابة بدقة من النص."}]},{"id":3038,"category":"شرعي","subjectName":"الفقه الحنفي","title":"كتاب الدعوى","page":79,"end":84,"pdf":"fiqh_hanafi_2026.pdf","locked":false,"officialBook":true,"integratedPdf":true,"summary":"<div class=\"dalil-box\">من كتاب الفقه الحنفي الرسمي للصف الثالث الإعدادي الأزهري ٢٠٢٦–٢٠٢٧ — الصفحة 79. اقرأ الصفحات الأصلية أدناه، ثم أجب عن التدريب.</div><h3>درس: كتاب الدعوى</h3><p>تجد شرح الدرس الأصلي وأمثلته وأدلته في صفحات الكتاب المدمج أسفل هذا العنوان. اضغط «قراءة صفحات الدرس» لعرضها دون الذهاب إلى مكتبة الأزهر.</p><div class=\"rule-box\"><strong>تدريب فهم:</strong> بعد قراءة الدرس، لخّص أهم حكم أو تعريف ورد فيه، واذكر دليلًا أو مثالًا من الصفحات.</div>","mindmap":"<div class=\"mindmap-root\">كتاب الدعوى</div><div class=\"mindmap-node\"><strong>مرجع الدرس</strong>الفقه الحنفي — الصفحات 79 إلى 84 من الكتاب الرسمي.</div>","flashcards":[{"q":"ما أهم مفهوم أو حكم في درس «كتاب الدعوى»؟","a":"راجع شرح الدرس في كتاب الفقه الحنفي، صفحة 79، واستخرج الإجابة بدقة من النص."}]},{"id":3039,"category":"شرعي","subjectName":"الفقه الحنفي","title":"كتاب الشهادات","page":85,"end":86,"pdf":"fiqh_hanafi_2026.pdf","locked":false,"officialBook":true,"integratedPdf":true,"summary":"<div class=\"dalil-box\">من كتاب الفقه الحنفي الرسمي للصف الثالث الإعدادي الأزهري ٢٠٢٦–٢٠٢٧ — الصفحة 85. اقرأ الصفحات الأصلية أدناه، ثم أجب عن التدريب.</div><h3>درس: كتاب الشهادات</h3><p>تجد شرح الدرس الأصلي وأمثلته وأدلته في صفحات الكتاب المدمج أسفل هذا العنوان. اضغط «قراءة صفحات الدرس» لعرضها دون الذهاب إلى مكتبة الأزهر.</p><div class=\"rule-box\"><strong>تدريب فهم:</strong> بعد قراءة الدرس، لخّص أهم حكم أو تعريف ورد فيه، واذكر دليلًا أو مثالًا من الصفحات.</div>","mindmap":"<div class=\"mindmap-root\">كتاب الشهادات</div><div class=\"mindmap-node\"><strong>مرجع الدرس</strong>الفقه الحنفي — الصفحات 85 إلى 86 من الكتاب الرسمي.</div>","flashcards":[{"q":"ما أهم مفهوم أو حكم في درس «كتاب الشهادات»؟","a":"راجع شرح الدرس في كتاب الفقه الحنفي، صفحة 85، واستخرج الإجابة بدقة من النص."}]},{"id":3040,"category":"شرعي","subjectName":"الفقه الحنفي","title":"مراتب الشهادات","page":87,"end":95,"pdf":"fiqh_hanafi_2026.pdf","locked":false,"officialBook":true,"integratedPdf":true,"summary":"<div class=\"dalil-box\">من كتاب الفقه الحنفي الرسمي للصف الثالث الإعدادي الأزهري ٢٠٢٦–٢٠٢٧ — الصفحة 87. اقرأ الصفحات الأصلية أدناه، ثم أجب عن التدريب.</div><h3>درس: مراتب الشهادات</h3><p>تجد شرح الدرس الأصلي وأمثلته وأدلته في صفحات الكتاب المدمج أسفل هذا العنوان. اضغط «قراءة صفحات الدرس» لعرضها دون الذهاب إلى مكتبة الأزهر.</p><div class=\"rule-box\"><strong>تدريب فهم:</strong> بعد قراءة الدرس، لخّص أهم حكم أو تعريف ورد فيه، واذكر دليلًا أو مثالًا من الصفحات.</div>","mindmap":"<div class=\"mindmap-root\">مراتب الشهادات</div><div class=\"mindmap-node\"><strong>مرجع الدرس</strong>الفقه الحنفي — الصفحات 87 إلى 95 من الكتاب الرسمي.</div>","flashcards":[{"q":"ما أهم مفهوم أو حكم في درس «مراتب الشهادات»؟","a":"راجع شرح الدرس في كتاب الفقه الحنفي، صفحة 87، واستخرج الإجابة بدقة من النص."}]},{"id":3041,"category":"شرعي","subjectName":"الفقه الحنفي","title":"أدب القاضي","page":96,"end":98,"pdf":"fiqh_hanafi_2026.pdf","locked":false,"officialBook":true,"integratedPdf":true,"summary":"<div class=\"dalil-box\">من كتاب الفقه الحنفي الرسمي للصف الثالث الإعدادي الأزهري ٢٠٢٦–٢٠٢٧ — الصفحة 96. اقرأ الصفحات الأصلية أدناه، ثم أجب عن التدريب.</div><h3>درس: أدب القاضي</h3><p>تجد شرح الدرس الأصلي وأمثلته وأدلته في صفحات الكتاب المدمج أسفل هذا العنوان. اضغط «قراءة صفحات الدرس» لعرضها دون الذهاب إلى مكتبة الأزهر.</p><div class=\"rule-box\"><strong>تدريب فهم:</strong> بعد قراءة الدرس، لخّص أهم حكم أو تعريف ورد فيه، واذكر دليلًا أو مثالًا من الصفحات.</div>","mindmap":"<div class=\"mindmap-root\">أدب القاضي</div><div class=\"mindmap-node\"><strong>مرجع الدرس</strong>الفقه الحنفي — الصفحات 96 إلى 98 من الكتاب الرسمي.</div>","flashcards":[{"q":"ما أهم مفهوم أو حكم في درس «أدب القاضي»؟","a":"راجع شرح الدرس في كتاب الفقه الحنفي، صفحة 96، واستخرج الإجابة بدقة من النص."}]},{"id":3042,"category":"شرعي","subjectName":"الفقه الحنفي","title":"التحكيم","page":99,"end":103,"pdf":"fiqh_hanafi_2026.pdf","locked":false,"officialBook":true,"integratedPdf":true,"summary":"<div class=\"dalil-box\">من كتاب الفقه الحنفي الرسمي للصف الثالث الإعدادي الأزهري ٢٠٢٦–٢٠٢٧ — الصفحة 99. اقرأ الصفحات الأصلية أدناه، ثم أجب عن التدريب.</div><h3>درس: التحكيم</h3><p>تجد شرح الدرس الأصلي وأمثلته وأدلته في صفحات الكتاب المدمج أسفل هذا العنوان. اضغط «قراءة صفحات الدرس» لعرضها دون الذهاب إلى مكتبة الأزهر.</p><div class=\"rule-box\"><strong>تدريب فهم:</strong> بعد قراءة الدرس، لخّص أهم حكم أو تعريف ورد فيه، واذكر دليلًا أو مثالًا من الصفحات.</div>","mindmap":"<div class=\"mindmap-root\">التحكيم</div><div class=\"mindmap-node\"><strong>مرجع الدرس</strong>الفقه الحنفي — الصفحات 99 إلى 103 من الكتاب الرسمي.</div>","flashcards":[{"q":"ما أهم مفهوم أو حكم في درس «التحكيم»؟","a":"راجع شرح الدرس في كتاب الفقه الحنفي، صفحة 99، واستخرج الإجابة بدقة من النص."}]},{"id":3043,"category":"شرعي","subjectName":"الفقه الحنفي","title":"الحظر والإباحة","page":104,"end":108,"pdf":"fiqh_hanafi_2026.pdf","locked":false,"officialBook":true,"integratedPdf":true,"summary":"<div class=\"dalil-box\">من كتاب الفقه الحنفي الرسمي للصف الثالث الإعدادي الأزهري ٢٠٢٦–٢٠٢٧ — الصفحة 104. اقرأ الصفحات الأصلية أدناه، ثم أجب عن التدريب.</div><h3>درس: الحظر والإباحة</h3><p>تجد شرح الدرس الأصلي وأمثلته وأدلته في صفحات الكتاب المدمج أسفل هذا العنوان. اضغط «قراءة صفحات الدرس» لعرضها دون الذهاب إلى مكتبة الأزهر.</p><div class=\"rule-box\"><strong>تدريب فهم:</strong> بعد قراءة الدرس، لخّص أهم حكم أو تعريف ورد فيه، واذكر دليلًا أو مثالًا من الصفحات.</div>","mindmap":"<div class=\"mindmap-root\">الحظر والإباحة</div><div class=\"mindmap-node\"><strong>مرجع الدرس</strong>الفقه الحنفي — الصفحات 104 إلى 108 من الكتاب الرسمي.</div>","flashcards":[{"q":"ما أهم مفهوم أو حكم في درس «الحظر والإباحة»؟","a":"راجع شرح الدرس في كتاب الفقه الحنفي، صفحة 104، واستخرج الإجابة بدقة من النص."}]},{"id":3044,"category":"شرعي","subjectName":"الفقه الحنفي","title":"الاحتكار والتسعير","page":109,"end":113,"pdf":"fiqh_hanafi_2026.pdf","locked":false,"officialBook":true,"integratedPdf":true,"summary":"<div class=\"dalil-box\">من كتاب الفقه الحنفي الرسمي للصف الثالث الإعدادي الأزهري ٢٠٢٦–٢٠٢٧ — الصفحة 109. اقرأ الصفحات الأصلية أدناه، ثم أجب عن التدريب.</div><h3>درس: الاحتكار والتسعير</h3><p>تجد شرح الدرس الأصلي وأمثلته وأدلته في صفحات الكتاب المدمج أسفل هذا العنوان. اضغط «قراءة صفحات الدرس» لعرضها دون الذهاب إلى مكتبة الأزهر.</p><div class=\"rule-box\"><strong>تدريب فهم:</strong> بعد قراءة الدرس، لخّص أهم حكم أو تعريف ورد فيه، واذكر دليلًا أو مثالًا من الصفحات.</div>","mindmap":"<div class=\"mindmap-root\">الاحتكار والتسعير</div><div class=\"mindmap-node\"><strong>مرجع الدرس</strong>الفقه الحنفي — الصفحات 109 إلى 113 من الكتاب الرسمي.</div>","flashcards":[{"q":"ما أهم مفهوم أو حكم في درس «الاحتكار والتسعير»؟","a":"راجع شرح الدرس في كتاب الفقه الحنفي، صفحة 109، واستخرج الإجابة بدقة من النص."}]},{"id":3045,"category":"شرعي","subjectName":"الفقه الحنفي","title":"كتاب الوصايا","page":114,"end":121,"pdf":"fiqh_hanafi_2026.pdf","locked":false,"officialBook":true,"integratedPdf":true,"summary":"<div class=\"dalil-box\">من كتاب الفقه الحنفي الرسمي للصف الثالث الإعدادي الأزهري ٢٠٢٦–٢٠٢٧ — الصفحة 114. اقرأ الصفحات الأصلية أدناه، ثم أجب عن التدريب.</div><h3>درس: كتاب الوصايا</h3><p>تجد شرح الدرس الأصلي وأمثلته وأدلته في صفحات الكتاب المدمج أسفل هذا العنوان. اضغط «قراءة صفحات الدرس» لعرضها دون الذهاب إلى مكتبة الأزهر.</p><div class=\"rule-box\"><strong>تدريب فهم:</strong> بعد قراءة الدرس، لخّص أهم حكم أو تعريف ورد فيه، واذكر دليلًا أو مثالًا من الصفحات.</div>","mindmap":"<div class=\"mindmap-root\">كتاب الوصايا</div><div class=\"mindmap-node\"><strong>مرجع الدرس</strong>الفقه الحنفي — الصفحات 114 إلى 121 من الكتاب الرسمي.</div>","flashcards":[{"q":"ما أهم مفهوم أو حكم في درس «كتاب الوصايا»؟","a":"راجع شرح الدرس في كتاب الفقه الحنفي، صفحة 114، واستخرج الإجابة بدقة من النص."}]},{"id":3046,"category":"شرعي","subjectName":"الفقه الحنفي","title":"أحكام الفرائض والمواريث","page":122,"end":122,"pdf":"fiqh_hanafi_2026.pdf","locked":false,"officialBook":true,"integratedPdf":true,"summary":"<div class=\"dalil-box\">من كتاب الفقه الحنفي الرسمي للصف الثالث الإعدادي الأزهري ٢٠٢٦–٢٠٢٧ — الصفحة 122. اقرأ الصفحات الأصلية أدناه، ثم أجب عن التدريب.</div><h3>درس: أحكام الفرائض والمواريث</h3><p>تجد شرح الدرس الأصلي وأمثلته وأدلته في صفحات الكتاب المدمج أسفل هذا العنوان. اضغط «قراءة صفحات الدرس» لعرضها دون الذهاب إلى مكتبة الأزهر.</p><div class=\"rule-box\"><strong>تدريب فهم:</strong> بعد قراءة الدرس، لخّص أهم حكم أو تعريف ورد فيه، واذكر دليلًا أو مثالًا من الصفحات.</div>","mindmap":"<div class=\"mindmap-root\">أحكام الفرائض والمواريث</div><div class=\"mindmap-node\"><strong>مرجع الدرس</strong>الفقه الحنفي — الصفحات 122 إلى 122 من الكتاب الرسمي.</div>","flashcards":[{"q":"ما أهم مفهوم أو حكم في درس «أحكام الفرائض والمواريث»؟","a":"راجع شرح الدرس في كتاب الفقه الحنفي، صفحة 122، واستخرج الإجابة بدقة من النص."}]},{"id":3047,"category":"شرعي","subjectName":"الفقه الحنفي","title":"أركان الإرث","page":123,"end":123,"pdf":"fiqh_hanafi_2026.pdf","locked":false,"officialBook":true,"integratedPdf":true,"summary":"<div class=\"dalil-box\">من كتاب الفقه الحنفي الرسمي للصف الثالث الإعدادي الأزهري ٢٠٢٦–٢٠٢٧ — الصفحة 123. اقرأ الصفحات الأصلية أدناه، ثم أجب عن التدريب.</div><h3>درس: أركان الإرث</h3><p>تجد شرح الدرس الأصلي وأمثلته وأدلته في صفحات الكتاب المدمج أسفل هذا العنوان. اضغط «قراءة صفحات الدرس» لعرضها دون الذهاب إلى مكتبة الأزهر.</p><div class=\"rule-box\"><strong>تدريب فهم:</strong> بعد قراءة الدرس، لخّص أهم حكم أو تعريف ورد فيه، واذكر دليلًا أو مثالًا من الصفحات.</div>","mindmap":"<div class=\"mindmap-root\">أركان الإرث</div><div class=\"mindmap-node\"><strong>مرجع الدرس</strong>الفقه الحنفي — الصفحات 123 إلى 123 من الكتاب الرسمي.</div>","flashcards":[{"q":"ما أهم مفهوم أو حكم في درس «أركان الإرث»؟","a":"راجع شرح الدرس في كتاب الفقه الحنفي، صفحة 123، واستخرج الإجابة بدقة من النص."}]},{"id":3048,"category":"شرعي","subjectName":"الفقه الحنفي","title":"أسباب الإرث","page":124,"end":124,"pdf":"fiqh_hanafi_2026.pdf","locked":false,"officialBook":true,"integratedPdf":true,"summary":"<div class=\"dalil-box\">من كتاب الفقه الحنفي الرسمي للصف الثالث الإعدادي الأزهري ٢٠٢٦–٢٠٢٧ — الصفحة 124. اقرأ الصفحات الأصلية أدناه، ثم أجب عن التدريب.</div><h3>درس: أسباب الإرث</h3><p>تجد شرح الدرس الأصلي وأمثلته وأدلته في صفحات الكتاب المدمج أسفل هذا العنوان. اضغط «قراءة صفحات الدرس» لعرضها دون الذهاب إلى مكتبة الأزهر.</p><div class=\"rule-box\"><strong>تدريب فهم:</strong> بعد قراءة الدرس، لخّص أهم حكم أو تعريف ورد فيه، واذكر دليلًا أو مثالًا من الصفحات.</div>","mindmap":"<div class=\"mindmap-root\">أسباب الإرث</div><div class=\"mindmap-node\"><strong>مرجع الدرس</strong>الفقه الحنفي — الصفحات 124 إلى 124 من الكتاب الرسمي.</div>","flashcards":[{"q":"ما أهم مفهوم أو حكم في درس «أسباب الإرث»؟","a":"راجع شرح الدرس في كتاب الفقه الحنفي، صفحة 124، واستخرج الإجابة بدقة من النص."}]},{"id":3049,"category":"شرعي","subjectName":"الفقه الحنفي","title":"موانع الميراث","page":124,"end":183,"pdf":"fiqh_hanafi_2026.pdf","locked":false,"officialBook":true,"integratedPdf":true,"summary":"<div class=\"dalil-box\">من كتاب الفقه الحنفي الرسمي للصف الثالث الإعدادي الأزهري ٢٠٢٦–٢٠٢٧ — الصفحة 124. اقرأ الصفحات الأصلية أدناه، ثم أجب عن التدريب.</div><h3>درس: موانع الميراث</h3><p>تجد شرح الدرس الأصلي وأمثلته وأدلته في صفحات الكتاب المدمج أسفل هذا العنوان. اضغط «قراءة صفحات الدرس» لعرضها دون الذهاب إلى مكتبة الأزهر.</p><div class=\"rule-box\"><strong>تدريب فهم:</strong> بعد قراءة الدرس، لخّص أهم حكم أو تعريف ورد فيه، واذكر دليلًا أو مثالًا من الصفحات.</div>","mindmap":"<div class=\"mindmap-root\">موانع الميراث</div><div class=\"mindmap-node\"><strong>مرجع الدرس</strong>الفقه الحنفي — الصفحات 124 إلى 183 من الكتاب الرسمي.</div>","flashcards":[{"q":"ما أهم مفهوم أو حكم في درس «موانع الميراث»؟","a":"راجع شرح الدرس في كتاب الفقه الحنفي، صفحة 124، واستخرج الإجابة بدقة من النص."}]}];
+    lessonsData.push(...fiqhBookLessons);
+
+
+    // Toast Helper
+    function showToast(msg) {
+      const t = document.getElementById("toast");
+      t.textContent = msg;
+      t.style.display = "block";
+      setTimeout(() => { t.style.display = "none"; }, 2600);
+    }
+
+    // Navigation
+    function switchView(viewName) {
+      document.querySelectorAll(".view-section").forEach(v => v.classList.remove("active"));
+      document.querySelectorAll(".nav-btn").forEach(b => b.classList.remove("active"));
+
+      if (viewName === "lesson-detail") {
+        document.getElementById("view-lesson-detail").classList.add("active");
+        document.getElementById("nav-lessons").classList.add("active");
+      } else {
+        document.getElementById("view-" + viewName).classList.add("active");
+        const navBtn = document.getElementById("nav-" + viewName);
+        if (navBtn) navBtn.classList.add("active");
+      }
+      window.scrollTo({ top: 0, behavior: "smooth" });
+    }
+
+    function openSubjectFilter(category) {
+      switchView("lessons");
+      const chips = document.querySelectorAll("#category-chips .chip");
+      chips.forEach(c => {
+        c.classList.remove("active");
+        if (c.textContent.includes(category)) c.classList.add("active");
+      });
+      renderLessonsList(category);
+    }
+
+    // Update UI Stats & Progress
+    function updateDashboard() {
+      document.getElementById("points-count").textContent = state.points;
+      document.getElementById("streak-count").textContent = state.streak;
+
+      const total = lessonsData.length;
+      const done = state.completedLessons.filter(id => lessonsData.some(l => l.id === id)).length;
+      const pct = Math.round((done / total) * 100);
+
+      document.getElementById("completed-lessons-num").textContent = done;
+      document.getElementById("total-lessons-num").textContent = total;
+      document.getElementById("progress-percent").textContent = pct + "%";
+
+      const circumference = 188.5;
+      const offset = circumference - (pct / 100) * circumference;
+      document.getElementById("progress-circle").style.strokeDashoffset = offset;
+
+      // Render Badges
+      const badgesBox = document.getElementById("badges-container");
+      badgesBox.innerHTML = badgesList.map(b => `
+        <div class="badge-item ${state.points >= b.reqPoints ? 'unlocked' : ''}">
+          <div class="b-icon">${b.icon}</div>
+          <div class="b-name">${b.name}</div>
+        </div>
+      `).join("");
+    }
+
+    // Lessons List
+    function filterLessons(category, btnEl) {
+      document.querySelectorAll("#category-chips .chip").forEach(c => c.classList.remove("active"));
+      if (btnEl) btnEl.classList.add("active");
+      renderLessonsList(category);
+    }
+
+    function renderLessonsList(filterCat = "الكل") {
+      const container = document.getElementById("lessons-list-container");
+      const filtered = filterCat === "الكل"
+        ? lessonsData
+        : lessonsData.filter(l => l.category === filterCat);
+
+      container.innerHTML = filtered.map((lesson, idx) => {
+        const isDone = state.completedLessons.includes(lesson.id);
+        const isLocked = lesson.locked && !state.isActivated;
+        return `
+          <div class="lesson-item ${isDone ? 'completed' : ''} ${isLocked ? 'locked' : ''}" onclick="openLesson(${lesson.id})">
+            <div class="lesson-meta">
+              <div class="lesson-badge">${isLocked ? '🔒' : (isDone ? '✓' : idx + 1)}</div>
+              <div class="lesson-title">
+                <h4>${lesson.title}</h4>
+                <span>${lesson.subjectName} ${isLocked ? '• يتطلب التفعيل' : ''}</span>
+              </div>
+            </div>
+            <span style="color:var(--azhar-green); font-weight:800;">◀</span>
+          </div>
+        `;
+      }).join("");
+    }
+
+    function continueLastLesson() {
+      openLesson(state.currentLessonId);
+    }
+
+    function openLesson(id) {
+      const lesson = lessonsData.find(l => l.id === id);
+      if (!lesson) return;
+      if (lesson.locked && !state.isActivated) {
+        showToast("🔒 هذا الدرس مغلق. فعّل التطبيق من تبويب (جدولي) بالكود AZHAR2026");
+        switchView("planner");
+        return;
+      }
+
+      state.currentLessonId = id;
+      state.currentFlashcardIndex = 0;
+
+      document.getElementById("detail-subject-tag").textContent = lesson.subjectName;
+      document.getElementById("detail-title").textContent = lesson.title;
+      document.getElementById("tab-summary").innerHTML = lesson.summary;
+      const pdfReader = document.getElementById("fiqh-pdf-reader");
+      if (lesson.integratedPdf) {
+        const pdfUrl = encodeURI(lesson.pdf) + "#page=" + lesson.page;
+        pdfReader.style.display = "block";
+        pdfReader.innerHTML = `<div class="rule-box"><strong>📘 الكتاب الرسمي مدمج داخل التطبيق</strong><p style="font-size:13px;margin:7px 0">الصفحات ${lesson.page}–${lesson.end} • ${lesson.subjectName}</p><a class="btn-primary" href="${pdfUrl}" target="_blank" rel="noopener">قراءة صفحات الدرس 📖</a><p style="font-size:12px;margin-top:8px">يفتح الكتاب المحلي المرفق مع التطبيق، وليس موقعًا خارجيًا. يمكنك الرجوع إلى الدرس بعد القراءة.</p></div>`;
+      } else {pdfReader.style.display="none";pdfReader.innerHTML="";}
+
+      document.getElementById("tab-mindmap").innerHTML = lesson.mindmap;
+
+      // Reset to first tab
+      const tabs = document.querySelectorAll(".smart-tab");
+      tabs.forEach(t => t.classList.remove("active"));
+      tabs[0].classList.add("active");
+      switchLessonTab("summary");
+
+      updateFlashcardUI();
+
+      const btn = document.getElementById("complete-lesson-btn");
+      btn.style.display = (lesson.officialBook && !lesson.integratedPdf) ? "none" : "inline-flex";
+      if (state.completedLessons.includes(id)) {
+        btn.textContent = "✅ تم إتمام هذا الدرس بنجاح";
+        btn.style.background = "#5C6B66";
+      } else {
+        btn.textContent = "✅ أتممت مذاكرة هذا الدرس (+25 نقطة)";
+        btn.style.background = "var(--azhar-green)";
+      }
+
+      switchView("lesson-detail");
+    }
+
+    function switchLessonTab(tabName, el) {
+      if (el) {
+        document.querySelectorAll(".smart-tab").forEach(t => t.classList.remove("active"));
+        el.classList.add("active");
+      }
+      document.getElementById("tab-summary").style.display = tabName === "summary" ? "block" : "none";
+      document.getElementById("fiqh-pdf-reader").style.display = (tabName === "summary" && lessonsData.find(l=>l.id===state.currentLessonId)?.integratedPdf) ? "block" : "none";
+      document.getElementById("tab-mindmap").style.display = tabName === "mindmap" ? "block" : "none";
+      document.getElementById("tab-flashcards").style.display = tabName === "flashcards" ? "block" : "none";
+    }
+
+    function changeFontSize(delta) {
+      state.fontSize = Math.min(22, Math.max(13, state.fontSize + delta));
+      document.documentElement.style.setProperty("--lesson-font-size", state.fontSize + "px");
+    }
+
+    // Flashcards
+    function updateFlashcardUI() {
+      const lesson = lessonsData.find(l => l.id === state.currentLessonId);
+      const cards = lesson.flashcards;
+      const current = cards[state.currentFlashcardIndex];
+      document.getElementById("flashcard-box").classList.remove("flipped");
+      document.getElementById("fc-question").textContent = current.q;
+      document.getElementById("fc-answer").textContent = current.a;
+      document.getElementById("fc-counter").textContent = `${state.currentFlashcardIndex + 1} / ${cards.length}`;
+    }
+
+    function nextFlashcard() {
+      const lesson = lessonsData.find(l => l.id === state.currentLessonId);
+      state.currentFlashcardIndex = (state.currentFlashcardIndex + 1) % lesson.flashcards.length;
+      updateFlashcardUI();
+    }
+
+    function prevFlashcard() {
+      const lesson = lessonsData.find(l => l.id === state.currentLessonId);
+      state.currentFlashcardIndex = (state.currentFlashcardIndex - 1 + lesson.flashcards.length) % lesson.flashcards.length;
+      updateFlashcardUI();
+    }
+
+    function markLessonComplete() {
+      if (!state.completedLessons.includes(state.currentLessonId)) {
+        state.completedLessons.push(state.currentLessonId);
+        state.points += 25;
+        updateDashboard();
+        renderLessonsList();
+        showToast("🎉 أحسنت! حصلت على +25 نقطة تفوق");
+        openLesson(state.currentLessonId);
+      }
+    }
+
+    // Quiz Engine
+    let qIndex = 0;
+    let qScore = 0;
+
+    function loadQuestion() {
+      const q = quizQuestions[qIndex];
+      document.getElementById("quiz-progress-text").textContent = `السؤال ${qIndex + 1} من ${quizQuestions.length}`;
+      document.getElementById("quiz-live-score").textContent = `الدرجة: ${qScore}`;
+      document.getElementById("quiz-subject-badge").textContent = q.subject;
+      document.getElementById("quiz-question-text").textContent = q.q;
+      document.getElementById("quiz-rationale").style.display = "none";
+      document.getElementById("quiz-next-btn").style.display = "none";
+
+      const list = document.getElementById("quiz-options-list");
+      list.innerHTML = q.options.map((opt, idx) => `
+        <button class="quiz-option" onclick="selectAnswer(${idx}, this)">
+          <span>${opt}</span>
+          <span class="opt-mark"></span>
+        </button>
+      `).join("");
+    }
+
+    function selectAnswer(selectedIdx, btnEl) {
+      const q = quizQuestions[qIndex];
+      const allBtns = document.querySelectorAll(".quiz-option");
+      allBtns.forEach(b => b.disabled = true);
+
+      if (selectedIdx === q.correct) {
+        btnEl.classList.add("correct");
+        btnEl.querySelector(".opt-mark").textContent = "✓";
+        qScore++;
+        state.points += 10;
+        updateDashboard();
+      } else {
+        btnEl.classList.add("wrong");
+        btnEl.querySelector(".opt-mark").textContent = "✕";
+        allBtns[q.correct].classList.add("correct");
+        allBtns[q.correct].querySelector(".opt-mark").textContent = "✓";
+      }
+
+      document.getElementById("quiz-live-score").textContent = `الدرجة: ${qScore}`;
+      const rat = document.getElementById("quiz-rationale");
+      rat.innerHTML = `<strong>💡 التوضيح والدليل:</strong> ${q.rationale}`;
+      rat.style.display = "block";
+      document.getElementById("quiz-next-btn").style.display = "flex";
+    }
+
+    function nextQuestion() {
+      qIndex++;
+      if (qIndex < quizQuestions.length) {
+        loadQuestion();
+      } else {
+        document.getElementById("quiz-active-box").style.display = "none";
+        document.getElementById("quiz-result-box").style.display = "block";
+        document.getElementById("quiz-final-summary").textContent =
+          `حصلت على ${qScore} من ${quizQuestions.length} إجابات صحيحة، وتمت إضافة نقاطك إلى رصيد التفوق!`;
+      }
+    }
+
+    function restartQuiz() {
+      qIndex = 0;
+      qScore = 0;
+      document.getElementById("quiz-active-box").style.display = "block";
+      document.getElementById("quiz-result-box").style.display = "none";
+      loadQuestion();
+    }
+
+    // Pomodoro Timer
+    let timerSeconds = 25 * 60;
+    let timerInterval = null;
+
+    function updateTimerDisplay() {
+      const m = String(Math.floor(timerSeconds / 60)).padStart(2, "0");
+      const s = String(timerSeconds % 60).padStart(2, "0");
+      document.getElementById("pomodoro-time").textContent = `${m}:${s}`;
+    }
+
+    function toggleTimer() {
+      const btn = document.getElementById("timer-toggle-btn");
+      if (timerInterval) {
+        clearInterval(timerInterval);
+        timerInterval = null;
+        btn.textContent = "▶ استكمال";
+      } else {
+        btn.textContent = "⏸ إيقاف مؤقت";
+        timerInterval = setInterval(() => {
+          if (timerSeconds > 0) {
+            timerSeconds--;
+            updateTimerDisplay();
+          } else {
+            clearInterval(timerInterval);
+            timerInterval = null;
+            state.points += 30;
+            updateDashboard();
+            showToast("🎉 انتهت جلسة التركيز! +30 نقطة");
+            resetTimer();
+          }
+        }, 1000);
+      }
+    }
+
+    function resetTimer() {
+      clearInterval(timerInterval);
+      timerInterval = null;
+      timerSeconds = 25 * 60;
+      updateTimerDisplay();
+      document.getElementById("timer-toggle-btn").textContent = "▶ ابدأ الجلسة";
+    }
+
+    // Tasks
+    function renderTasks() {
+      const list = document.getElementById("tasks-list");
+      list.innerHTML = state.tasks.map((t, i) => `
+        <div class="todo-item ${t.done ? 'done' : ''}">
+          <label style="display:flex; align-items:center; gap:8px; cursor:pointer; flex:1;">
+            <input type="checkbox" ${t.done ? 'checked' : ''} onchange="toggleTask(${i})" />
+            <span>${t.text}</span>
+          </label>
+          <button onclick="deleteTask(${i})" style="background:none; border:none; color:var(--danger); cursor:pointer; font-weight:800;">✕</button>
+        </div>
+      `).join("");
+    }
+
+    function addTask() {
+      const input = document.getElementById("new-task-input");
+      const val = input.value.trim();
+      if (!val) return;
+      state.tasks.push({ text: val, done: false });
+      input.value = "";
+      renderTasks();
+    }
+
+    function toggleTask(i) {
+      state.tasks[i].done = !state.tasks[i].done;
+      renderTasks();
+    }
+
+    function deleteTask(i) {
+      state.tasks.splice(i, 1);
+      renderTasks();
+    }
+
+    // Activation
+    function activateApp() {
+      const code = document.getElementById("activation-code-input").value.trim().toUpperCase();
+      if (code === "AZHAR2026") {
+        state.isActivated = true;
+        document.getElementById("activation-status-badge").textContent = "مفعّل بالكامل ✅";
+        document.getElementById("activation-status-badge").style.color = "var(--azhar-green)";
+        renderLessonsList();
+        showToast("🎉 تم تفعيل جميع الدروس بنجاح!");
+      } else {
+        showToast("⚠️ كود التفعيل غير صحيح. جرّب: AZHAR2026");
+      }
+    }
+
+    // Init
+    updateDashboard();
+    renderLessonsList();
+    loadQuestion();
+    renderTasks();
+  </script>
+</body>
+</html>
