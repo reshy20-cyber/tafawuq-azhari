@@ -1,5 +1,5 @@
 // خدمة العمل دون اتصال: تُخزَّن الصفحة بعد أول فتح، وتُحدَّث في الخلفية عند توفر الإنترنت.
-const CACHE = 'tafawuq-azhari-v2';
+const CACHE = 'tafawuq-azhari-v3';
 const SHELL = ['./', './index.html', './manifest.json', './icons/icon-192.png', './icons/icon-512.png', './icons/icon-maskable-512.png', './icons/apple-touch-icon.png'];
 
 self.addEventListener('install', (e) => {
