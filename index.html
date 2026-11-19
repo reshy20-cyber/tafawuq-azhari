@@ -787,6 +787,20 @@
     }
   <style id="term-exam-style">#term-exam-panel .term-exam-grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:8px}#term-exam-panel .term-exam-btn{width:100%;text-align:center;border:1px solid var(--border-subtle);border-radius:10px;background:#fff;padding:10px 5px;font-family:inherit;color:var(--azhar-green-dark);font-weight:700;cursor:pointer}#term-exam-panel .term-exam-btn:disabled{opacity:.55;cursor:default}#term-exam-panel .term-exam-option{display:block;width:100%;margin:8px 0;text-align:right;background:white;border:1px solid var(--border-subtle);border-radius:10px;padding:12px;font:inherit;cursor:pointer}#term-exam-panel .term-exam-option:disabled{opacity:.8}#term-exam-panel .term-exam-muted{font-size:12px;color:var(--text-muted);line-height:1.8}</style>
 </style>
+  <style id="tablet-layout">
+    /* تخطيط التابلت: عرض أكبر وخط أوضح، مع بقاء الهاتف كما هو */
+    @media (min-width: 700px) {
+      .app-shell { max-width: 780px; font-size: 15.5px; }
+      .bottom-nav { max-width: 780px; }
+      .subjects-grid { grid-template-columns: repeat(3, 1fr); gap: 16px; }
+      #term-exam-panel .term-exam-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+    }
+    @media (min-width: 1000px) {
+      .app-shell { max-width: 980px; font-size: 16.5px; }
+      .bottom-nav { max-width: 980px; }
+      .subjects-grid { grid-template-columns: repeat(4, 1fr); }
+    }
+  </style>
 </head>
 <body>
   <div class="app-shell">
