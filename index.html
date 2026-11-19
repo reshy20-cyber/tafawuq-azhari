@@ -1048,6 +1048,7 @@
         <h3 style="font-size:15px; font-weight:800; color:var(--azhar-green-dark); margin-bottom:4px;">🔑 النسخة الكاملة — دفعة واحدة مدى الحياة</h3>
         <p id="plan-status" style="font-size:12.5px; color:var(--text-muted); margin-bottom:8px;"></p>
         <p style="font-size:12.5px; color:var(--text-muted);">تشمل كل الدروس والامتحانات التدريبية والخرائط الذهنية والتسميع الذاتي لكل المواد. الترقية متاحة من داخل تطبيق Google Play فقط.</p>
+        <button id="upgrade-btn" class="btn-gold" style="display:none;width:100%;margin-top:10px;padding:12px;" onclick="azUpgrade()">ترقية مدى الحياة</button>
       </div>
       </div>
     </section>
@@ -1756,7 +1757,54 @@ function renderLessonsList(filterCat = "الكل") {
     window.azIsActivated = function () { return state.isActivated === true; };
     // يستدعيها غلاف تطبيق Google Play بعد التحقق من الشراء
     window.azSetActivated = function (v) { state.isActivated = v === true; saveState(); applyFreePlan(); renderLessonsList(); if (window.azRefreshTermExams) try { window.azRefreshTermExams(); } catch (e) {} updateDashboard(); };
+    // ===== الربط مع Google Play Billing (يعمل داخل تطبيق Google Play فقط، ويتجاهله المتصفح) =====
+    const PLAY_SKU = 'lifetime_full';
+    const PLAY_BILLING = 'https://play.google.com/billing';
+    let playService = null;
+    async function getPlayService() {
+      if (playService) return playService;
+      if (!('getDigitalGoodsService' in window)) return null;
+      try { playService = await window.getDigitalGoodsService(PLAY_BILLING); } catch (e) { playService = null; }
+      return playService;
+    }
+    async function azInitBilling() {
+      const svc = await getPlayService();
+      const btn = document.getElementById('upgrade-btn');
+      if (!svc) { if (btn) btn.style.display = 'none'; return; }
+      try {
+        const [item] = await svc.getDetails([PLAY_SKU]);
+        if (btn && item && item.price) btn.textContent = 'ترقية مدى الحياة — ' + item.price.value + ' ' + item.price.currency;
+      } catch (e) { /* السعر اختياري */ }
+      try {
+        const purchases = await svc.listPurchases();
+        const owned = purchases.some(p => p.itemId === PLAY_SKU);
+        if (owned && !state.isActivated) window.azSetActivated(true);
+        else if (!owned && state.isActivated) window.azSetActivated(false); // مثلاً بعد استرداد المبلغ
+      } catch (e) { /* لا تغيّر الحالة عند تعذر الاستعلام */ }
+      if (btn) btn.style.display = state.isActivated ? 'none' : 'block';
+    }
+    async function azUpgrade() {
+      const svc = await getPlayService();
+      if (!svc) { showToast('ℹ️ الترقية متاحة من داخل تطبيق Google Play فقط'); return; }
+      try {
+        const req = new PaymentRequest(
+          [{ supportedMethods: PLAY_BILLING, data: { sku: PLAY_SKU } }],
+          { total: { label: 'Total', amount: { currency: 'USD', value: '0' } } }
+        );
+        const res = await req.show();
+        const token = res.details && res.details.purchaseToken;
+        if (token) await svc.acknowledge(token, 'onetime');
+        await res.complete('success');
+        window.azSetActivated(true);
+        showToast('🎉 تمت الترقية! شكرًا لك');
+        const btn = document.getElementById('upgrade-btn'); if (btn) btn.style.display = 'none';
+      } catch (e) {
+        showToast('تعذّر إتمام الشراء. لم يُخصم شيء.');
+      }
+    }
+    window.azUpgrade = azUpgrade;
     applyFreePlan();
+    azInitBilling();
     updateDashboard();
     renderLessonsList();
     loadQuestion();
