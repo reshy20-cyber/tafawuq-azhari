@@ -4,6 +4,14 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
   <title>تفوق الأزهري - الصف الثالث الإعدادي</title>
+  <meta name="theme-color" content="#0b5d44">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="تفوق الأزهري">
+  <link rel="manifest" href="manifest.json">
+  <link rel="icon" type="image/svg+xml" href="icons/icon.svg">
+  <link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;600;700;800&family=Readex+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
@@ -1804,5 +1812,6 @@ function render(){const r=el('term-exam-run'),c=current;if(!c)return;if(c.index>
 const q=c.qs[c.index];c.answered=false;r.innerHTML='<p class="term-exam-muted">'+escapeText(c.subject)+' — '+(c.term===0?'مراجعة عامة':'الفصل '+(c.term===1?'الأول':'الثاني'))+' | السؤال '+(c.index+1)+' من '+c.qs.length+'</p><h3 style="margin:10px 0">'+escapeText(q.question)+'</h3>'+q.options.map((o,i)=>'<button class="term-exam-option" data-answer="'+i+'">'+escapeText(o)+'</button>').join('')+'<p id="term-exam-feedback" class="term-exam-muted" aria-live="polite"></p><button class="btn-primary" id="term-exam-next" style="display:none">التالي</button><p class="term-exam-muted">الدرس: '+escapeText(q.lesson)+(q.lessonStart?' — الدرس يبدأ في الصفحة '+escapeText(q.page)+' من كتاب '+escapeText(q.subject):q.page?' — الصفحة المطبوعة '+escapeText(q.page)+(q.subject==='أصول الدين'?' من كتاب أصول الدين':' من كتاب '+escapeText(q.subject)):' — رقم الصفحة غير موثق ما لم تتم مطابقته بالكتاب.')+'</p>'}
 document.addEventListener('click',e=>{const b=e.target.closest('#term-exam-panel button');if(!b)return;if(b.id==='term-exam-back'){current=null;el('term-exam-run').style.display='none';el('term-exam-choices').style.display='block';choices();return}if(b.dataset.subject){start(b.dataset.subject,Number(b.dataset.term));return}if(b.id==='term-exam-next'){current.index++;render();return}if(b.dataset.answer!==undefined&&current&&!current.answered){current.answered=true;const q=current.qs[current.index];const correct=Number(b.dataset.answer)===q.answer;if(correct)current.score++;el('term-exam-feedback').textContent=(correct?'✓ إجابة صحيحة. ':'✕ إجابة غير صحيحة. ')+(q.explanation||'الإجابة الصحيحة: '+q.options[q.answer]);el('term-exam-next').style.display='inline-flex';el('term-exam-run').querySelectorAll('[data-answer]').forEach(x=>{x.disabled=true;if(Number(x.dataset.answer)===q.answer)x.style.borderColor='var(--azhar-green)'});}});
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',choices);else choices();
-})();</script></body>
+})();</script><script>if('serviceWorker' in navigator&&location.protocol!=='file:'){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});}</script>
+</body>
 </html>
