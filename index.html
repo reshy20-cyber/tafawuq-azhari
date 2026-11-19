@@ -1045,12 +1045,10 @@
 
       <!-- Activation Card -->
       <div class="card" style="border: 1.5px solid var(--azhar-gold); background: var(--azhar-gold-light);">
-        <h3 style="font-size:15px; font-weight:800; color:var(--azhar-green-dark); margin-bottom:4px;">🔑 تفعيل النسخة الكاملة</h3>
-        <p style="font-size:12.5px; color:var(--text-muted); margin-bottom:10px;">التفعيل متاح من داخل تطبيق Google Play. أدخل كود التفعيل إن وصلك</p>
-        <div class="task-input-row" style="margin-bottom:0;">
-          <input type="text" id="activation-code-input" class="input-field" placeholder="اكتب كود التفعيل هنا..." style="background:#fff;" />
-          <button class="btn-gold" onclick="activateApp()">تفعيل</button>
-        </div>
+        <h3 style="font-size:15px; font-weight:800; color:var(--azhar-green-dark); margin-bottom:4px;">🔑 النسخة الكاملة — دفعة واحدة مدى الحياة</h3>
+        <p id="plan-status" style="font-size:12.5px; color:var(--text-muted); margin-bottom:8px;"></p>
+        <p style="font-size:12.5px; color:var(--text-muted);">تشمل كل الدروس والامتحانات التدريبية والخرائط الذهنية والتسميع الذاتي لكل المواد. الترقية متاحة من داخل تطبيق Google Play فقط.</p>
+      </div>
       </div>
     </section>
 
@@ -1106,6 +1104,7 @@
         if (saved.examAwards && typeof saved.examAwards === 'object') state.examAwards = saved.examAwards;
         state.passedFiqh = !!saved.passedFiqh;
         state.passedArabic = !!saved.passedArabic;
+        state.isActivated = saved.isActivated === true;
       }
     } catch (e) { /* التخزين غير متاح */ }
     function saveState() {
@@ -1113,7 +1112,7 @@
         localStorage.setItem(STATE_KEY, JSON.stringify({
           points: state.points, streak: state.streak, completedLessons: state.completedLessons,
           tasks: state.tasks, examAwards: state.examAwards,
-          passedFiqh: state.passedFiqh, passedArabic: state.passedArabic
+          passedFiqh: state.passedFiqh, passedArabic: state.passedArabic, isActivated: state.isActivated
         }));
       } catch (e) { /* التخزين غير متاح */ }
     }
@@ -1475,7 +1474,7 @@ function renderLessonsList(filterCat = "الكل") {
       if (subject === 'الكل') { renderLessonsList('الكل'); document.getElementById('fiqh-navigation-status').textContent='جميع المقررات'; return; }
       const matches = lessonsData.filter(l => l.subjectName === subject && (l.id >= 310000 && l.id < 330000));
       document.getElementById('fiqh-navigation-status').textContent = subject + ' — ' + matches.length + ' دروس وامتحانات جديدة. اضغط على أي عنوان لفتحه.';
-      container.innerHTML = matches.map((lesson,idx) => `<div class="lesson-item" onclick="openLesson(${lesson.id})"><div class="lesson-meta"><div class="lesson-badge">${idx+1}</div><div class="lesson-title"><h4>${lesson.title}</h4><span>${lesson.id % 1000 >= 100 ? 'امتحان تدريبي' : 'شرح وتدريبات'}</span></div></div><span style="color:var(--azhar-green)">◀</span></div>`).join('');
+      container.innerHTML = matches.map((lesson,idx) => `<div class="lesson-item" onclick="openLesson(${lesson.id})"><div class="lesson-meta"><div class="lesson-badge">${(lesson.locked && !state.isActivated) ? '🔒' : idx+1}</div><div class="lesson-title"><h4>${lesson.title}</h4><span>${lesson.id % 1000 >= 100 ? 'امتحان تدريبي' : 'شرح وتدريبات'}</span></div></div><span style="color:var(--azhar-green)">◀</span></div>`).join('');
       document.querySelectorAll('#category-chips .chip').forEach(c=>c.classList.remove('active'));
       container.scrollIntoView({behavior:'smooth',block:'start'});
     }
@@ -1484,7 +1483,7 @@ function renderLessonsList(filterCat = "الكل") {
       const lesson = lessonsData.find(l => l.id === id);
       if (!lesson) return;
       if (lesson.locked && !state.isActivated) {
-        showToast("🔒 هذا الدرس مغلق. فعّل التطبيق من تبويب (جدولي)");
+        showToast("🔒 هذا الدرس في النسخة الكاملة (دفعة واحدة مدى الحياة من تطبيق Google Play)");
         switchView("planner");
         return;
       }
@@ -1728,10 +1727,36 @@ function renderLessonsList(filterCat = "الكل") {
 
     // Activation
     function activateApp() {
-       showToast("ℹ️ التفعيل متاح من داخل تطبيق Google Play فقط");
+       showToast("ℹ️ الترقية متاحة من داخل تطبيق Google Play فقط");
      }
 
      // Init
+    // الخطة المجانية: الحاسب والقرآن مفتوحان كاملين، ومن كل مادة أخرى درسان وامتحان تدريبي واحد
+    const FREE_SUBJECTS = ['الحاسب الآلي', 'القرآن الكريم والتجويد'];
+    const FREE_LESSONS_PER_SUBJECT = 2;
+    function isExamLesson(l) { return /امتحان|اختبار/.test(l.title || ''); }
+    function applyFreePlan() {
+      const lessonCount = {}, examCount = {};
+      // الدروس الجديدة المبنية على الكتب (310000 فما فوق) تُعد أولاً، فتكون هي المفتوحة في الخطة المجانية
+      const ordered = lessonsData.map((l, i) => ({ l, i, p: (l.id >= 310000 && l.id < 330000) ? 0 : 1 })).sort((x, y) => (x.p - y.p) || (x.i - y.i)).map(x => x.l);
+      ordered.forEach(l => {
+        let base = String(l.subjectName || '').split(' — ')[0];
+        if (base === 'النحو' || base === 'الصرف') base = 'اللغة العربية';
+        if (base.indexOf('القرآن الكريم') === 0) base = 'القرآن الكريم والتجويد';
+        if (FREE_SUBJECTS.includes(base)) { l.locked = false; return; }
+        const exam = isExamLesson(l);
+        const bucket = exam ? examCount : lessonCount;
+        bucket[base] = (bucket[base] || 0) + 1;
+        const limit = exam ? 1 : FREE_LESSONS_PER_SUBJECT;
+        l.locked = bucket[base] > limit;
+      });
+      const st = document.getElementById('plan-status');
+      if (st) st.textContent = state.isActivated ? '✅ نسختك كاملة. جميع الدروس والامتحانات مفتوحة.' : '🔓 أنت على النسخة المجانية: درسان وامتحان تدريبي من كل مادة، والحاسب والقرآن كاملان.';
+    }
+    window.azIsActivated = function () { return state.isActivated === true; };
+    // يستدعيها غلاف تطبيق Google Play بعد التحقق من الشراء
+    window.azSetActivated = function (v) { state.isActivated = v === true; saveState(); applyFreePlan(); renderLessonsList(); if (window.azRefreshTermExams) try { window.azRefreshTermExams(); } catch (e) {} updateDashboard(); };
+    applyFreePlan();
     updateDashboard();
     renderLessonsList();
     loadQuestion();
@@ -1819,13 +1844,15 @@ function el(id){return document.getElementById(id)}
 function escapeText(t){return String(t??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function read(){try{return JSON.parse(localStorage.getItem(key)||'[]')}catch(e){return []}}
 function save(v){try{localStorage.setItem(key,JSON.stringify(v))}catch(e){}}
-function choices(){const target=el('term-exam-choices');if(!target)return;target.innerHTML=subjects.map(subject=>{const terms=[1,2].filter(term=>bank.some(x=>x.subject===subject&&x.term===term));if(!terms.length)return '';return '<div style="margin-top:12px"><strong>'+escapeText(subject)+'</strong><div class="term-exam-grid">'+terms.map(term=>{const n=bank.filter(x=>x.subject===subject&&x.term===term).length;return '<button class="term-exam-btn" data-subject="'+escapeText(subject)+'" data-term="'+term+'">الفصل '+(term===1?'الأول':'الثاني')+'<div class="term-exam-muted">'+n+' سؤالًا تدريبيًا</div></button>'}).join('')+'</div></div>'}).join('')+'<div style="margin-top:16px"><strong>امتحانات المراجعة العامة — غير موزعة على فصل دراسي</strong><p class="term-exam-muted">تدريبات تعليمية مؤلفة من أسئلة الدروس، وليست امتحانات رسمية أو مطابقة لكتاب الأزهر.</p><div class="term-exam-grid">'+['الفقه الحنفي','الفقه المالكي','الفقه الشافعي','الفقه الحنبلي','أصول الدين'].map(subject=>{const n=bank.filter(x=>x.subject===subject&&x.term===0).length;return '<button class="term-exam-btn" data-subject="'+escapeText(subject)+'" data-term="0">'+escapeText(subject)+' — امتحان تدريبي<div class="term-exam-muted">'+n+' سؤالًا مع تصحيح وحفظ النتيجة</div></button>'}).join('')+'</div></div>';history()}
+function firstFreeTerm(subject){return [1,2,0].find(t=>bank.some(x=>x.subject===subject&&x.term===t));}
+function isLockedExam(subject,term){if(window.azIsActivated&&window.azIsActivated())return false;if(subject==='القرآن الكريم والتجويد')return false;return term!==firstFreeTerm(subject);}
+function choices(){const target=el('term-exam-choices');if(!target)return;target.innerHTML=subjects.map(subject=>{const terms=[1,2].filter(term=>bank.some(x=>x.subject===subject&&x.term===term));if(!terms.length)return '';return '<div style="margin-top:12px"><strong>'+escapeText(subject)+'</strong><div class="term-exam-grid">'+terms.map(term=>{const n=bank.filter(x=>x.subject===subject&&x.term===term).length;const lk=isLockedExam(subject,term);return '<button class="term-exam-btn" data-subject="'+escapeText(subject)+'" data-term="'+term+'"'+(lk?' data-locked="1"':'')+'>'+(lk?'🔒 ':'')+'الفصل '+(term===1?'الأول':'الثاني')+'<div class="term-exam-muted">'+(lk?'ضمن النسخة الكاملة':n+' سؤالًا تدريبيًا')+'</div></button>'}).join('')+'</div></div>'}).join('')+'<div style="margin-top:16px"><strong>امتحانات المراجعة العامة — غير موزعة على فصل دراسي</strong><p class="term-exam-muted">تدريبات تعليمية مؤلفة من أسئلة الدروس، وليست امتحانات رسمية أو مطابقة لكتاب الأزهر.</p><div class="term-exam-grid">'+['الفقه الحنفي','الفقه المالكي','الفقه الشافعي','الفقه الحنبلي','أصول الدين'].map(subject=>{const n=bank.filter(x=>x.subject===subject&&x.term===0).length;const lk=isLockedExam(subject,0);return '<button class="term-exam-btn" data-subject="'+escapeText(subject)+'" data-term="0"'+(lk?' data-locked="1"':'')+'>'+(lk?'🔒 ':'')+escapeText(subject)+' — امتحان تدريبي<div class="term-exam-muted">'+(lk?'ضمن النسخة الكاملة':n+' سؤالًا مع تصحيح وحفظ النتيجة')+'</div></button>'}).join('')+'</div></div>';history()}
 function history(){const h=read();el('term-exam-history').innerHTML='<h3 style="margin:14px 0 8px">نتائج المحاولات المحفوظة</h3>'+(h.length?h.slice(-12).reverse().map(x=>'<p class="term-exam-muted">'+escapeText(x.subject)+' — '+(x.term===0?'مراجعة عامة':'الفصل '+(x.term===1?'الأول':'الثاني'))+': '+x.score+' / '+x.total+' — '+escapeText(x.date)+'</p>').join(''):'<p class="term-exam-muted">لا توجد محاولات محفوظة بعد.</p>')}
 function start(subject,term){const qs=bank.filter(x=>x.subject===subject&&x.term===term);if(!qs.length)return;current={subject,term,qs:qs.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(p=>p[1]).slice(0,30),index:0,score:0,answered:false};el('term-exam-run').style.display='block';el('term-exam-choices').style.display='none';render();}
 function render(){const r=el('term-exam-run'),c=current;if(!c)return;if(c.index>=c.qs.length){const record={subject:c.subject,term:c.term,score:c.score,total:c.qs.length,date:new Date().toLocaleString('ar-EG')};const h=read();h.push(record);save(h.slice(-100));if(window.azAwardExam)window.azAwardExam('term:'+c.subject+':'+c.term,c.score,c.qs.length,c.subject);r.innerHTML='<h3>نتيجة التدريب: '+c.score+' / '+c.qs.length+'</h3><p class="term-exam-muted">تم حفظ النتيجة على هذا الجهاز.</p><button class="btn-primary" id="term-exam-back">العودة إلى المواد</button>';history();return}
 const q=c.qs[c.index];c.answered=false;r.innerHTML='<p class="term-exam-muted">'+escapeText(c.subject)+' — '+(c.term===0?'مراجعة عامة':'الفصل '+(c.term===1?'الأول':'الثاني'))+' | السؤال '+(c.index+1)+' من '+c.qs.length+'</p><h3 style="margin:10px 0">'+escapeText(q.question)+'</h3>'+q.options.map((o,i)=>'<button class="term-exam-option" data-answer="'+i+'">'+escapeText(o)+'</button>').join('')+'<p id="term-exam-feedback" class="term-exam-muted" aria-live="polite"></p><button class="btn-primary" id="term-exam-next" style="display:none">التالي</button><p class="term-exam-muted">الدرس: '+escapeText(q.lesson)+(q.lessonStart?' — الدرس يبدأ في الصفحة '+escapeText(q.page)+' من كتاب '+escapeText(q.subject):q.page?' — الصفحة المطبوعة '+escapeText(q.page)+(q.subject==='أصول الدين'?' من كتاب أصول الدين':' من كتاب '+escapeText(q.subject)):' — رقم الصفحة غير موثق ما لم تتم مطابقته بالكتاب.')+'</p>'}
-document.addEventListener('click',e=>{const b=e.target.closest('#term-exam-panel button');if(!b)return;if(b.id==='term-exam-back'){current=null;el('term-exam-run').style.display='none';el('term-exam-choices').style.display='block';choices();return}if(b.dataset.subject){start(b.dataset.subject,Number(b.dataset.term));return}if(b.id==='term-exam-next'){current.index++;render();return}if(b.dataset.answer!==undefined&&current&&!current.answered){current.answered=true;const q=current.qs[current.index];const correct=Number(b.dataset.answer)===q.answer;if(correct)current.score++;el('term-exam-feedback').textContent=(correct?'✓ إجابة صحيحة. ':'✕ إجابة غير صحيحة. ')+(q.explanation||'الإجابة الصحيحة: '+q.options[q.answer]);el('term-exam-next').style.display='inline-flex';el('term-exam-run').querySelectorAll('[data-answer]').forEach(x=>{x.disabled=true;if(Number(x.dataset.answer)===q.answer)x.style.borderColor='var(--azhar-green)'});}});
-if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',choices);else choices();
+document.addEventListener('click',e=>{const b=e.target.closest('#term-exam-panel button');if(!b)return;if(b.id==='term-exam-back'){current=null;el('term-exam-run').style.display='none';el('term-exam-choices').style.display='block';choices();return}if(b.dataset.subject){if(b.dataset.locked==='1'||isLockedExam(b.dataset.subject,Number(b.dataset.term))){if(typeof showToast==='function')showToast('🔒 هذا الامتحان في النسخة الكاملة (دفعة واحدة مدى الحياة من تطبيق Google Play)');return}start(b.dataset.subject,Number(b.dataset.term));return}if(b.id==='term-exam-next'){current.index++;render();return}if(b.dataset.answer!==undefined&&current&&!current.answered){current.answered=true;const q=current.qs[current.index];const correct=Number(b.dataset.answer)===q.answer;if(correct)current.score++;el('term-exam-feedback').textContent=(correct?'✓ إجابة صحيحة. ':'✕ إجابة غير صحيحة. ')+(q.explanation||'الإجابة الصحيحة: '+q.options[q.answer]);el('term-exam-next').style.display='inline-flex';el('term-exam-run').querySelectorAll('[data-answer]').forEach(x=>{x.disabled=true;if(Number(x.dataset.answer)===q.answer)x.style.borderColor='var(--azhar-green)'});}});
+window.azRefreshTermExams=choices;if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',choices);else choices();
 })();</script><script>if('serviceWorker' in navigator&&location.protocol!=='file:'){window.addEventListener('load',function(){navigator.serviceWorker.register('sw.js').catch(function(){});});}</script>
 </body>
 </html>
