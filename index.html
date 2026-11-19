@@ -1069,6 +1069,52 @@
       ]
     };
 
+    // حفظ التقدم على هذا الجهاز (النقاط، الدروس المكتملة، المهام، نتائج الامتحانات)
+    const STATE_KEY = 'tafawuq-azhari-state-v1';
+    state.examAwards = {};
+    state.passedFiqh = false;
+    state.passedArabic = false;
+    try {
+      const saved = JSON.parse(localStorage.getItem(STATE_KEY) || 'null');
+      if (saved && typeof saved === 'object') {
+        if (Number.isFinite(saved.points)) state.points = saved.points;
+        if (Number.isFinite(saved.streak)) state.streak = saved.streak;
+        if (Array.isArray(saved.completedLessons)) state.completedLessons = saved.completedLessons;
+        if (Array.isArray(saved.tasks)) state.tasks = saved.tasks;
+        if (saved.examAwards && typeof saved.examAwards === 'object') state.examAwards = saved.examAwards;
+        state.passedFiqh = !!saved.passedFiqh;
+        state.passedArabic = !!saved.passedArabic;
+      }
+    } catch (e) { /* التخزين غير متاح */ }
+    function saveState() {
+      try {
+        localStorage.setItem(STATE_KEY, JSON.stringify({
+          points: state.points, streak: state.streak, completedLessons: state.completedLessons,
+          tasks: state.tasks, examAwards: state.examAwards,
+          passedFiqh: state.passedFiqh, passedArabic: state.passedArabic
+        }));
+      } catch (e) { /* التخزين غير متاح */ }
+    }
+    window.addEventListener('pagehide', saveState);
+    document.addEventListener('visibilitychange', function () { if (document.hidden) saveState(); });
+
+    // نقاط الامتحانات: الاجتياز بنسبة 60% فأكثر. تُمنح مرة واحدة لكل امتحان، وتتحدث فقط إن حسّن الطالب درجته.
+    window.azAwardExam = function (key, score, total, subject) {
+      if (!key || !total || score / total < 0.6) return;
+      const pct = score / total;
+      const pts = 20 + Math.round(pct * 30);
+      const prev = state.examAwards[key] || 0;
+      const name = String(subject || '');
+      if (/^الفقه/.test(name)) state.passedFiqh = true;
+      if (/^اللغة العربية/.test(name)) state.passedArabic = true;
+      if (pts > prev) {
+        state.points += pts - prev;
+        state.examAwards[key] = pts;
+        if (typeof showToast === 'function') showToast('🎉 اجتزت الامتحان! +' + (pts - prev) + ' نقطة تفوق');
+      }
+      updateDashboard();
+    };
+
     // دروس موثقة العنوان من بوابة الأزهر التعليمية، مع شرح أصلي داخل التطبيق.
     const verifiedInteractiveLessons = [
     {
@@ -1254,8 +1300,8 @@
 
     const badgesList = [
       { id: "b1", name: "بداية موفقة", icon: "🌱", reqPoints: 50 },
-      { id: "b2", name: "فقيه صغير", icon: "⚖️", reqPoints: 120 },
-      { id: "b3", name: "نحوي بارع", icon: "✒️", reqPoints: 160 },
+      { id: "b2", name: "فقيه صغير", icon: "⚖️", reqPoints: 120, needs: "passedFiqh", hint: "اجتز امتحان فقه" },
+      { id: "b3", name: "نحوي بارع", icon: "✒️", reqPoints: 160, needs: "passedArabic", hint: "اجتز امتحان عربي" },
       { id: "b4", name: "متفوق الأزهر", icon: "👑", reqPoints: 220 }
     ];
 
@@ -1351,11 +1397,13 @@
       // Render Badges
       const badgesBox = document.getElementById("badges-container");
       badgesBox.innerHTML = badgesList.map(b => `
-        <div class="badge-item ${state.points >= b.reqPoints ? 'unlocked' : ''}">
+        <div class="badge-item ${(state.points >= b.reqPoints && (!b.needs || state[b.needs])) ? 'unlocked' : ''}">
           <div class="b-icon">${b.icon}</div>
           <div class="b-name">${b.name}</div>
+          <div style="font-size:10px;opacity:.75;margin-top:2px">${(state.points >= b.reqPoints && (!b.needs || state[b.needs])) ? '' : (b.needs ? b.hint + ' • ' : '') + b.reqPoints + ' نقطة'}</div>
         </div>
       `).join("");
+      saveState();
     }
 
     // Lessons List
@@ -1624,6 +1672,7 @@ function renderLessonsList(filterCat = "الكل") {
 
     // Tasks
     function renderTasks() {
+      saveState();
       const list = document.getElementById("tasks-list");
       list.innerHTML = state.tasks.map((t, i) => `
         <div class="todo-item ${t.done ? 'done' : ''}">
@@ -1713,6 +1762,7 @@ document.addEventListener('click',function(e){
  if(b.dataset.correct==='1')group.dataset.examCorrect='1';
  const score=selected+(b.dataset.correct==='1'?1:0);
  exam.querySelector('.az-science-progress').textContent='تمت الإجابة: '+answered+' / '+total;
+ if(answered===total&&window.azAwardExam){const les=(typeof lessonsData!=='undefined'?lessonsData.find(l=>l.id===state.currentLessonId):null);let subj=les?les.subjectName:'';const pk=exam.dataset.persistKey||'';if(/arabic/.test(pk))subj='اللغة العربية';else if(/shafii|fiqh/.test(pk))subj='الفقه';const idx=Array.from(document.querySelectorAll('.az-science-exam')).indexOf(exam);window.azAwardExam('exam:'+(pk||(state.currentLessonId+':'+idx)),score,total,subj);}
  exam.querySelector('.az-science-score').textContent=answered===total?'النتيجة النهائية: '+score+' / '+total+' ('+Math.round(score/total*100)+'٪). راجع تفسيرات الأسئلة الخاطئة.':'درجتك الحالية: '+score+' / '+answered;
 });
 </script><script>
@@ -1750,7 +1800,7 @@ function save(v){try{localStorage.setItem(key,JSON.stringify(v))}catch(e){}}
 function choices(){const target=el('term-exam-choices');if(!target)return;target.innerHTML=subjects.map(subject=>{const terms=[1,2].filter(term=>bank.some(x=>x.subject===subject&&x.term===term));if(!terms.length)return '';return '<div style="margin-top:12px"><strong>'+escapeText(subject)+'</strong><div class="term-exam-grid">'+terms.map(term=>{const n=bank.filter(x=>x.subject===subject&&x.term===term).length;return '<button class="term-exam-btn" data-subject="'+escapeText(subject)+'" data-term="'+term+'">الفصل '+(term===1?'الأول':'الثاني')+'<div class="term-exam-muted">'+n+' سؤالًا تدريبيًا</div></button>'}).join('')+'</div></div>'}).join('')+'<div style="margin-top:16px"><strong>امتحانات المراجعة العامة — غير موزعة على فصل دراسي</strong><p class="term-exam-muted">تدريبات تعليمية مؤلفة من أسئلة الدروس، وليست امتحانات رسمية أو مطابقة لكتاب الأزهر.</p><div class="term-exam-grid">'+['الفقه الحنفي','الفقه المالكي','الفقه الشافعي','الفقه الحنبلي','أصول الدين'].map(subject=>{const n=bank.filter(x=>x.subject===subject&&x.term===0).length;return '<button class="term-exam-btn" data-subject="'+escapeText(subject)+'" data-term="0">'+escapeText(subject)+' — امتحان تدريبي<div class="term-exam-muted">'+n+' سؤالًا مع تصحيح وحفظ النتيجة</div></button>'}).join('')+'</div></div>';history()}
 function history(){const h=read();el('term-exam-history').innerHTML='<h3 style="margin:14px 0 8px">نتائج المحاولات المحفوظة</h3>'+(h.length?h.slice(-12).reverse().map(x=>'<p class="term-exam-muted">'+escapeText(x.subject)+' — '+(x.term===0?'مراجعة عامة':'الفصل '+(x.term===1?'الأول':'الثاني'))+': '+x.score+' / '+x.total+' — '+escapeText(x.date)+'</p>').join(''):'<p class="term-exam-muted">لا توجد محاولات محفوظة بعد.</p>')}
 function start(subject,term){const qs=bank.filter(x=>x.subject===subject&&x.term===term);if(!qs.length)return;current={subject,term,qs:qs.map(x=>[Math.random(),x]).sort((p,q)=>p[0]-q[0]).map(p=>p[1]).slice(0,30),index:0,score:0,answered:false};el('term-exam-run').style.display='block';el('term-exam-choices').style.display='none';render();}
-function render(){const r=el('term-exam-run'),c=current;if(!c)return;if(c.index>=c.qs.length){const record={subject:c.subject,term:c.term,score:c.score,total:c.qs.length,date:new Date().toLocaleString('ar-EG')};const h=read();h.push(record);save(h.slice(-100));r.innerHTML='<h3>نتيجة التدريب: '+c.score+' / '+c.qs.length+'</h3><p class="term-exam-muted">تم حفظ النتيجة على هذا الجهاز.</p><button class="btn-primary" id="term-exam-back">العودة إلى المواد</button>';history();return}
+function render(){const r=el('term-exam-run'),c=current;if(!c)return;if(c.index>=c.qs.length){const record={subject:c.subject,term:c.term,score:c.score,total:c.qs.length,date:new Date().toLocaleString('ar-EG')};const h=read();h.push(record);save(h.slice(-100));if(window.azAwardExam)window.azAwardExam('term:'+c.subject+':'+c.term,c.score,c.qs.length,c.subject);r.innerHTML='<h3>نتيجة التدريب: '+c.score+' / '+c.qs.length+'</h3><p class="term-exam-muted">تم حفظ النتيجة على هذا الجهاز.</p><button class="btn-primary" id="term-exam-back">العودة إلى المواد</button>';history();return}
 const q=c.qs[c.index];c.answered=false;r.innerHTML='<p class="term-exam-muted">'+escapeText(c.subject)+' — '+(c.term===0?'مراجعة عامة':'الفصل '+(c.term===1?'الأول':'الثاني'))+' | السؤال '+(c.index+1)+' من '+c.qs.length+'</p><h3 style="margin:10px 0">'+escapeText(q.question)+'</h3>'+q.options.map((o,i)=>'<button class="term-exam-option" data-answer="'+i+'">'+escapeText(o)+'</button>').join('')+'<p id="term-exam-feedback" class="term-exam-muted" aria-live="polite"></p><button class="btn-primary" id="term-exam-next" style="display:none">التالي</button><p class="term-exam-muted">الدرس: '+escapeText(q.lesson)+(q.lessonStart?' — الدرس يبدأ في الصفحة '+escapeText(q.page)+' من كتاب '+escapeText(q.subject):q.page?' — الصفحة المطبوعة '+escapeText(q.page)+(q.subject==='أصول الدين'?' من كتاب أصول الدين':' من كتاب '+escapeText(q.subject)):' — رقم الصفحة غير موثق ما لم تتم مطابقته بالكتاب.')+'</p>'}
 document.addEventListener('click',e=>{const b=e.target.closest('#term-exam-panel button');if(!b)return;if(b.id==='term-exam-back'){current=null;el('term-exam-run').style.display='none';el('term-exam-choices').style.display='block';choices();return}if(b.dataset.subject){start(b.dataset.subject,Number(b.dataset.term));return}if(b.id==='term-exam-next'){current.index++;render();return}if(b.dataset.answer!==undefined&&current&&!current.answered){current.answered=true;const q=current.qs[current.index];const correct=Number(b.dataset.answer)===q.answer;if(correct)current.score++;el('term-exam-feedback').textContent=(correct?'✓ إجابة صحيحة. ':'✕ إجابة غير صحيحة. ')+(q.explanation||'الإجابة الصحيحة: '+q.options[q.answer]);el('term-exam-next').style.display='inline-flex';el('term-exam-run').querySelectorAll('[data-answer]').forEach(x=>{x.disabled=true;if(Number(x.dataset.answer)===q.answer)x.style.borderColor='var(--azhar-green)'});}});
 if(document.readyState==='loading')document.addEventListener('DOMContentLoaded',choices);else choices();
