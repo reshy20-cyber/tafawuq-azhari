@@ -1760,6 +1760,13 @@ function renderLessonsList(filterCat = "الكل") {
     // ===== الربط مع Google Play Billing (يعمل داخل تطبيق Google Play فقط، ويتجاهله المتصفح) =====
     const PLAY_SKU = 'lifetime_full';
     const PLAY_BILLING = 'https://play.google.com/billing';
+    const VERIFY_URL = 'https://nwlmoecyepsajayyyugd.supabase.co/functions/v1/verify-purchase';
+    const VERIFY_KEY = 'sb_publishable_rgaE-hjmqV37RU57_C8JEA_yn-0AcEO';
+    // يتحقق الخادم من الشراء لدى Google Play ويؤكده (acknowledge). يرمي خطأ إذا تعذّر الوصول للخادم.
+    function azVerifyPurchase(token) {
+      return fetch(VERIFY_URL, { method: 'POST', headers: { 'Content-Type': 'application/json', apikey: VERIFY_KEY, Authorization: 'Bearer ' + VERIFY_KEY }, body: JSON.stringify({ purchaseToken: token, sku: PLAY_SKU }) })
+        .then(r => r.json().then(d => { if (!r.ok && r.status >= 500) throw new Error('server'); return !!(d && d.valid); }));
+    }
     let playService = null;
     async function getPlayService() {
       if (playService) return playService;
@@ -1777,9 +1784,14 @@ function renderLessonsList(filterCat = "الكل") {
       } catch (e) { /* السعر اختياري */ }
       try {
         const purchases = await svc.listPurchases();
-        const owned = purchases.some(p => p.itemId === PLAY_SKU);
-        if (owned && !state.isActivated) window.azSetActivated(true);
-        else if (!owned && state.isActivated) window.azSetActivated(false); // مثلاً بعد استرداد المبلغ
+        const mine = purchases.find(p => p.itemId === PLAY_SKU);
+        if (!mine) { if (state.isActivated) window.azSetActivated(false); } // مثلاً بعد استرداد المبلغ
+        else {
+          let ok = null;
+          try { ok = await azVerifyPurchase(mine.purchaseToken); } catch (e) { ok = null; } // الخادم غير متاح: لا تغيّر الحالة
+          if (ok === true && !state.isActivated) window.azSetActivated(true);
+          else if (ok === false && state.isActivated) window.azSetActivated(false);
+        }
       } catch (e) { /* لا تغيّر الحالة عند تعذر الاستعلام */ }
       if (btn) btn.style.display = state.isActivated ? 'none' : 'block';
     }
@@ -1793,7 +1805,10 @@ function renderLessonsList(filterCat = "الكل") {
         );
         const res = await req.show();
         const token = res.details && res.details.purchaseToken;
-        if (token) await svc.acknowledge(token, 'onetime');
+        let ok = null;
+        try { ok = token ? await azVerifyPurchase(token) : false; } catch (e) { ok = null; } // null = الخادم غير متاح
+        if (ok === false) { await res.complete('fail'); showToast('تعذّر التحقق من الشراء. تواصل معنا إن خُصم المبلغ.'); return; }
+        if (ok === null && token) { try { await svc.acknowledge(token, 'onetime'); } catch (e2) {} } // احتياط: أكّد الشراء من الجهاز
         await res.complete('success');
         window.azSetActivated(true);
         showToast('🎉 تمت الترقية! شكرًا لك');
